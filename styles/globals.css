@@ -28,10 +28,10 @@
     @apply break-all;
   }
   .prose h1 {
-    @apply mt-16 mb-3 text-3xl font-bold text-gray-800;
+    @apply mt-16 mb-4 text-2xl font-bold text-gray-800;
   }
   .prose h2 {
-    @apply mt-8 mb-3 text-2xl font-bold text-gray-800;
+    @apply mt-8 mb-4 text-xl font-bold text-gray-800;
   }
   .prose p {
     @apply mt-4 mb-4 text-xl text-gray-800;

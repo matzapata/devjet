@@ -1,0 +1,59 @@
+import PostLayout from '../../components/PostLayout'
+
+export const meta = {
+  title: "Install Tailwindcss with Next.js",
+  description: "Setup tailwindcss within your nextjs project",
+  introduction: "Setup tailwindcss within your nextjs project",
+  cover: "/images/next-tailwindcss.png",
+  categories: ["UI"],
+  tags: ["nextjs", "tailwindcss", "style"],
+}
+
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
+
+
+# Step 1: Install Tailwind CSS
+
+```
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+# Step 2: Configure your template paths
+
+```js tailwind.config.js focus=2:5
+module.exports = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+# Step 3: Add tailwind directives to your CSS
+
+```css globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+# Step 4: Test
+
+```js index.js focus=3:5
+export default function Home() {
+  return (
+    <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
+  )
+}
+```
+
+```
+npm run dev
+```

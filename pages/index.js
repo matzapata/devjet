@@ -27,13 +27,15 @@ export default function Home() {
   function PostCard({ post }) {
     return (
       <Link href={'/posts' + post.link}>
-        <li className='max-w-md p-5 mx-auto bg-white border cursor-pointer md:rounded-md'>
-          <img className='mx-auto mb-2' src={post.cover} alt="" />
-          <h2 className='text-lg font-bold text-gray-900 hover:underline hover:text-blue-600'>{post.title}</h2>
-          <p className='mt-2 font-medium text-gray-700'>{post.description}</p>
-          <ul className='mt-4'>
-            {post.tags.map((tag, index) => <span className='px-2 py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</span>)}
-          </ul>
+        <li className='max-w-md p-5 flex flex-col justify-between mx-auto bg-white border cursor-pointer md:rounded-md'>
+          <img className='mx-auto mb-4' src={post.cover} alt="" />
+          <div>
+            <h2 className='text-lg font-bold text-gray-900 hover:underline hover:text-blue-600'>{post.title}</h2>
+            <p className='mt-2 font-medium text-gray-700'>{post.description}</p>
+            <ul className='mt-4'>
+              {post.tags.map((tag, index) => <span className='px-2 py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</span>)}
+            </ul>
+          </div>
         </li>
       </Link>
     )
@@ -43,7 +45,7 @@ export default function Home() {
     <div >
       <Head>
         <title>Devjet</title>
-        <meta name="description" content={"Expertly crafted guides, examples, templates, and resources to help you go about building your websites faster."} />
+        <meta name="description" content={"Expertly crafted guides, examples, templates, and resources to help you build your websites faster."} />
         <meta itemProp="name" content={"devjet"} />
       </Head>
 
@@ -53,7 +55,7 @@ export default function Home() {
             All the resources you need to speed up your development
           </h1>
           <p className='max-w-2xl mt-4 font-medium text-gray-200 md:text-lg'>
-            At devjet we&apos;ve create expertly crafted guides, examples, templates, and resources to help you go about building your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
+            At devjet we&apos;ve create expertly crafted guides, examples, templates, and resources to help you build your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
           </p>
         </div>
       </Header>

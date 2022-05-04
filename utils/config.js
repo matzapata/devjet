@@ -8,5 +8,6 @@ export const AllCategories = [
     'Devtools',
     'Payment',
     'SEO',
+    'Setup',
     'UI',
 ]
