@@ -1,7 +1,11 @@
+import PostLayout from '../../components/PostLayout'
 
 export const meta = {
-  title: "Code hike tutorial"
+  title: "Code hike tutorial",
+  description: "How to integrate code hike with nextjs"
 }
+
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
 
 
 # Just testing out [Code Hike](https://codehike.org/)
