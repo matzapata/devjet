@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* UI Elements */
+  .form-input {
+    @apply w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-1;
+  }
+  .form-label {
+    @apply block mb-1 font-medium;
+  }
+  .btn-sm {
+    @apply px-2 py-1 text-sm font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 hover:shadow;
+  }
+  .btn-md {
+    @apply px-4 py-2 font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 hover:shadow;
+  }
+  .btn-lg {
+    @apply px-4 py-3 font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 hover:shadow;
+  }
+  .link {
+      @apply text-blue-500 hover:underline hover:text-blue-600 ;
+  }
+}
