@@ -8,7 +8,7 @@ export default function Header({ children, className="" }) {
     const { authUser } = useFirebaseAuth()
 
     return (
-        <div className='bg-[#232E52] md:m-4 m-1 rounded-lg px-4 md:px-8'>
+        <div className='bg-[#263238] md:m-4 m-1 rounded-lg px-4 md:px-8'>
             <nav className="flex items-center justify-between md:py-8 py-4">
                 <BrandLogoWhite className="h-8 my-0" />
                 <ul className="flex items-center">

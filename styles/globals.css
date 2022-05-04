@@ -11,15 +11,49 @@
     @apply block mb-1 font-medium;
   }
   .btn-sm {
-    @apply px-2 py-1 text-sm font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 hover:shadow;
+    @apply px-2 py-1 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 hover:shadow;
   }
   .btn-md {
-    @apply px-4 py-2 font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 hover:shadow;
+    @apply px-4 py-2 font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 hover:shadow;
   }
   .btn-lg {
-    @apply px-4 py-3 font-medium text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 hover:shadow;
+    @apply px-4 py-3 font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 hover:shadow;
   }
   .link {
-      @apply text-blue-500 hover:underline hover:text-blue-600 ;
+    @apply text-blue-600 hover:underline hover:text-blue-700;
+  }
+
+  /* Article */
+  .prose {
+    @apply break-all;
+  }
+  .prose h1 {
+    @apply mt-16 mb-3 text-3xl font-bold text-gray-800;
+  }
+  .prose h2 {
+    @apply mt-8 mb-3 text-2xl font-bold text-gray-800;
+  }
+  .prose p {
+    @apply mt-4 mb-4 text-xl text-gray-800;
+  }
+  .prose ul {
+    @apply mt-2 mb-4 list-disc;
+  }
+  .prose ol {
+    @apply mt-2 mb-4 list-decimal;
+  }
+  .prose li {
+    @apply my-1 ml-8 text-xl text-gray-800;
+  }
+  .prose a {
+    @apply text-blue-600 hover:underline;
+  }
+  .prose blockquote {
+    @apply px-1 py-0.5 rounded-md bg-[#f6f8fa] border-l-2 border-l-blue-600;
+  }
+
+  /* Code hike customization */
+  .prose .ch-codeblock, .prose .ch-codegroup, .prose.ch-preview {
+    @apply shadow-none border;
   }
 }
