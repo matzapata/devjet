@@ -1,6 +1,6 @@
 function importAll(r) {
     return r.keys().map((fileName) => ({
-        link: fileName.substr(1).replace(/\/index\.mdx$/, ""),
+        link: fileName.substr(1).replace(".mdx", ""),
         module: r(fileName),
     }))
 }
@@ -10,7 +10,7 @@ const posts = postModules.map((post) => {
     const { link, module: { meta } } = post
     return {
         link,
-        meta
+        ...meta
     }
 })
 
