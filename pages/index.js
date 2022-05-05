@@ -6,13 +6,16 @@ import Header from "../components/Header";
 import Footer from "../components/Footer"
 import { SearchIcon } from "@heroicons/react/solid";
 
-import { posts } from "../utils/getAllPosts"
+
+import fs from 'fs'
+import path from 'path'
+
 import { AllCategories } from "../utils/config";
 
-export default function Home() {
+export default function Home({ posts }) {
   const [active, setActive] = useState(AllCategories[0])
   const [search, setSearch] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState(posts)
+  const [filteredPosts, setFilteredPosts] = useState([])
   const fuse = new Fuse(posts, { includeScore: true, keys: ['title', 'description', 'tags'] })
 
   useEffect(() => {
@@ -22,24 +25,8 @@ export default function Home() {
     } else {
       setFilteredPosts(posts.filter((post) => post.categories.includes(active) || active == 'All'))
     }
-  }, [search, active]);
+  }, [search, active, posts]);
 
-  function PostCard({ post }) {
-    return (
-      <Link href={'/posts' + post.link}>
-        <li className='max-w-md p-5 flex flex-col justify-between mx-auto bg-white border cursor-pointer md:rounded-md'>
-          <img className='mx-auto mb-4' src={post.cover} alt="" />
-          <div>
-            <h2 className='text-lg font-bold text-gray-900 hover:underline hover:text-blue-600'>{post.title}</h2>
-            <p className='mt-2 font-medium text-gray-700'>{post.description}</p>
-            <ul className='mt-4'>
-              {post.tags.map((tag, index) => <span className='px-2 py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</span>)}
-            </ul>
-          </div>
-        </li>
-      </Link>
-    )
-  }
 
   return (
     <div >
@@ -94,19 +81,51 @@ export default function Home() {
 
       {/* Posts listing */}
       <div className='px-4 bg-gray-50'>
-        {filteredPosts.length == 0 ?
+        {filteredPosts.length == 0 &&
           <div className='max-w-6xl py-20 mx-auto'>
             <h2 className='text-lg font-bold text-gray-900'>No results to show</h2>
             <p className='font-medium text-gray-500'>Please check spelling or try different keywords</p>
           </div>
-          :
-          <ul className='grid max-w-6xl grid-cols-1 gap-4 mx-auto md:grid-cols-3 py-14'>
-            {filteredPosts.map((post, index) => <PostCard key={index} post={post} />)}
-          </ul>
         }
+        <ul className='grid max-w-6xl grid-cols-1 gap-4 mx-auto md:grid-cols-3 py-14'>
+          {filteredPosts.map((post, index) => (
+            <li key={index} className='max-w-md p-5 flex flex-col justify-between mx-auto bg-white border cursor-pointer md:rounded-md'>
+              <img className='mx-auto mb-4' src={post.cover} alt="" />
+              <div>
+                <Link href={'/posts' + post.link}>
+                  <a className='text-lg font-bold text-gray-900 hover:underline hover:text-blue-600'>{post.title}</a>
+                </Link>
+                <p className='mt-2 font-medium text-gray-700'>{post.description}</p>
+                <ul className='mt-4'>
+                  {post.tags.map((tag, index) => <li className='px-2 inline-block py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</li>)}
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <Footer />
     </div>
   )
+}
+
+
+export async function getStaticProps() {
+  const files = fs.readdirSync(path.join('pages/posts'))
+  const posts = []
+
+  files.forEach(async (filename) => {
+    const { meta } = await import('./posts/' + filename)
+    posts.push({
+      link: filename.replace('.mdx', ''),
+      ...meta
+    })
+  })
+
+  return {
+    props: {
+      posts
+    }
+  }
 }
