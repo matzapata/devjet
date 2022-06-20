@@ -36,7 +36,7 @@ export default function Home({ posts }) {
         <meta itemProp="name" content={"devjet"} />
       </Head>
 
-      <Header className='py-24  rounded'>
+      <Header className='py-24 rounded'>
         <div className='max-w-6xl px-4 mx-auto md:px-0'>
           <h1 className='max-w-6xl text-4xl font-extrabold text-white md:text-6xl'>
             All the resources you need to speed up your development
@@ -89,15 +89,15 @@ export default function Home({ posts }) {
         }
         <ul className='grid max-w-6xl grid-cols-1 gap-4 mx-auto md:grid-cols-3 py-14'>
           {filteredPosts.map((post, index) => (
-            <li key={index} className='max-w-md p-5 flex flex-col justify-between mx-auto bg-white border cursor-pointer md:rounded-md'>
+            <li key={index} className='flex flex-col justify-between max-w-md p-5 mx-auto bg-white border cursor-pointer md:rounded-md'>
               <img className='mx-auto mb-4' src={post.cover} alt="" />
               <div>
-                <Link href={'/posts' + post.link}>
+                <Link href={'/posts/' + post.link}>
                   <a className='text-lg font-bold text-gray-900 hover:underline hover:text-blue-600'>{post.title}</a>
                 </Link>
                 <p className='mt-2 font-medium text-gray-700'>{post.description}</p>
                 <ul className='mt-4'>
-                  {post.tags.map((tag, index) => <li className='px-2 inline-block py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</li>)}
+                  {post.tags.map((tag, index) => <li className='inline-block px-2 py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</li>)}
                 </ul>
               </div>
             </li>

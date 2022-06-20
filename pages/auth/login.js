@@ -59,7 +59,7 @@ export default function Login() {
                         ref={passwordRef}
                     />
                     <Link href={"/auth/reset-password"}>
-                        <a className="block mb-5 text-right font-medium link">Forget your password?</a>
+                        <a className="block mb-5 font-medium text-right link">Forget your password?</a>
                     </Link>
 
                     {error &&
