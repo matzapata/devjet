@@ -1,0 +1,178 @@
+import PostLayout from "../../components/PostLayout";
+
+export const meta = {
+  title: "Use redux with react",
+  description: "Setup redux to manage your react app state",
+  introduction: "Setup redux to manage your react app state",
+  cover: "/images/react-redux.png",
+  categories: ["Setup", "Devtools"],
+  tags: ["react", "redux"],
+};
+
+
+export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
+
+
+# STEP 1: Install dependencies
+
+```
+npm install redux react-redux
+```
+
+# STEP 2: Create your store
+
+Create the following files. In this case we provide you with an example to get you started but feel free to make the modifications you need.
+
+```js redux/constants.js
+export const INCREMENT = "INCREMENT";
+export const DECREMENT = "DECREMENT";
+export const RESET = "RESET";
+```
+
+```js redux/actions.js
+import { INCREMENT, DECREMENT, RESET } from "./constants";
+
+export function increment() {
+  return {
+    type: INCREMENT,
+  };
+}
+export function decrement() {
+  return {
+    type: DECREMENT,
+  };
+}
+export function reset() {
+  return {
+    type: RESET,
+  };
+}
+```
+
+```js redux/reducer.js
+import { INCREMENT, DECREMENT, RESET } from "./constants";
+
+const initialState = {
+  count: 0,
+};
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case INCREMENT:
+      return {
+        ...state,
+        count: state.count + 1,
+      };
+    case DECREMENT:
+      return {
+        ...state,
+        count: state.count - 1,
+      };
+    case RESET:
+      return {
+        ...state,
+        count: 0,
+      };
+    default:
+      return { ...state };
+  }
+};
+```
+
+```js redux/store.js
+import { createStore } from "redux";
+import rootReducer from "./reducer";
+
+const store = createStore(rootReducer);
+
+export default store;
+```
+
+```js index.js focus=4,5,13,17
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import store from "./redux/store";
+import { Provider } from "react-redux";
+
+import App from "./App";
+
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement);
+
+root.render(
+  <Provider store={store}>
+    <StrictMode>
+      <App />
+    </StrictMode>
+  </Provider>
+);
+```
+
+# STEP 3: Make use of the redux store in your components
+
+Here we have a couple of options, we'll present you all of them, chose the one you feel more confortable with.
+
+## React-redux `connect`
+
+```js App.js
+import { connect } from "react-redux";
+import { increment, decrement, reset } from "./redux/actions";
+
+function App({ increment, decrement, reset, count }) {
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={() => increment()}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
+
+function mapStateToProps(state) {
+  return {
+    count: state.count,
+  };
+}
+
+export default connect(mapStateToProps, { increment, decrement, reset })(App);
+```
+
+## React-redux `useSelector` & `useDispatch`
+
+```js App.js
+import { useSelector, useDispatch } from "react-redux";
+import { increment, decrement, reset } from "./redux/actions";
+
+export default function App() {
+  const count = useSelector((state) => state.count);
+  const dispatch = useDispatch();
+  return (
+    <div>
+      <p>{count}</p>
+      <button
+        onClick={() => {
+          dispatch(increment());
+        }}
+      >
+        Increment
+      </button>
+      <button
+        onClick={() => {
+          dispatch(decrement());
+        }}
+      >
+        Decrement
+      </button>
+      <button
+        onClick={() => {
+          dispatch(reset());
+        }}
+      >
+        Reset
+      </button>
+    </div>
+  );
+}
+```

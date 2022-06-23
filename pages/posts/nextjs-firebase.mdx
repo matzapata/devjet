@@ -29,7 +29,7 @@ NEXT_PUBLIC_FB_APP_ID=""
 NEXT_PUBLIC_FB_MEASUREMENT_ID=""
 ```
 
-# STEP 2: Initialize firebase
+# STEP 3: Initialize firebase
 
 ```js utils/firebase.js
 // Import the functions you need from the SDKs you need
@@ -52,7 +52,7 @@ if (typeof window != undefined && getApps().length < 1) {
 export { firebaseApp }
 ```
 
-# STEP 3: What's next
+# STEP 4: What's next
 
 That's it, you can already use firebase services in your app. With firebase V9 you need to pass the `firebaseApp` instance in each methode like this:
 
