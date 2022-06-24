@@ -1,51 +1,65 @@
-import Fuse from 'fuse.js'
-import Link from "next/link"
+import Fuse from 'fuse.js';
+import Link from "next/link";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 import { SearchIcon } from "@heroicons/react/solid";
 
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 
 import { AllCategories } from "../utils/config";
+import NavBar from '../components/Navbar';
+import PostCard from '../components/PostCard';
+import NoPosts from '../components/NoPosts';
 
 export default function Home({ posts }) {
-  const [active, setActive] = useState(AllCategories[0])
-  const [search, setSearch] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState([])
-  const fuse = new Fuse(posts, { includeScore: true, keys: ['title', 'description', 'tags'] })
+  const [active, setActive] = useState(AllCategories[0]);
+  const [search, setSearch] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const fuse = new Fuse(posts, { includeScore: true, keys: ['title', 'description', 'tags'] });
 
   useEffect(() => {
-    if (search != "") {
-      const results = fuse.search(search)
-      setFilteredPosts(results.filter((result) => (result.score < 0.5 && ((result.item.categories.includes(active) || active == 'All')))).map((result) => result.item))
+    if (search) {
+      const results = fuse.search(search);
+      setFilteredPosts(results.filter((result) => (result.score < 0.5 && ((result.item.categories.includes(active) || active == 'All')))).map((result) => result.item));
     } else {
-      setFilteredPosts(posts.filter((post) => post.categories.includes(active) || active == 'All'))
+      setFilteredPosts(posts.filter((post) => post.categories.includes(active) || active == 'All'));
     }
   }, [search, active, posts]);
 
+  useEffect(() => {
+    document.body.classList.add("hide-scrollbar");
+  }, []);
+
 
   return (
-    <div >
+    <div>
       <Head>
         <title>Devjet</title>
         <meta name="description" content={"Expertly crafted guides, examples, templates, and resources to help you build your websites faster."} />
         <meta itemProp="name" content={"devjet"} />
       </Head>
 
-      <Header className='py-24 rounded'>
-        <div className='max-w-6xl px-4 mx-auto md:px-0'>
-          <h1 className='max-w-6xl text-4xl font-extrabold text-white md:text-6xl'>
-            All the resources you need to speed up your development
-          </h1>
-          <p className='max-w-2xl mt-4 font-medium text-gray-200 md:text-lg'>
-            At devjet we&apos;ve create expertly crafted guides, examples, templates, and resources to help you build your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
-          </p>
+      <div className="h-screen p-1 md:p-3">
+        <div className='bg-[#263238] flex flex-col h-full rounded-lg px-4 md:px-8 '>
+          <div className='w-full max-w-5xl mx-auto 5xl:px-0'>
+            <NavBar />
+          </div>
+          <div className="flex items-center justify-center h-full pb-20">
+            <div className='max-w-5xl px-4 mx-auto md:px-0'>
+              <h1 className='max-w-5xl text-4xl font-extrabold text-center text-white md:text-6xl'>
+                All the resources you need to speed up your development
+              </h1>
+              <p className='max-w-3xl mx-auto mt-10 font-medium text-center text-gray-200 md:text-lg'>
+                At devjet we&apos;ve create expertly crafted guides, examples, templates, and resources to help you build your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
+              </p>
+            </div>
+          </div>
         </div>
-      </Header>
+      </div>
 
       {/* Filters */}
       <div className='sticky top-0 px-4 bg-white shadow'>
@@ -81,51 +95,36 @@ export default function Home({ posts }) {
 
       {/* Posts listing */}
       <div className='px-4 bg-gray-50'>
-        {filteredPosts.length == 0 &&
-          <div className='max-w-6xl py-20 mx-auto'>
-            <h2 className='text-lg font-bold text-gray-900'>No results to show</h2>
-            <p className='font-medium text-gray-500'>Please check spelling or try different keywords</p>
-          </div>
+        {filteredPosts.length === 0 ?
+          <NoPosts />
+          :
+          <ul className='grid max-w-6xl grid-cols-1 gap-4 mx-auto md:grid-cols-3 py-14'>
+            {filteredPosts.map((post, index) => <PostCard key={index} post={post} />)}
+          </ul>
         }
-        <ul className='grid max-w-6xl grid-cols-1 gap-4 mx-auto md:grid-cols-3 py-14'>
-          {filteredPosts.map((post, index) => (
-            <li key={index} className='flex flex-col justify-between max-w-md p-5 mx-auto bg-white border cursor-pointer md:rounded-md'>
-              <img className='mx-auto mb-4' src={post.cover} alt="" />
-              <div>
-                <Link href={'/posts/' + post.link}>
-                  <a className='text-lg font-bold text-gray-900 hover:underline hover:text-blue-600'>{post.title}</a>
-                </Link>
-                <p className='mt-2 font-medium text-gray-700'>{post.description}</p>
-                <ul className='mt-4'>
-                  {post.tags.map((tag, index) => <li className='inline-block px-2 py-1 mr-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-full' key={index}>{tag}</li>)}
-                </ul>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
 
       <Footer />
     </div>
-  )
+  );
 }
 
 
 export async function getStaticProps() {
-  const files = fs.readdirSync(path.join('pages/posts'))
-  const posts = []
+  const files = fs.readdirSync(path.join('pages/posts'));
+  const posts = [];
 
   files.forEach(async (filename) => {
-    const { meta } = await import('./posts/' + filename)
+    const { meta } = await import('./posts/' + filename);
     posts.push({
       link: filename.replace('.mdx', ''),
       ...meta
-    })
-  })
+    });
+  });
 
   return {
     props: {
       posts
     }
-  }
+  };
 }

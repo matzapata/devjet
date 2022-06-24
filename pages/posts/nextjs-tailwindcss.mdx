@@ -12,14 +12,14 @@ export const meta = {
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
 
 
-# Step 1: Install Tailwind CSS
+## Step 1: Install Tailwind CSS
 
 ```
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
-# Step 2: Configure your template paths
+## Step 2: Configure your template paths
 
 ```js tailwind.config.js focus=2:5
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
 }
 ```
 
-# Step 3: Add tailwind directives to your CSS
+## Step 3: Add tailwind directives to your CSS
 
 ```css globals.css
 @tailwind base;
@@ -42,7 +42,7 @@ module.exports = {
 @tailwind utilities;
 ```
 
-# Step 4: Test
+## Step 4: Test
 
 ```js index.js focus=3:5
 export default function Home() {

@@ -13,13 +13,13 @@ export const meta = {
 export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
 
 
-# STEP 1: Install dependencies
+## STEP 1: Install dependencies
 
 ```
 npm install redux react-redux
 ```
 
-# STEP 2: Create your store
+## STEP 2: Create your store
 
 Create the following files. In this case we provide you with an example to get you started but feel free to make the modifications you need.
 
@@ -109,11 +109,11 @@ root.render(
 );
 ```
 
-# STEP 3: Make use of the redux store in your components
+## STEP 3: Make use of the redux store in your components
 
 Here we have a couple of options, we'll present you all of them, chose the one you feel more confortable with.
 
-## React-redux `connect`
+#### React-redux `connect`
 
 ```js App.js
 import { connect } from "react-redux";
@@ -139,7 +139,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, { increment, decrement, reset })(App);
 ```
 
-## React-redux `useSelector` & `useDispatch`
+#### React-redux `useSelector` & `useDispatch`
 
 ```js App.js
 import { useSelector, useDispatch } from "react-redux";

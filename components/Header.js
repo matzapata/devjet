@@ -9,7 +9,7 @@ export default function Header({ children, className="" }) {
 
     return (
         <div className='bg-[#263238] md:m-4 m-1 rounded-lg px-4 md:px-8'>
-            <nav className="flex items-center justify-between md:py-8 py-4">
+            <nav className="flex items-center justify-between py-4 md:py-8">
                 <BrandLogoWhite className="h-8 my-0" />
                 <ul className="flex items-center">
                     <Link href={'/#search'}>
@@ -25,11 +25,11 @@ export default function Header({ children, className="" }) {
                     }
                     {!authUser &&
                         <Link href={'/auth/signup'}>
-                            <a className=" ml-4 btn-md">Get Started</a>
+                            <a className="ml-4  btn-md">Get Started</a>
                         </Link>
                     }
                     {authUser &&
-                        <SignOutBtn className=" ml-4 btn-md">
+                        <SignOutBtn className="ml-4  btn-md">
                             Logout
                         </SignOutBtn>
                     }
