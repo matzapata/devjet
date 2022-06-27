@@ -48,12 +48,12 @@ export default function Home({ posts }) {
           <div className='w-full max-w-5xl mx-auto 5xl:px-0'>
             <NavBar />
           </div>
-          <div className="flex items-center justify-center h-full pb-20">
+          <div className="flex items-center justify-center h-full pb-10">
             <div className='max-w-5xl px-4 mx-auto md:px-0'>
-              <h1 className='max-w-5xl text-4xl font-extrabold text-center text-white md:text-6xl'>
+              <h1  className='max-w-5xl text-4xl font-extrabold text-center text-white font-fira-code md:text-6xl'>
                 All the resources you need to speed up your development
               </h1>
-              <p className='max-w-3xl mx-auto mt-10 font-medium text-center text-gray-200 md:text-lg'>
+              <p className='max-w-3xl mx-auto mt-10 text-center text-gray-200 font-fira-code md:text-lg'>
                 At devjet we&apos;ve create expertly crafted guides, examples, templates, and resources to help you build your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
               </p>
             </div>
