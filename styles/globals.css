@@ -5,8 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  @apply font-fira-code;
+@layer base {
+  * {
+    @apply font-fira-code;
+  }
 }
 
 @layer components {
@@ -43,10 +45,14 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
-
+  
   /* Hide scrollbar for IE, Edge and Firefox */
   .hide-scrollbar {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+}
+
+div.ch-codegroup {
+  box-shadow: none !important;
 }

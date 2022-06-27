@@ -18,7 +18,7 @@ export default function PostLayout({ children, meta }) {
                 <meta itemProp="description" content={meta.description} />
             </Head>
 
-            <div className='bg-[#263238] md:m-4 m-1 rounded-lg px-4 md:px-8'>
+            <div className='bg-[#263238] md:m-4 m-2 rounded-lg px-4 md:px-8'>
                 <div className='max-w-5xl px-4 mx-auto 5xl:px-0'>
                     <NavBar />
                 </div>

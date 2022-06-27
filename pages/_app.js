@@ -1,5 +1,5 @@
-import '../styles/globals.css';
 import "@code-hike/mdx/dist/index.css";
+import '../styles/globals.css';
 
 import { AuthUserProvider } from '../context/AuthUserContext';
 
