@@ -1,4 +1,4 @@
-import PostLayout from '../../components/PostLayout'
+import PostLayout from "../../components/PostLayout";
 
 export const meta = {
   title: "Connect firebase V9 to Next.js",
@@ -7,9 +7,11 @@ export const meta = {
   cover: "/images/next-firebase.jpg",
   categories: ["Setup", "Auth"],
   tags: ["nextjs", "firebase"],
-}
+};
 
-export default ({children}) => <PostLayout meta={meta}>{children}</PostLayout>
+export default ({ children }) => (
+  <PostLayout meta={meta}>{children}</PostLayout>
+);
 
 ## STEP 1: Install dependencies
 
@@ -36,30 +38,33 @@ NEXT_PUBLIC_FB_MEASUREMENT_ID=""
 import { initializeApp, getApps } from "firebase/app";
 
 const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
-    appId: process.env.NEXT_PUBLIC_FB_APP_ID,
-    measurementId: process.env.NEXT_PUBLIC_FB_MEASUREMENT_ID
-}
+  apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
+  appId: process.env.NEXT_PUBLIC_FB_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FB_MEASUREMENT_ID,
+};
 
 // Initialize Firebase
-let firebaseApp
+let firebaseApp;
+let auth;
 if (typeof window != undefined && getApps().length < 1) {
-    firebaseApp = initializeApp(firebaseConfig);
+  firebaseApp = initializeApp(firebaseConfig);
+  auth = getAuth(firebaseApp);
 }
 
-export { firebaseApp }
+export { firebaseApp, auth };
 ```
 
 ## STEP 4: What's next
 
 That's it, you can already use firebase services in your app. With firebase V9 you need to pass the `firebaseApp` instance in each methode like this:
 
-```js
-import { firebaseApp } from './firebase';
-import { getAuth } from 'firebase/auth';
+```js focus=1,5[28:32]
+import { auth } from "./utils/firebase.js";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-const auth = getAuth(firebaseApp)
+// ...
+signInWithEmailAndPassword(auth, email, password);
 // ...
 ```

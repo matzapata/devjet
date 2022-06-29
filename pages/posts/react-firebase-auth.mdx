@@ -1,0 +1,165 @@
+import PostLayout from "../../components/PostLayout";
+
+export const meta = {
+  title: "React and firebase authentication",
+  description: "Setup authentication with react and firebase V9",
+  introduction: "Setup authentication with react and firebase V9",
+  cover: "/images/react-fb-auth.png",
+  categories: ["Setup", "Auth"],
+  tags: ["react", "firebase", "auth"],
+};
+
+export default ({ children }) => (
+  <PostLayout meta={meta}>{children}</PostLayout>
+);
+
+## STEP 1: Dependencies
+
+Before setting up firebase authentication we've to:
+
+1. Setup react router v6 (optional but recomended and necesary to use the examples provided)
+2. Setup firebase v9 in the react app. [receipe]()
+3. Install npm dependencies.
+
+```
+npm install react-firebase-hooks
+```
+
+## STEP 2: Create the login and signup forms
+
+```jsx Signup.js
+import React, { useState } from "react";
+import { auth } from "./firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+export default function SignUp() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => navigate("/"))
+      .catch((error) => console.log(error));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        placeholder="email"
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        type="email"
+      />
+      <input
+        placeholder="password"
+        onChange={(e) => setPassword(e.target.value)}
+        required
+        type="password"
+      />
+      <button type="submit">Sign Up</button>
+    </form>
+  );
+}
+```
+
+```jsx Login.js
+import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "./firebase";
+
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => navigate("/"))
+      .catch((error) => console.log(error));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        placeholder="email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button type="submit">Login</button>
+    </form>
+  );
+}
+```
+
+## STEP 3: Create a component to protect your private routes
+
+```jsx PrivateRoute.js
+import { Navigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
+
+export default function PrivateRoute({ element }) {
+  const [user, loading, error] = useAuthState(auth);
+
+  if (loading) return <p>Initialising User...</p>;
+  else if (error) return <p>Error: {error}</p>;
+  else if (user) return element;
+  else return <Navigate to="/login" />;
+}
+```
+
+## STEP 4: Create your routes
+
+In this case, as an example we'created a Home component that makes use of the logout functionality and renders the user email.
+
+```jsx Home.js
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
+
+export default function Home() {
+  const [user, loading, error] = useAuthState(auth);
+
+  const logout = () => {
+    signOut(auth);
+  };
+
+  return (
+    <div>
+      <p>Current User: {user.email}</p>
+      <button onClick={logout}>Log out</button>
+    </div>
+  );
+}
+```
+
+```jsx App.js focus=14
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import Login from "./Login";
+import SignUp from "./Signup";
+import PrivateRoute from "./PrivateRoute";
+
+export default function App() {
+  return (
+    <div className="app">
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/" element={<PrivateRoute element={<Home />} />} />
+      </Routes>
+    </div>
+  );
+}
+```

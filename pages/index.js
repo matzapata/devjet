@@ -1,11 +1,8 @@
 import Fuse from 'fuse.js';
-import Link from "next/link";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { SearchIcon } from "@heroicons/react/solid";
-
 
 import fs from 'fs';
 import path from 'path';
@@ -43,7 +40,7 @@ export default function Home({ posts }) {
         <meta itemProp="name" content={"devjet"} />
       </Head>
 
-      <div className="h-screen p-1 md:p-3">
+      <div className="h-screen p-2 md:p-3">
         <div className='bg-[#263238] flex flex-col h-full rounded-lg px-4 md:px-8 '>
           <div className='w-full max-w-5xl mx-auto 5xl:px-0'>
             <NavBar />
@@ -54,7 +51,7 @@ export default function Home({ posts }) {
                 All the resources you need to speed up your development
               </h1>
               <p className='max-w-3xl mx-auto mt-10 text-center text-gray-200 font-fira-code md:text-lg'>
-                At devjet we&apos;ve create expertly crafted guides, examples, templates, and resources to help you build your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
+                At devjet we&apos;ve created expertly crafted guides, examples, templates, and resources to help you build your websites faster. Get started by checking out our free guides, or browsing all of the examples in the categories you&apos;re most curious about.
               </p>
             </div>
           </div>

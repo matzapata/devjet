@@ -1,0 +1,76 @@
+import PostLayout from "../../components/PostLayout";
+
+export const meta = {
+  title: "Add routing to your react app",
+  description: "Setup react-router-dom 6 in your react app",
+  introduction: "Setup react-router-dom 6 in your react app",
+  cover: "/images/react-router.png",
+  categories: ["Setup", "Devtools"],
+  tags: ["react", "react-router-dom"],
+};
+
+export default ({ children }) => (
+  <PostLayout meta={meta}>{children}</PostLayout>
+);
+
+## STEP 1: Install dependencies
+
+```
+npm install react-router-dom@6
+```
+
+## STEP 2: Connect the app to the browser's url
+
+```jsx src/index.js focus=2,7,9,11
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+```
+
+## STEP 3: Create your routes
+
+In this case we're just providing and example to help you understand how to use the Route component provided by `react-router-dom`.
+
+```jsx src/app.js focus=2,4,7,10,14:17,25:29
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+
+function RouteA() {
+  return <div>Route /a</div>;
+}
+function RouteB() {
+  return <div>Route /b</div>;
+}
+function RouteNested() {
+  return (
+    <div>
+      Route /nested/*
+      <Routes>
+        <Route path="a" element={<RouteA />} />
+        <Route path="b" element={<RouteB />} />
+      </Routes>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="a" element={<RouteA />} />
+        <Route path="b" element={<RouteB />} />
+        <Route path="nested/*" element={<RouteNested />} />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;
+```

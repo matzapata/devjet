@@ -7,12 +7,15 @@ const withMDX = require("@next/mdx")({
     remarkPlugins: [
       [
         remarkCodeHike, 
-        { theme }
+        { 
+          theme
+        }
       ],
     ],
     rehypePlugins: [],
   },
 });
+
 
 module.exports = withMDX({
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],

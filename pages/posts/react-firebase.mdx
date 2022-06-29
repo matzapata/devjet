@@ -1,0 +1,66 @@
+import PostLayout from "../../components/PostLayout";
+
+export const meta = {
+  title: "Setup firebase within a react app",
+  description: "Setup firebase within a react app",
+  introduction: "Setup firebase within a react app",
+  cover: "/images/react-firebase.png",
+  categories: ["Setup", "Auth"],
+  tags: ["firebase", "react"],
+};
+
+export default ({ children }) => (
+  <PostLayout meta={meta}>{children}</PostLayout>
+);
+
+## STEP 1: Install dependencies
+
+```
+npm install firebase
+```
+
+## STEP 2: Configure enviroment variables
+
+Create a firebase project and get your enviroment variables
+
+``` .env
+REACT_APP_FB_API_KEY=""
+REACT_APP_FB_AUTH_DOMAIN=""
+REACT_APP_FB_PROJECT_ID=""
+REACT_APP_FB_APP_ID=""
+```
+
+## STEP 3: Initialize firebase
+
+```js utils/firebase.js
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth"
+
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FB_API_KEY,
+    authDomain: process.env.REACT_APP_FB_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FB_PROJECT_ID,
+    appId: process.env.REACT_APP_FB_APP_ID,
+}
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp)
+// Other firebase services instances...
+
+export { firebaseApp, auth }
+```
+
+## STEP 4: What's next
+
+That's it, you can already use firebase services in your app. With firebase V9 you need to pass the `firebaseApp` instance in each methode like this:
+
+```js focus=1,5[28:32]
+import { auth } from "./utils/firebase"; // adjust this line to your folder structure
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+// ...
+signInWithEmailAndPassword(auth, email, password);
+// ...
+```
