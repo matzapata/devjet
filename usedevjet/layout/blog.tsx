@@ -1,9 +1,10 @@
 import React from "react";
 import Head from "next/head";
 import { parseISO, format } from "date-fns";
-import { Heading, Text, Stack } from "@chakra-ui/react";
+import { Heading, Text, Stack, Container } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { BlogFrontMatter } from "../types/Blog";
+import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 function BlogLayout({
   children,
@@ -27,8 +28,10 @@ function BlogLayout({
         <Text fontSize="sm">
           {format(parseISO(frontMatter.publishedAt), "MMMM dd, yyyy")}
         </Text>
-        {children}
       </Stack>
+      <Container w="full" maxW="container.lg">
+        <Prose>{children}</Prose>
+      </Container>
     </>
   );
 }
