@@ -3,4 +3,5 @@ export type BlogFrontMatter = {
   title: string;
   publishedAt: string;
   summary: string;
+  tags: string[];
 };
