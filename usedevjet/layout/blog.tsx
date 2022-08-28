@@ -30,7 +30,7 @@ function BlogLayout({
         </Text>
       </Stack>
       <Container w="full" maxW="container.lg">
-        <Prose>{children}</Prose>
+        <Prose className="prose">{children}</Prose>
       </Container>
     </>
   );

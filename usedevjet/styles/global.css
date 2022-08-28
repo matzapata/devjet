@@ -1,0 +1,121 @@
+.prose pre {
+    border: 1px;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-color: var(--chakra-colors-gray-700) !important;
+    background-color: var(--chakra-colors-gray-900) !important;
+}
+
+.prose pre code {
+    padding: 0;
+    color: var(--chakra-colors-gray-200);
+    border: initial;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: var(--chakra-colors-gray-300);
+}
+
+.token.punctuation {
+    color: var(--chakra-colors-gray-300);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: var(--chakra-colors-green-500);
+
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: var(--chakra-colors-purple-500);
+
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: var(--chakra-colors-yellow-500);
+
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: var(--chakra-colors-blue-500);
+
+}
+
+.token.function,
+.token.class-name {
+    color: var(--chakra-colors-pink-500);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: var(--chakra-colors-yellow-500);
+}
+
+code[class*='language-'],
+pre[class*='language-'] {
+    color: var(--chakra-colors-gray-50);
+}
+
+pre::-webkit-scrollbar {
+    display: none;
+}
+
+pre {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.rehype-code-title {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    background-color: var(--chakra-colors-gray-800);
+    color: var(--chakra-colors-gray-200);
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-width: 1px;
+    border-bottom-width: 0;
+    border-color: var(--chakra-colors-gray-700);
+}
+
+.rehype-code-title+pre {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.highlight-line {
+    display: block;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    background-color: var(--chakra-colors-gray-800);
+    border-color: var(--chakra-colors-blue-500);
+    border-left-width: 4px;
+}

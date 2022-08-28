@@ -1,9 +1,13 @@
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
-import mdxPrism from "rehype-prism-plus";
-import renderToString from "next-mdx-remote/render-to-string";
 import { BlogFrontMatter } from "../types/Blog";
+import { bundleMDX } from "mdx-bundler";
+
+import rehypeSlug from "rehype-slug";
+import rehypeCodeTitles from "rehype-code-titles";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypePrism from "rehype-prism-plus";
 
 const root = process.cwd();
 
@@ -19,24 +23,32 @@ export async function getFileBySlug(
     ? fs.readFileSync(path.join(root, "data", type, `${slug}.mdx`), "utf8")
     : fs.readFileSync(path.join(root, "data", type, `${type}.mdx`), "utf8");
 
-  const { data, content } = matter(source);
-  const mdxSource = await renderToString(content, {
-    // components: MDXComponents,
-    mdxOptions: {
-      remarkPlugins: [
-        require("remark-autolink-headings"),
-        require("remark-slug"),
-        require("remark-code-titles"),
-      ],
-      rehypePlugins: [mdxPrism],
+  const { code, frontmatter } = await bundleMDX({
+    source,
+    mdxOptions(options) {
+      options.rehypePlugins = [
+        ...(options?.rehypePlugins ?? []),
+        rehypeSlug,
+        rehypeCodeTitles,
+        rehypePrism,
+        [
+          rehypeAutolinkHeadings,
+          {
+            properties: {
+              className: ["anchor"],
+            },
+          },
+        ],
+      ];
+      return options;
     },
   });
 
   return {
-    mdxSource,
+    code,
     frontMatter: {
-      slug: slug || null,
-      ...data,
+      slug,
+      ...frontmatter,
     },
   };
 }

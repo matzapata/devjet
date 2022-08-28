@@ -1,22 +1,25 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { getFiles, getFileBySlug } from "../../utils/mdx";
 import BlogLayout from "../../layout/blog";
 import { GetStaticPaths, GetStaticProps } from "next";
-import hydrate from "next-mdx-remote/hydrate";
 import { BlogFrontMatter } from "../../types/Blog";
-import { MdxRemote } from "next-mdx-remote/types";
+import { getMDXComponent } from "mdx-bundler/client";
 
 function Blog({
-  mdxSource,
+  code,
   frontMatter,
 }: {
-  mdxSource: MdxRemote.Source;
+  code: string;
   frontMatter: BlogFrontMatter;
 }) {
-  const content = hydrate(mdxSource);
+  const Component = useMemo(() => getMDXComponent(code), [code]);
 
-  return <BlogLayout frontMatter={frontMatter}>{content as any}</BlogLayout>;
+  return (
+    <BlogLayout frontMatter={frontMatter}>
+      <Component />
+    </BlogLayout>
+  );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
