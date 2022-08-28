@@ -2,10 +2,15 @@ import React from "react";
 import Link from "next/link";
 import { Image } from "@chakra-ui/react";
 
-export function BrandFavicon() {
+export function BrandFavicon(props: any) {
   return (
     <Link href={"/"}>
-      <Image cursor="pointer" src="/brand-favicon.svg" alt="devjet favicon" />
+      <Image
+        cursor="pointer"
+        {...props}
+        src="/brand-favicon.svg"
+        alt="devjet favicon"
+      />
     </Link>
   );
 }

@@ -9,6 +9,7 @@ import { Container } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 import { Text } from "@chakra-ui/react";
 import { InputLeftElement } from "@chakra-ui/react";
+import Footer from "../components/Footer";
 
 export default function Blog({ posts }: { posts: BlogFrontMatter[] }) {
   const [searchValue, setSearchValue] = useState("");
@@ -49,6 +50,8 @@ export default function Blog({ posts }: { posts: BlogFrontMatter[] }) {
         {filteredBlogPosts.map((frontMatter) => (
           <BlogPostCard key={frontMatter.title} {...frontMatter} />
         ))}
+
+        <Footer />
       </Container>
     </>
   );
