@@ -16,13 +16,21 @@ import {
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
 
-export default function Login() {
+export default function SignUp() {
   const [state, setState] = useState({
+    fullName: {
+      value: "",
+      error: "",
+    },
     email: {
       value: "",
       error: "",
     },
     password: {
+      value: "",
+      error: "",
+    },
+    passwordConfirmation: {
       value: "",
       error: "",
     },
@@ -41,7 +49,7 @@ export default function Login() {
       <Container maxW="md">
         <BrandFavicon mx="auto" mb="4" />
         <Heading mb="20" textAlign="center">
-          Log in to your account
+          Create your account
         </Heading>
         <Box
           as="form"
@@ -61,7 +69,7 @@ export default function Login() {
             />
             <FormErrorMessage>{state.email.error}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={state.email.error !== ""}>
+          <FormControl isInvalid={state.email.error !== ""} mb="5">
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
@@ -72,28 +80,30 @@ export default function Login() {
             />
             <FormErrorMessage>{state.password.error}</FormErrorMessage>
           </FormControl>
-          <NextLink href="/auth/recover" passHref>
-            <Link
-              color="blue.600"
-              fontWeight="medium"
-              display="block"
-              textAlign="right"
-              mt="1"
-            >
-              Forgot your password?
-            </Link>
-          </NextLink>
+          <FormControl isInvalid={state.passwordConfirmation.error !== ""}>
+            <FormLabel>Confirm password</FormLabel>
+            <Input
+              type="password"
+              name="passwordConfirmation"
+              bg="white"
+              value={state.password.value}
+              onChange={onChange}
+            />
+            <FormErrorMessage>
+              {state.passwordConfirmation.error}
+            </FormErrorMessage>
+          </FormControl>
           <Button type="submit" mt="8" size="md" colorScheme="blue" w="full">
-            Sign In
+            Sign up
           </Button>
         </Box>
         <Flex justifyContent="center" mt="6">
           <Text as="span" fontWeight="500" mr="1" color="gray.600">
-            Don&apos;t have an account?
+            Already have an account?
           </Text>
-          <NextLink href="/auth/signup" passHref>
+          <NextLink href="/auth/login" passHref>
             <Link color="blue.600" fontWeight="500">
-              Sign up
+              Sign in
             </Link>
           </NextLink>
         </Flex>
