@@ -5,6 +5,7 @@ import { Heading, Text, Flex, Container, Tag } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { BlogFrontMatter } from "../types/Blog";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import NavBar from "../components/NavBar";
 
 function BlogLayout({
   children,
@@ -22,7 +23,8 @@ function BlogLayout({
         <title>{slug}</title>
       </Head>
       <Container as="article" w="full" maxW="container.md">
-        <Text fontSize="sm" mt="8">
+        <NavBar />
+        <Text fontSize="sm" mt="16">
           {format(parseISO(frontMatter.publishedAt), "MMMM dd, yyyy")}
         </Text>
         <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">
