@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { BlogFrontMatter } from "../types/Blog";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 function BlogLayout({
   children,
@@ -40,7 +41,10 @@ function BlogLayout({
           </Flex>
         </Flex>
         <Text mt="4">{frontMatter.summary}</Text>
+
         <Prose className="prose">{children}</Prose>
+
+        <Footer />
       </Container>
     </>
   );
