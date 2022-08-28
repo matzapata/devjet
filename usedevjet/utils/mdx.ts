@@ -1,7 +1,7 @@
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
-import mdxPrism from "mdx-prism";
+import mdxPrism from "rehype-prism-plus";
 import renderToString from "next-mdx-remote/render-to-string";
 import { BlogFrontMatter } from "../types/Blog";
 

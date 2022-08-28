@@ -14,7 +14,7 @@ function BlogLayout({
   frontMatter: BlogFrontMatter;
 }) {
   const router = useRouter();
-  const slug = router.asPath.replace("/blog", "");
+  const slug = router.asPath.replace("/blog/", "");
 
   return (
     <>
