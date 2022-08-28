@@ -1,6 +1,7 @@
 import React from "react";
 import { BrandLogo } from "./Brand";
 import { Button, Flex, Hide, HStack } from "@chakra-ui/react";
+import Link from "next/link";
 
 function NavBar() {
   return (
@@ -8,10 +9,16 @@ function NavBar() {
       <BrandLogo />
       <HStack spacing="4">
         <Hide below="md">
-          <Button variant="ghost">Explore</Button>
-          <Button variant="ghost">Log in</Button>
+          <Link href="/">
+            <Button variant="ghost">Explore</Button>
+          </Link>
+          <Link href="/auth/login">
+            <Button variant="ghost">Log in</Button>
+          </Link>
         </Hide>
-        <Button colorScheme="blue">Get started</Button>
+        <Link href="/auth/signup">
+          <Button colorScheme="blue">Get started</Button>
+        </Link>
       </HStack>
     </Flex>
   );
