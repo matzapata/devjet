@@ -10,6 +10,7 @@
     "lint:fix": "eslint --fix ./**/*.{js,jsx,ts,tsx,json}"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^1.9.1",
     "@chakra-ui/icons": "^2.0.9",
     "@chakra-ui/react": "^2.2.9",
     "@emotion/react": "^11.10.0",
