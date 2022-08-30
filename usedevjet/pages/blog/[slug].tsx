@@ -5,7 +5,6 @@ import BlogLayout from "../../layout/blog";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { BlogFrontMatter } from "../../types/Blog";
 import { getMDXComponent } from "mdx-bundler/client";
-import NavBar from "../../components/NavBar";
 
 function Blog({
   code,
