@@ -2,9 +2,9 @@ import React from "react";
 import NextLink from "next/link";
 import { Heading, Text, Link, Box } from "@chakra-ui/react";
 import { parseISO, format } from "date-fns";
-import { BlogFrontMatter } from "../types/Blog";
+import { Post } from "contentlayer/generated";
 
-function BlogPostCard({ title, publishedAt, summary, slug }: BlogFrontMatter) {
+function BlogPostCard({ post }: { post: Post }) {
   return (
     <Box
       p="8"
@@ -14,13 +14,13 @@ function BlogPostCard({ title, publishedAt, summary, slug }: BlogFrontMatter) {
       borderColor="gray.200"
       borderRadius="8"
     >
-      <NextLink href={`blog/${slug}`} passHref>
+      <NextLink href={post.url} passHref>
         <Link>
-          <Heading size="md">{title}</Heading>
+          <Heading size="md">{post.title}</Heading>
           <Text fontSize="sm" mb="2">
-            {format(parseISO(publishedAt), "MMMM dd, yyyy")}
+            {format(parseISO(post.date), "MMMM dd, yyyy")}
           </Text>
-          <Text>{summary}</Text>
+          <Text>{post.summary}</Text>
         </Link>
       </NextLink>
     </Box>

@@ -1,8 +1,8 @@
 ---
-title: "Improving My Next.js MDX Blog"
-publishedAt: "2020-03-22"
+title: "Another Test Post"
+date: 2022-02-28
 summary: "This is the summary of our blog post! This is the summary of our blog post! This is the summary of our blog post!"
-tags: ["blog", "mdx"]
+tags: ["blog","mdx"]
 ---
 
 ## Table of Contents
@@ -12,10 +12,23 @@ tags: ["blog", "mdx"]
 - Allows you to escape or skip HTML (try toggling the checkboxes above)
 - If you escape or skip the HTML, no `dangerouslySetInnerHTML` is used! Yay!
 
+## Getting started
+
+Preliminary question:
+
+<button onClick={() => alert(42)}>
+  What is the answer to the mystery of universe ??
+</button>
+
+## HTML block below
+
+<blockquote>
+  This blockquote will change based on the HTML settings above.
+</blockquote>
 
 ## How about some code?
 
-```js:filename.js {1,2}
+```js
 var React = require("react");
 var Markdown = require("react-markdown");
 React.render(
