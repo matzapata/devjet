@@ -8,6 +8,8 @@ import {
   InputLeftElement,
   Text,
   Container,
+  Box,
+  Divider,
 } from "@chakra-ui/react";
 
 import NavBar from "../components/NavBar";
@@ -16,6 +18,7 @@ import PostCard from "../components/BlogPostCard";
 
 import { compareDesc } from "date-fns";
 import { allPosts, Post } from "contentlayer/generated";
+import QuickStartCard from "components/QuickstartCard";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -27,8 +30,10 @@ export async function getStaticProps() {
 export default function Blog({ posts }: { posts: Post[] }) {
   const [searchValue, setSearchValue] = useState("");
 
-  const filteredBlogPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredBlogPosts = posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+      post.url !== "/posts/quickstart"
   );
 
   return (
@@ -61,10 +66,16 @@ export default function Blog({ posts }: { posts: Post[] }) {
           </InputLeftElement>
         </InputGroup>
 
-        {!filteredBlogPosts.length && "No posts found :(("}
-        {filteredBlogPosts.map((p, i) => (
-          <PostCard key={i} post={p} />
-        ))}
+        <Divider my="4" />
+
+        <QuickStartCard />
+
+        <Box mt="4">
+          {!filteredBlogPosts.length && "No posts found :(("}
+          {filteredBlogPosts.map((p, i) => (
+            <PostCard key={i} post={p} />
+          ))}
+        </Box>
 
         <Footer />
       </Container>
