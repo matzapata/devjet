@@ -1,27 +1,45 @@
 import React, { useState } from "react";
 import Head from "next/head";
-import { Heading, Input, InputGroup } from "@chakra-ui/react";
-import { getAllFilesFrontMatter } from "../utils/mdx";
-import BlogPostCard from "../components/BlogPostCard";
 import { SearchIcon } from "@chakra-ui/icons";
-import { BlogFrontMatter } from "../types/Blog";
-import { Container } from "@chakra-ui/react";
-import NavBar from "../components/NavBar";
-import { Text } from "@chakra-ui/react";
-import { InputLeftElement } from "@chakra-ui/react";
-import Footer from "../components/Footer";
+import {
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+  Container,
+  Box,
+  Divider,
+} from "@chakra-ui/react";
 
-export default function Blog({ posts }: { posts: BlogFrontMatter[] }) {
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import PostCard from "../components/BlogPostCard";
+
+import { compareDesc } from "date-fns";
+import { allPosts, Post } from "contentlayer/generated";
+import QuickStartCard from "components/QuickstartCard";
+
+export async function getStaticProps() {
+  const posts: Post[] = allPosts.sort((a, b) => {
+    return compareDesc(new Date(a.date), new Date(b.date));
+  });
+  return { props: { posts } };
+}
+
+export default function Blog({ posts }: { posts: Post[] }) {
   const [searchValue, setSearchValue] = useState("");
 
-  const filteredBlogPosts = posts.filter((frontMatter) =>
-    frontMatter.title.toLowerCase().includes(searchValue.toLowerCase())
+  const filteredBlogPosts = posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+      post.url !== "/posts/quickstart"
   );
 
   return (
     <>
       <Head>
-        <title>Blog</title>
+        <title>Devjet</title>
       </Head>
       <Container w="full" maxW="container.md">
         <NavBar />
@@ -39,26 +57,28 @@ export default function Blog({ posts }: { posts: BlogFrontMatter[] }) {
           <Input
             aria-label="Search by title"
             placeholder="Search by title"
-            onChange={(e: any) => setSearchValue(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchValue(e.target.value)
+            }
           />
           <InputLeftElement>
             <SearchIcon color="gray.300" />
           </InputLeftElement>
         </InputGroup>
 
-        {!filteredBlogPosts.length && "No posts found :(("}
-        {filteredBlogPosts.map((frontMatter) => (
-          <BlogPostCard key={frontMatter.title} {...frontMatter} />
-        ))}
+        <Divider my="4" />
+
+        <QuickStartCard />
+
+        <Box mt="4">
+          {!filteredBlogPosts.length && "No posts found :(("}
+          {filteredBlogPosts.map((p, i) => (
+            <PostCard key={i} post={p} />
+          ))}
+        </Box>
 
         <Footer />
       </Container>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const posts = await getAllFilesFrontMatter("blog");
-
-  return { props: { posts } };
 }

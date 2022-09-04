@@ -3,16 +3,16 @@ html, body {
 }
 
 .prose pre {
-    border: 1px;
+    border: 1px solid;
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
-    border-color: var(--chakra-colors-gray-700) !important;
-    background-color: var(--chakra-colors-gray-900) !important;
+    border-color: var(--chakra-colors-gray-200) !important;
+    background-color: var(--chakra-colors-gray-50) !important;
 }
 
 .prose pre code {
     padding: 0;
-    color: var(--chakra-colors-gray-200);
+    color: var(--chakra-colors-gray-800);
     border: initial;
 }
 
@@ -20,11 +20,11 @@ html, body {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-    color: var(--chakra-colors-gray-300);
+    color: var(--chakra-colors-gray-700);
 }
 
 .token.punctuation {
-    color: var(--chakra-colors-gray-300);
+    color: var(--chakra-colors-gray-700);
 }
 
 .token.property,
@@ -77,7 +77,7 @@ html, body {
 
 code[class*='language-'],
 pre[class*='language-'] {
-    color: var(--chakra-colors-gray-50);
+    color: var(--chakra-colors-gray-800);
 }
 
 pre::-webkit-scrollbar {
@@ -94,8 +94,8 @@ pre {
     padding-bottom: 0.75rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
-    background-color: var(--chakra-colors-gray-800);
-    color: var(--chakra-colors-gray-200);
+    background-color: var(--chakra-colors-gray-200);
+    color: var(--chakra-colors-gray-800);
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -103,8 +103,9 @@ pre {
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
     border-width: 1px;
+    border-style: solid;
     border-bottom-width: 0;
-    border-color: var(--chakra-colors-gray-700);
+    border-color: var(--chakra-colors-gray-200);
 }
 
 .rehype-code-title+pre {
@@ -119,7 +120,7 @@ pre {
     padding-right: 1rem;
     margin-left: -1rem;
     margin-right: -1rem;
-    background-color: var(--chakra-colors-gray-800);
+    background-color: var(--chakra-colors-gray-100);
     border-color: var(--chakra-colors-blue-500);
     border-left-width: 4px;
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { Image } from "@chakra-ui/react";
+import { ChakraProps, Image } from "@chakra-ui/react";
 
-export function BrandFavicon(props: any) {
+export function BrandFavicon(props: ChakraProps) {
   return (
     <Link href={"/"}>
       <Image
