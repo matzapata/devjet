@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -17,24 +17,44 @@ import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
 import { supabase } from "utils/supabase";
 import { useRouter } from "next/router";
+import { useAuth } from "utils/auth";
 
 export default function Login() {
   const router = useRouter();
+  const { user } = useAuth();
   const [state, setState] = useState({
     email: "",
     password: "",
     error: "",
   });
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user]);
 
   const onChange = (e: any) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setState({ ...state, error: "" });
+    setLoading(true);
+    const { error } = await supabase.auth.signIn({
+      email: state.email,
+      password: state.password,
+    });
+    setLoading(false);
+    if (error) setState({ ...state, error: error.message });
+    else router.push("/");
   };
 
   return (
@@ -44,20 +64,7 @@ export default function Login() {
         <Heading mb="20" textAlign="center">
           Log in to your account
         </Heading>
-        <Box
-          as="form"
-          w="full"
-          onSubmit={async (e: any) => {
-            e.preventDefault();
-            console.log(state);
-            const { error } = await supabase.auth.signIn({
-              email: state.email,
-              password: state.password,
-            });
-            if (error) setState({ ...state, error: error.message });
-            else router.push("/");
-          }}
-        >
+        <Box as="form" w="full" onSubmit={onSubmit}>
           <FormControl isInvalid={errors.email !== ""} mb="5">
             <FormLabel>Email</FormLabel>
             <Input
@@ -93,7 +100,14 @@ export default function Login() {
               Forgot your password?
             </Link>
           </NextLink>
-          <Button type="submit" mt="8" size="md" colorScheme="blue" w="full">
+          <Button
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+            isLoading={loading}
+          >
             Sign In
           </Button>
           <Text color="red.500" mt="2" fontWeight="500">

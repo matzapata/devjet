@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Container,
@@ -52,6 +52,18 @@ export default function SignUp() {
     });
   };
 
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setState({ ...state, error: error.message });
+    else router.push("/auth/login");
+    setLoading(false);
+  };
+
   return (
     <Center minH="100vh" py="10">
       <Container maxW="md">
@@ -59,21 +71,7 @@ export default function SignUp() {
         <Heading mb="20" textAlign="center">
           Create your account
         </Heading>
-        <Box
-          as="form"
-          w="full"
-          onSubmit={async (e: any) => {
-            e.preventDefault();
-            setLoading(true);
-            const { error } = await supabase.auth.signUp({
-              email: state.email,
-              password: state.password,
-            });
-            if (error) setState({ ...state, error: error.message });
-            else router.push("/");
-            setLoading(false);
-          }}
-        >
+        <Box as="form" w="full" onSubmit={onSubmit}>
           <FormControl isInvalid={state.errors.email !== ""} mb="5">
             <FormLabel>Email</FormLabel>
             <Input
