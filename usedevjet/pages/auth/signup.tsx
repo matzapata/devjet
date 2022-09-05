@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -15,37 +15,34 @@ import {
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
-import { supabase } from "utils/supabase";
 import { useRouter } from "next/router";
+import { useAuth } from "utils/auth";
 
 type State = {
   email: string;
   password: string;
   passwordConfirmation: string;
-  errors: {
-    email: string;
-    password: string;
-    passwordConfirmation: string;
-  };
-  error: string;
 };
 
 export default function SignUp() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { loading, user, signUp, error } = useAuth();
   const [state, setState] = useState<State>({
     email: "",
     password: "",
     passwordConfirmation: "",
-    errors: {
-      email: "",
-      password: "",
-      passwordConfirmation: "",
-    },
-    error: "",
+  });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
   });
 
-  const onChange = (e: any) => {
+  useEffect(() => {
+    if (user) router.push("/");
+  }, []);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
@@ -54,14 +51,7 @@ export default function SignUp() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email: state.email,
-      password: state.password,
-    });
-    if (error) setState({ ...state, error: error.message });
-    else router.push("/auth/login");
-    setLoading(false);
+    signUp(state.email, state.password);
   };
 
   return (
@@ -72,7 +62,7 @@ export default function SignUp() {
           Create your account
         </Heading>
         <Box as="form" w="full" onSubmit={onSubmit}>
-          <FormControl isInvalid={state.errors.email !== ""} mb="5">
+          <FormControl isInvalid={errors.email !== ""} mb="5">
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
@@ -82,9 +72,9 @@ export default function SignUp() {
               value={state.email}
               onChange={onChange}
             />
-            <FormErrorMessage>{state.errors.email}</FormErrorMessage>
+            <FormErrorMessage>{errors.email}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={state.errors.password !== ""} mb="5">
+          <FormControl isInvalid={errors.password !== ""} mb="5">
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
@@ -94,9 +84,9 @@ export default function SignUp() {
               value={state.password}
               onChange={onChange}
             />
-            <FormErrorMessage>{state.errors.password}</FormErrorMessage>
+            <FormErrorMessage>{errors.password}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={state.errors.passwordConfirmation !== ""}>
+          <FormControl isInvalid={errors.passwordConfirmation !== ""}>
             <FormLabel>Confirm password</FormLabel>
             <Input
               type="password"
@@ -106,9 +96,7 @@ export default function SignUp() {
               value={state.passwordConfirmation}
               onChange={onChange}
             />
-            <FormErrorMessage>
-              {state.errors.passwordConfirmation}
-            </FormErrorMessage>
+            <FormErrorMessage>{errors.passwordConfirmation}</FormErrorMessage>
           </FormControl>
           <Button
             isLoading={loading}
@@ -120,6 +108,9 @@ export default function SignUp() {
           >
             Sign up
           </Button>
+          <Text color="red.500" mt="2" fontWeight="500">
+            {error}
+          </Text>
         </Box>
         <Flex justifyContent="center" mt="6">
           <Text as="span" fontWeight="500" mr="1" color="gray.600">

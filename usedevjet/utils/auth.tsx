@@ -5,6 +5,7 @@ import {
   User,
 } from "@supabase/supabase-js";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export const AuthContext = createContext<any>({});
 
@@ -17,6 +18,9 @@ export const AuthProvider = ({
 }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const activeSession = supabase.auth.session();
@@ -33,12 +37,39 @@ export const AuthProvider = ({
     return () => authListener?.unsubscribe();
   }, []);
 
+  const signOut = () => supabase.auth.signOut();
+  const signIn = async (email: string, password: string) => {
+    setLoading(true);
+    setError("");
+    const { error } = await supabase.auth.signIn({
+      email,
+      password,
+    });
+    setLoading(false);
+    if (error) setError(error.message);
+    else router.push("/");
+  };
+  const signUp = async (email: string, password: string) => {
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) setError(error.message);
+    else router.push("/auth/login");
+    setLoading(false);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         session,
         user,
-        signOut: () => supabase.auth.signOut(),
+        signOut,
+        signIn,
+        signUp,
+        loading,
+        error,
       }}
     >
       {children}

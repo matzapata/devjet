@@ -15,19 +15,16 @@ import {
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
-import { supabase } from "utils/supabase";
-import { useRouter } from "next/router";
 import { useAuth } from "utils/auth";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading, error, signIn } = useAuth();
   const [state, setState] = useState({
     email: "",
     password: "",
-    error: "",
   });
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -37,7 +34,7 @@ export default function Login() {
     if (user) router.push("/");
   }, [user]);
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
@@ -46,15 +43,7 @@ export default function Login() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setState({ ...state, error: "" });
-    setLoading(true);
-    const { error } = await supabase.auth.signIn({
-      email: state.email,
-      password: state.password,
-    });
-    setLoading(false);
-    if (error) setState({ ...state, error: error.message });
-    else router.push("/");
+    signIn(state.email, state.password);
   };
 
   return (
@@ -111,7 +100,7 @@ export default function Login() {
             Sign In
           </Button>
           <Text color="red.500" mt="2" fontWeight="500">
-            {state.error}
+            {error}
           </Text>
         </Box>
         <Flex justifyContent="center" mt="6">
