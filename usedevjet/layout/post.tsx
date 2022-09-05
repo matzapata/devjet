@@ -32,7 +32,9 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
         </Flex>
         <Text mt="4">{post.summary}</Text>
 
-        <Prose className="prose">{children}</Prose>
+        <Prose className="prose" mb="20">
+          {children}
+        </Prose>
 
         <Footer />
       </Container>
