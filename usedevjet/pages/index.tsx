@@ -18,7 +18,7 @@ import PostCard from "../components/BlogPostCard";
 
 import { compareDesc } from "date-fns";
 import { allPosts, Post } from "contentlayer/generated";
-import QuickStartCard from "components/QuickstartCard";
+import QuickStartCard from "../components/QuickstartCard";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {

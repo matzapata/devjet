@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -15,24 +15,32 @@ import {
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
+import { supabase } from "utils/supabase";
+import { useRouter } from "next/router";
+
+type State = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+  errors: {
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+  };
+  error: string;
+};
 
 export default function SignUp() {
-  const [state, setState] = useState({
-    fullName: {
-      value: "",
-      error: "",
-    },
-    email: {
-      value: "",
-      error: "",
-    },
-    password: {
-      value: "",
-      error: "",
-    },
-    passwordConfirmation: {
-      value: "",
-      error: "",
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState<State>({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+    errors: {
+      email: "",
+      password: "",
+      passwordConfirmation: "",
     },
     error: "",
   });
@@ -54,46 +62,64 @@ export default function SignUp() {
         <Box
           as="form"
           w="full"
-          onSubmit={(e: any) => {
+          onSubmit={async (e: any) => {
             e.preventDefault();
+            setLoading(true);
+            const { error } = await supabase.auth.signUp({
+              email: state.email,
+              password: state.password,
+            });
+            if (error) setState({ ...state, error: error.message });
+            else router.push("/");
+            setLoading(false);
           }}
         >
-          <FormControl isInvalid={state.email.error !== ""} mb="5">
+          <FormControl isInvalid={state.errors.email !== ""} mb="5">
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
               name="email"
               bg="white"
-              value={state.email.value}
+              required
+              value={state.email}
               onChange={onChange}
             />
-            <FormErrorMessage>{state.email.error}</FormErrorMessage>
+            <FormErrorMessage>{state.errors.email}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={state.email.error !== ""} mb="5">
+          <FormControl isInvalid={state.errors.password !== ""} mb="5">
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
               name="password"
               bg="white"
-              value={state.password.value}
+              required
+              value={state.password}
               onChange={onChange}
             />
-            <FormErrorMessage>{state.password.error}</FormErrorMessage>
+            <FormErrorMessage>{state.errors.password}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={state.passwordConfirmation.error !== ""}>
+          <FormControl isInvalid={state.errors.passwordConfirmation !== ""}>
             <FormLabel>Confirm password</FormLabel>
             <Input
               type="password"
               name="passwordConfirmation"
               bg="white"
-              value={state.password.value}
+              required
+              value={state.passwordConfirmation}
               onChange={onChange}
             />
             <FormErrorMessage>
-              {state.passwordConfirmation.error}
+              {state.errors.passwordConfirmation}
             </FormErrorMessage>
           </FormControl>
-          <Button type="submit" mt="8" size="md" colorScheme="blue" w="full">
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
             Sign up
           </Button>
         </Box>

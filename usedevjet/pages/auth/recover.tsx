@@ -50,6 +50,7 @@ function Recover() {
               type="email"
               name="email"
               bg="white"
+              required
               placeholder="Enter your email"
               value={state.value}
               onChange={onChange}
@@ -61,7 +62,7 @@ function Recover() {
           </Button>
         </Box>
         <Box textAlign="center" mt="4">
-          <NextLink href="/auth/signup" passHref>
+          <NextLink href="/auth/login" passHref>
             <Link color="gray.600" fontWeight="500" justifyItems="center">
               <ArrowBackIcon mr="1" />
               Back to login

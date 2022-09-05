@@ -4,10 +4,10 @@ import { Button, Flex, Hide, HStack } from "@chakra-ui/react";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
-import { useUser } from "@auth0/nextjs-auth0";
+import { useAuth } from "utils/auth";
 
 function NavBar() {
-  const { user, isLoading } = useUser();
+  const { user } = useAuth();
 
   return (
     <Flex my="8" justifyContent="space-between">
@@ -19,11 +19,9 @@ function NavBar() {
           </Link>
         </Hide>
         {user ? (
-          <LogoutButton colorScheme="blue">Logout</LogoutButton>
+          <LogoutButton colorScheme="blue" />
         ) : (
-          <LoginButton isLoading={isLoading} colorScheme="blue">
-            Get started
-          </LoginButton>
+          <LoginButton colorScheme="blue" />
         )}
       </HStack>
     </Flex>

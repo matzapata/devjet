@@ -1,16 +1,12 @@
 import React from "react";
-import { Button, ChakraProps } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { useAuth } from "utils/auth";
 
-export default function LogoutButton({
-  children,
-  ...props
-}: {
-  children: JSX.Element;
-  props: ChakraProps;
-}) {
+export default function LogoutButton(props: any) {
+  const { signOut } = useAuth();
   return (
-    <Button as={"a"} href="/api/auth/logout" {...props}>
-      {children}
+    <Button onClick={() => signOut()} {...props}>
+      Logout
     </Button>
   );
 }

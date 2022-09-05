@@ -1,16 +1,13 @@
 import React from "react";
-import { Button, ChakraProps } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
-export default function LoginButton({
-  children,
-  ...props
-}: {
-  children: JSX.Element;
-  props: ChakraProps;
-}) {
+export default function LoginButton(props: any) {
+  const router = useRouter();
+
   return (
-    <Button as={"a"} href="/api/auth/login" {...props}>
-      {children}
+    <Button onClick={() => router.push("/auth/login")} {...props}>
+      Login
     </Button>
   );
 }

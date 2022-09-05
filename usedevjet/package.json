@@ -10,13 +10,13 @@
     "lint:fix": "eslint --fix ./**/*.{js,jsx,ts,tsx,json}"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^1.9.1",
     "@chakra-ui/icons": "^2.0.9",
     "@chakra-ui/react": "^2.2.9",
     "@chakra-ui/theme-tools": "^2.0.11",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
+    "@supabase/supabase-js": "^1.35.6",
     "contentlayer": "^0.2.7",
     "date-fns": "^2.16.1",
     "framer-motion": "^6.5.1",
