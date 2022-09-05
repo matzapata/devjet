@@ -13,7 +13,7 @@ function NavBar() {
     <Flex my="8" justifyContent="space-between">
       <BrandLogo />
       <HStack spacing="4">
-        <Hide below="md">
+        <Hide below="sm">
           <Link href="/">
             <Button variant="ghost">Explore</Button>
           </Link>
