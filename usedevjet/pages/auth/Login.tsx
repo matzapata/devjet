@@ -12,6 +12,8 @@ import {
   Box,
   Text,
   Flex,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
@@ -25,14 +27,14 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({
+  const [errors] = useState({
     email: "",
     password: "",
   });
 
   useEffect(() => {
     if (user) router.push("/");
-  }, [user]);
+  }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -53,6 +55,12 @@ export default function Login() {
         <Heading mb="20" textAlign="center">
           Log in to your account
         </Heading>
+        {router.query.recover && (
+          <Alert status="success" mb="5" fontSize="sm">
+            <AlertIcon h="4" />
+            Recovery email sent successfully
+          </Alert>
+        )}
         <Box as="form" w="full" onSubmit={onSubmit}>
           <FormControl isInvalid={errors.email !== ""} mb="5">
             <FormLabel>Email</FormLabel>

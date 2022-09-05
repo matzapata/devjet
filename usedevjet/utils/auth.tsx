@@ -35,7 +35,7 @@ export const AuthProvider = ({
     );
 
     return () => authListener?.unsubscribe();
-  }, []);
+  }, [supabase.auth]);
 
   const signOut = () => supabase.auth.signOut();
   const signIn = async (email: string, password: string) => {
@@ -59,17 +59,29 @@ export const AuthProvider = ({
     else router.push("/auth/login");
     setLoading(false);
   };
+  const recoverPassword = async (email: string) => {
+    setLoading(true);
+    const { error } = await supabase.auth.api.resetPasswordForEmail(email);
+    if (error) setError(error.message);
+    else
+      router.push({
+        pathname: "/auth/login",
+        query: { recover: true },
+      });
+    setLoading(false);
+  };
 
   return (
     <AuthContext.Provider
       value={{
         session,
         user,
+        error,
+        loading,
         signOut,
         signIn,
         signUp,
-        loading,
-        error,
+        recoverPassword,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -14,18 +14,21 @@ import {
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
+import { useAuth } from "utils/auth";
+import { useRouter } from "next/router";
 
 function Recover() {
-  const [state, setState] = useState({
-    value: "",
-    error: "",
-  });
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const { error, loading, user, recoverPassword } = useAuth();
 
-  const onChange = (e: any) => {
-    setState({
-      ...state,
-      value: e.target.value,
-    });
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    recoverPassword(email);
   };
 
   return (
@@ -38,26 +41,27 @@ function Recover() {
         <Text mb="10" fontWeight="medium" color="gray.700" textAlign="center">
           No worries, we&apos;ll send you reset instructions.
         </Text>
-        <Box
-          as="form"
-          w="full"
-          onSubmit={(e: any) => {
-            e.preventDefault();
-          }}
-        >
-          <FormControl isInvalid={state.error !== ""} mb="5">
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl isInvalid={error !== ""} mb="5">
             <Input
               type="email"
               name="email"
               bg="white"
               required
               placeholder="Enter your email"
-              value={state.value}
-              onChange={onChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <FormErrorMessage>{state.error}</FormErrorMessage>
+            <FormErrorMessage>{error}</FormErrorMessage>
           </FormControl>
-          <Button type="submit" mt="8" size="md" colorScheme="blue" w="full">
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
             Reset password
           </Button>
         </Box>

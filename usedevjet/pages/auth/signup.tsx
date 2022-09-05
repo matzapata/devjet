@@ -32,7 +32,7 @@ export default function SignUp() {
     password: "",
     passwordConfirmation: "",
   });
-  const [errors, setErrors] = useState({
+  const [errors] = useState({
     email: "",
     password: "",
     passwordConfirmation: "",
@@ -40,7 +40,7 @@ export default function SignUp() {
 
   useEffect(() => {
     if (user) router.push("/");
-  }, []);
+  }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
