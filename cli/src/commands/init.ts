@@ -18,6 +18,19 @@ module.exports = {
 
     print.info(`Creating a new pern dejvet app at ${projectDirectory}`)
 
+    if (filesystem.exists(projectDirectory)) {
+      const overwrite = await prompt.confirm(
+        `${projectDirectory} already exists. Would you like to overwrite it?`
+      )
+      if (overwrite) {
+        print.info(`Removing ${projectDirectory}...`)
+        filesystem.remove(projectDirectory)
+      } else {
+        print.error(`Couldn't create project at ${projectDirectory}`)
+        return null
+      }
+    }
+
     await filesystem.copy(
       filesystem.path(__dirname, '../templates/pern'),
       `./${projectDirectory}`
