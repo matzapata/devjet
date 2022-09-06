@@ -21,6 +21,7 @@ import { compareDesc } from "date-fns";
 import { allPosts, Post } from "contentlayer/generated";
 import QuickStartCard from "../components/QuickstartCard";
 import Pagination from "components/Pagination";
+import CategoriesFilter from "components/CategoriesFilter";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -33,19 +34,20 @@ export default function Blog({ posts }: { posts: Post[] }) {
   const [searchValue, setSearchValue] = useState("");
   const [filteredBlogPosts, setFilteredBlogPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
+  const [category, setCategory] = useState("all");
   const itemsPerPage = 10;
 
   useEffect(() => {
     setFilteredBlogPosts(
       posts
-        .filter(
-          (post) =>
-            post.title.toLowerCase().includes(searchValue.toLowerCase()) &&
-            post.url !== "/posts/quickstart"
+        .filter((p) =>
+          p.title.toLowerCase().includes(searchValue.toLowerCase())
         )
+        .filter((p) => p.url !== "/posts/quickstart")
+        .filter((p) => p.category === category || category === "all")
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
-  }, [posts, searchValue, page]);
+  }, [posts, searchValue, page, category]);
 
   return (
     <>
@@ -77,6 +79,8 @@ export default function Blog({ posts }: { posts: Post[] }) {
             <SearchIcon color="gray.300" />
           </InputLeftElement>
         </InputGroup>
+
+        <CategoriesFilter setCategory={(c) => setCategory(c)} />
 
         <Divider my="4" />
 
