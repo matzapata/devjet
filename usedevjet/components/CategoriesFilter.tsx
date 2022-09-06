@@ -1,6 +1,7 @@
 import React from "react";
-import { Button, HStack } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack } from "@chakra-ui/react";
 import { allPosts } from "contentlayer/generated";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 
 function CategoriesFilter({
   setCategory,
@@ -12,13 +13,40 @@ function CategoriesFilter({
     ...allPosts.map((p) => p.category).filter((c) => c !== undefined),
   ];
   return (
-    <HStack>
-      {categories.map((c, i) => (
-        <Button size="sm" key={i} onClick={() => setCategory(c as string)}>
-          {c}
-        </Button>
-      ))}
-    </HStack>
+    <Box position="relative">
+      <Box
+        overflowX="scroll"
+        css={{
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
+      >
+        <HStack width="fit-content">
+          {categories.map((c, i) => (
+            <Button
+              display="block"
+              size="sm"
+              key={i}
+              onClick={() => setCategory(c as string)}
+            >
+              {c}
+            </Button>
+          ))}
+        </HStack>
+      </Box>
+      <Box
+        px="2"
+        h="full"
+        bg="gray.50"
+        borderRadius="0"
+        position="absolute"
+        top="0"
+        right="0"
+      >
+        <ChevronRightIcon />
+      </Box>
+    </Box>
   );
 }
 
