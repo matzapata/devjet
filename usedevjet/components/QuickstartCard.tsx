@@ -13,6 +13,7 @@ function QuickStartCard() {
         bgColor="blue.50"
         borderRadius="6"
         cursor="pointer"
+        mb="4"
       >
         <Link fontWeight="500" fontSize="md" mb="2" color="gray.600">
           Quickstart

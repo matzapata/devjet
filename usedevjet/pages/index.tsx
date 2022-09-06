@@ -80,9 +80,8 @@ export default function Blog({ posts }: { posts: Post[] }) {
 
         <Divider my="4" />
 
-        <QuickStartCard />
-
         <Box mt="4">
+          <QuickStartCard />
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
             <PostCard key={i} post={p} />
