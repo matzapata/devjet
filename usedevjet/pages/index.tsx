@@ -55,6 +55,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
 
         <InputGroup mb="4" mt="8" w="100%" bg="white">
           <Input
+            shadow={"sm"}
             aria-label="Search by title"
             placeholder="Search by title"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

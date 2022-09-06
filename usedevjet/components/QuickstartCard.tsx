@@ -8,6 +8,7 @@ function QuickStartCard() {
       <Box
         border="1px"
         p="4"
+        shadow="sm"
         borderColor="blue.200"
         bgColor="blue.50"
         borderRadius="6"
