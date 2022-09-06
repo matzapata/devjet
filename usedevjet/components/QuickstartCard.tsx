@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Link, Text } from "@chakra-ui/react";
 import ReactLink from "next/link";
 
 function QuickStartCard() {
@@ -7,21 +7,17 @@ function QuickStartCard() {
     <ReactLink href="/posts/quickstart">
       <Box
         border="1px"
-        p="4"
+        p="6"
         shadow="sm"
         borderColor="blue.200"
         bgColor="blue.50"
         borderRadius="6"
         cursor="pointer"
-        _hover={{
-          border: "2px",
-          borderColor: "blue.200",
-        }}
       >
-        <Heading size="sm" mb="1">
+        <Link fontWeight="500" fontSize="md" mb="2" color="gray.600">
           Quickstart
-        </Heading>
-        <Text>
+        </Link>
+        <Text color="gray.600" fontSize="sm">
           Learn the basics of devjet tech stack and workflow to get started
           building your projects.
         </Text>

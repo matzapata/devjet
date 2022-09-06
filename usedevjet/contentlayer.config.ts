@@ -29,6 +29,16 @@ const Post = defineDocumentType(() => ({
       description: "Keywords representing the the post content",
       required: false,
     },
+    image: {
+      type: "string",
+      description: "Image that will be rendered on the post card",
+      required: true,
+    },
+    category: {
+      type: "enum",
+      options: ["basics", "auth"],
+      required: true,
+    },
   },
   computedFields: {
     url: {
