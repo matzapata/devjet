@@ -1,14 +1,6 @@
 import React from "react";
 import NextLink from "next/link";
-import {
-  Heading,
-  Text,
-  Link,
-  Box,
-  Image,
-  Flex,
-  HStack,
-} from "@chakra-ui/react";
+import { Text, Link, Box, Image, HStack } from "@chakra-ui/react";
 import { parseISO, format } from "date-fns";
 import { Post } from "contentlayer/generated";
 
