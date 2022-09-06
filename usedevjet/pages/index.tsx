@@ -15,7 +15,7 @@ import {
 
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import PostCard from "../components/BlogPostCard";
+import PostCard from "../components/PostCard";
 
 import { compareDesc } from "date-fns";
 import { allPosts, Post } from "contentlayer/generated";

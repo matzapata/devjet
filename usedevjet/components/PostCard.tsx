@@ -7,7 +7,7 @@ import { Post } from "contentlayer/generated";
 function BlogPostCard({ post }: { post: Post }) {
   return (
     <Box
-      p="8"
+      p="6"
       border="1px"
       bg="white"
       mb="4"
@@ -16,14 +16,16 @@ function BlogPostCard({ post }: { post: Post }) {
       shadow="sm"
     >
       <NextLink href={post.url} passHref>
-        <Link>
-          <Heading size="md">{post.title}</Heading>
-          <Text fontSize="sm" mb="2">
-            {format(parseISO(post.date), "MMMM dd, yyyy")}
-          </Text>
-          <Text>{post.summary}</Text>
+        <Link fontSize="lg" fontWeight="medium" color="blue.500">
+          {post.title}
         </Link>
       </NextLink>
+      <Text color="gray.600" mt="2">
+        {post.summary}
+      </Text>
+      <Text fontSize="sm" mb="2">
+        {format(parseISO(post.date), "MMMM dd, yyyy")}
+      </Text>
     </Box>
   );
 }
