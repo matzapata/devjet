@@ -21,7 +21,8 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
         <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">
           {post.title}
         </Heading>
-        <Flex justifyContent="space-between" mt="4" alignItems="center">
+        <Text mt="4">{post.summary}</Text>
+        <Flex justifyContent="space-between" mt="2" alignItems="center">
           <Flex>
             {post.tags?.map((t, i) => (
               <Tag size="sm" mr="2" key={i}>
@@ -30,7 +31,6 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
             ))}
           </Flex>
         </Flex>
-        <Text mt="4">{post.summary}</Text>
 
         <Prose className="prose" mb="20">
           {children}
