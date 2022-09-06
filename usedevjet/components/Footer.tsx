@@ -6,7 +6,7 @@ import { FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   return (
-    <VStack pt="4" pb="10">
+    <VStack pt="20" pb="10">
       <Divider />
       <Flex justifyContent="space-between" alignItems="center" w="100%">
         <Flex w="full" py="4">
