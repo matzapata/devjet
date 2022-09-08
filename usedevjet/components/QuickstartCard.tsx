@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Heading, Link, Text } from "@chakra-ui/react";
+import { Box, Link, Text } from "@chakra-ui/react";
 import ReactLink from "next/link";
 
 function QuickStartCard() {
@@ -7,7 +7,7 @@ function QuickStartCard() {
     <ReactLink href="/posts/quickstart">
       <Box
         border="1px"
-        p="6"
+        p="4"
         shadow="sm"
         borderColor="blue.200"
         bgColor="blue.50"

@@ -36,7 +36,7 @@ const Post = defineDocumentType(() => ({
     },
     category: {
       type: "enum",
-      options: ["basics", "auth"],
+      options: ["basics", "auth", "recipes", "snippets"],
       required: false,
     },
   },

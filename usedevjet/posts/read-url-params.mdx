@@ -1,0 +1,33 @@
+---
+title: "Read url parameters"
+date: 2022-09-07
+summary: "Read url parameters in client app using react-router-dom"
+tags: ["basics","react","react-router-dom"]
+category: "basics"
+image: "/images/react.png"
+---
+
+Use `:param` syntax in your route path and useParams() to read them:
+
+```tsx {2,8,15,16}
+import React from "react";
+import { Routes, Route, useParams } from "react-router-dom";
+
+function App() {
+    return (
+    <Routes>
+      <Route
+        path="invoices/:invoiceId"
+        element={<Invoice />}
+      />
+    </Routes>
+  );
+}
+
+function Invoice() {
+  let params = useParams();
+  return <h1>Invoice {params.invoiceId}</h1>;
+}
+```
+
+Note that the path segment `:invoiceId` and the param's key `params.invoiceId` match up.

@@ -16,7 +16,7 @@ function Footer() {
           </Text>
         </Flex>
         <Link href="https://www.linkedin.com/in/matias-zapata-b57406143/?locale=en_US">
-          <Icon as={FaLinkedin} h="6" cursor="pointer" />
+          <Icon as={FaLinkedin} h="7" cursor="pointer" />
         </Link>
       </Flex>
     </VStack>

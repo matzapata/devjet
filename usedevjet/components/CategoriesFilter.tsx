@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Flex, HStack } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 import { allPosts } from "contentlayer/generated";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 
@@ -8,10 +8,12 @@ function CategoriesFilter({
 }: {
   setCategory: (category: string) => void;
 }) {
-  const categories = [
+  const postCategories = [
     "all",
     ...allPosts.map((p) => p.category).filter((c) => c !== undefined),
   ];
+  const categories = Array.from(new Set(postCategories));
+
   return (
     <Box position="relative">
       <Box
