@@ -116,7 +116,7 @@ export default function SignUp() {
           <Text as="span" fontWeight="500" mr="1" color="gray.600">
             Already have an account?
           </Text>
-          <NextLink href="/auth/login" passHref>
+          <NextLink href="/auth/signin" passHref>
             <Link color="blue.600" fontWeight="500">
               Sign in
             </Link>

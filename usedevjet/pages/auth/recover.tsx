@@ -66,7 +66,7 @@ function Recover() {
           </Button>
         </Box>
         <Box textAlign="center" mt="4">
-          <NextLink href="/auth/login" passHref>
+          <NextLink href="/auth/signin" passHref>
             <Link color="gray.600" fontWeight="500" justifyItems="center">
               <ArrowBackIcon mr="1" />
               Back to login

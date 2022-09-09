@@ -6,7 +6,7 @@ export default function LoginButton(props: any) {
   const router = useRouter();
 
   return (
-    <Button onClick={() => router.push("/auth/login")} {...props}>
+    <Button onClick={() => router.push("/auth/signin")} {...props}>
       Login
     </Button>
   );

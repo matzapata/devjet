@@ -56,7 +56,7 @@ export const AuthProvider = ({
       password,
     });
     if (error) setError(error.message);
-    else router.push("/auth/login");
+    else router.push("/auth/signin");
     setLoading(false);
   };
   const recoverPassword = async (email: string) => {
@@ -65,7 +65,7 @@ export const AuthProvider = ({
     if (error) setError(error.message);
     else
       router.push({
-        pathname: "/auth/login",
+        pathname: "/auth/signin",
         query: { recover: true },
       });
     setLoading(false);
