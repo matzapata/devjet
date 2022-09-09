@@ -1,4 +1,5 @@
 import { GluegunToolbox } from 'gluegun'
+import gitly from 'gitly'
 
 module.exports = {
   name: 'init',
@@ -31,11 +32,8 @@ module.exports = {
       }
     }
 
-    await filesystem.copy(
-      filesystem.path(__dirname, '../templates/pern'),
-      `./${projectDirectory}`
-    )
-
+    print.info('Downloading boilerplate...')
+    await gitly('matzapata/devjet-pern-boilerplate', projectDirectory, {})
     await system.run(
       `cd ${projectDirectory} && git init && git add . && git commit -m "First commit by devjet"`
     )
