@@ -33,13 +33,18 @@ module.exports = {
     }
 
     print.info('Downloading boilerplate...')
-    await gitly('matzapata/devjet-pern-boilerplate', projectDirectory, {})
-    await system.run(
-      `cd ${projectDirectory} && git init && git add . && git commit -m "First commit by devjet"`
-    )
+    try {
+      await gitly('matzapata/devjet-pern-boilerplate', projectDirectory, {})
+      await system.run(
+        `cd ${projectDirectory} && git init && git add . && git commit -m "First commit by devjet"`
+      )
 
-    print.success(`Generated pern project at ${projectDirectory}`)
-    print.info(`- cd ${projectDirectory}/api && npm install`)
-    print.info(`- cd ${projectDirectory}/client && npm install`)
+      print.success(`Generated pern project at ${projectDirectory}`)
+      print.info(`- cd ${projectDirectory}/api && npm install`)
+      print.info(`- cd ${projectDirectory}/client && npm install`)
+    } catch (e) {
+      print.error('Error creating devjet boilerplate')
+      print.error(e)
+    }
   },
 }
