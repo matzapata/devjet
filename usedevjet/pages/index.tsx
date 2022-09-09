@@ -45,6 +45,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
         )
         .filter((p) => p.url !== "/posts/quickstart")
         .filter((p) => p.category === category || category === "all")
+        .sort((a, b) => (a.title > b.title ? 1 : -1))
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
   }, [posts, searchValue, page, category]);

@@ -1,0 +1,24 @@
+---
+title: "Absolute imports"
+date: 2022-02-28
+summary: "Learn how to work with redux toolkit by creating a slice that makes use of both, syncronous and asyncronous actions"
+tags: ["basics", "utils"]
+category: "basics"
+image: "/images/react.png"
+---
+
+With usedevjet pern boilerplate you can use absolute imports by default in yout react client aplication. We've acomplished this by configuring tsconfig `baseUrl`.
+
+```json:tsconfig.json {4,7}
+{
+  "compilerOptions": {
+    ...,
+    "baseUrl": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+This means you can use `redux/stores.ts` instead of `../../../redux/stores.ts` for example. Access all folders from `src` without relative paths.
