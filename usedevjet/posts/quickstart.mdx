@@ -28,16 +28,30 @@ Some other services may be opted on receipes themselves to build different funct
 
 In order to get you started easily, we've created a CLI tool that you'll use frecuently along with the code receipes provided.
 
-Install `devjet` CLI:
+Install `devjet` CLI 
 
 ```
 npm install -g devjet
-```
-
-Create a project
-
-```
 devjet init my-pern-project
 ```
 
-That's it. Now navigate into de project folder and install the dependencies. Congratulations, you can already start using devjet receipes.
+Or directly create your project with 
+
+```
+npx devjet init my-pern-project
+```
+
+That's it. Now navigate into de project folder and install the dependencies. 
+
+```
+cd my-pern-project
+cd api && npm install
+cd ../client && npm install
+```
+
+You can already get started working with your cliente application. 
+For your backend there are still a couple of settings we have to do like creating a postgress database for local development and configuring enviroment variables.
+
+Let's first setup our enviroment variables. In order to do that copy your `api/.env.example` file to `api/.env`.
+
+Now we have to create a postgress database to work locally.

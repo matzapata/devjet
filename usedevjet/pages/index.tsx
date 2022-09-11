@@ -67,8 +67,9 @@ export default function Blog({ posts }: { posts: Post[] }) {
           examples in the categories you&apos;re most curious about.
         </Text>
 
-        <InputGroup mb="4" mt="8" w="100%" bg="white">
+        <InputGroup mb="4" mt="8" w="100%">
           <Input
+            bg="white"
             shadow={"sm"}
             aria-label="Search by title"
             placeholder="Search by title"
