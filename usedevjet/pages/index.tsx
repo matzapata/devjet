@@ -82,7 +82,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
           </InputLeftElement>
         </InputGroup>
 
-        <CategoriesFilter setCategory={(c) => setCategory(c)} />
+        <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
 
         <Divider my="4" />
 

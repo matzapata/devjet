@@ -1,17 +1,19 @@
 import React from "react";
 import { Box, Button, HStack } from "@chakra-ui/react";
-import { allPosts } from "contentlayer/generated";
+import { Post } from "contentlayer/generated";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 
 function CategoriesFilter({
   setCategory,
+  posts,
 }: {
   setCategory: (category: string) => void;
+  posts: Post[];
 }) {
   const postCategories = [
     "all",
-    ...allPosts.map((p) => p.category).filter((c) => c !== undefined),
-  ];
+    ...posts?.map((p) => p.category).filter((c) => c !== undefined),
+  ] as string[];
   const categories = Array.from(new Set(postCategories));
 
   return (

@@ -1,7 +1,6 @@
 import React from "react";
-import { Divider, Flex, Text, VStack, Icon } from "@chakra-ui/react";
+import { Divider, Flex, Text, VStack, Icon, Link } from "@chakra-ui/react";
 import { BrandFavicon } from "./Brand";
-import Link from "next/link";
 import { FaLinkedin } from "react-icons/fa";
 
 function Footer() {
