@@ -6,6 +6,7 @@ import {
 } from "@supabase/supabase-js";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import api, { AxiosDefaultHeaders } from "services/api";
 
 export const AuthContext = createContext<any>({});
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -25,17 +26,36 @@ export const AuthProvider = ({
   useEffect(() => {
     const activeSession = supabase.auth.session();
     setSession(activeSession);
-    setUser(activeSession?.user ?? null);
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event: AuthChangeEvent, currentSession: Session | null) => {
+      async (event: AuthChangeEvent, currentSession: Session | null) => {
+        console.log(event);
         setSession(currentSession);
-        setUser(currentSession?.user ?? null);
       }
     );
 
     return () => authListener?.unsubscribe();
   }, [supabase.auth]);
+
+  useEffect(() => {
+    api.defaults.headers = {
+      ...api.defaults.headers,
+      Authorization: session?.access_token,
+    } as AxiosDefaultHeaders;
+
+    if (session === null) setUser(null);
+    else if (session?.access_token !== undefined) {
+      api.get("/user").then((res: any) => {
+        console.log(res);
+        setUser({
+          id: session.user?.id,
+          email: session.user?.email,
+          name: res.data.name,
+          readingList: res.data.readingList,
+        });
+      });
+    }
+  }, [session]);
 
   const signOut = () => supabase.auth.signOut();
   const signIn = async (email: string, password: string) => {

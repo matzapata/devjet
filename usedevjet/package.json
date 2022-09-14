@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.10.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@supabase/supabase-js": "^1.35.6",
+    "axios": "^0.27.2",
     "contentlayer": "^0.2.7",
     "date-fns": "^2.16.1",
     "framer-motion": "^6.5.1",
