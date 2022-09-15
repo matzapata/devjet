@@ -6,6 +6,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Post } from "contentlayer/generated";
+import ToggleReadingList from "components/ToggleReadingList";
 
 function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
   return (
@@ -15,9 +16,12 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
       </Head>
       <Container as="article" w="full" maxW="container.md">
         <NavBar />
-        <Text fontSize="sm" mt="16">
-          {format(parseISO(post.date), "MMMM dd, yyyy")}
-        </Text>
+        <Flex justifyContent="space-between" mt="16" alignItems="center">
+          <Text fontSize="sm">
+            {format(parseISO(post.date), "MMMM dd, yyyy")}
+          </Text>
+          <ToggleReadingList postSlug={post.url.replace("/posts/", "")} />
+        </Flex>
         <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">
           {post.title}
         </Heading>

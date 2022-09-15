@@ -7,16 +7,18 @@ import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Provider } from "react-redux";
 import { store } from "redux/store";
+import ReduxApp from "components/ReduxApp";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <Provider store={store}>
-      <UserProvider supabaseClient={supabaseClient}>
+    <UserProvider supabaseClient={supabaseClient}>
+      <Provider store={store}>
         <ChakraProvider theme={theme}>
+          <ReduxApp />
           <Component {...pageProps} />
         </ChakraProvider>
-      </UserProvider>
-    </Provider>
+      </Provider>
+    </UserProvider>
   );
 };
 

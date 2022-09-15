@@ -11,7 +11,7 @@ Redux helps you with your app global state management.
 
 1. Create a redux state slice at the `client/src/redux/slices` folder. If this is your first slice you can already delete the `.gitignore` file. Inside that folder create a file with your slice name, for this case `counterSlice.ts`. Insede of it define your initialState along with it's typescript type definition. Then use the `createSlice` function to define your slice name, initialState and reducers.
 
-```ts:counterSlice.ts 
+```ts:redux/slices/counter.ts 
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
