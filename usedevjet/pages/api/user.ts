@@ -4,7 +4,7 @@ import { supabase } from "utils/supabase";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.headers.authorization === undefined)
     return res.status(401).json({ msg: "Unauthorized" });
-  const { user, error } = await supabase.auth.api.getUser(
+  const { error } = await supabase.auth.api.getUser(
     req.headers.authorization as string
   );
   if (error) res.status(error.status).json({ msg: error.message });

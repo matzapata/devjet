@@ -2,7 +2,6 @@ import {
   AuthChangeEvent,
   Session,
   SupabaseClient,
-  User,
 } from "@supabase/supabase-js";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
