@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.10.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@prisma/client": "^4.3.1",
+    "@reduxjs/toolkit": "^1.8.5",
     "@supabase/auth-helpers-nextjs": "^0.2.7",
     "@supabase/auth-helpers-react": "^0.2.3",
     "@supabase/supabase-js": "^1.35.6",
@@ -29,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
+    "react-redux": "^8.0.2",
     "rehype-code-titles": "^1.1.0",
     "rehype-prism-plus": "^1.5.0",
     "rehype-slug": "^5.0.1"
