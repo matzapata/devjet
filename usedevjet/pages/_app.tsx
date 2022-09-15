@@ -3,16 +3,16 @@ import { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../utils/chakraTheme";
 import "../styles/global.css";
-import { AuthProvider } from "utils/auth";
-import { supabase } from "utils/supabase";
+import { UserProvider } from "@supabase/auth-helpers-react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <AuthProvider supabase={supabase}>
+    <UserProvider supabaseClient={supabaseClient}>
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
-    </AuthProvider>
+    </UserProvider>
   );
 };
 

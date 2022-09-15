@@ -16,7 +16,8 @@ import {
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useAuth } from "utils/auth";
+import { useUser } from "@supabase/auth-helpers-react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 
 type State = {
   email: string;
@@ -26,7 +27,9 @@ type State = {
 
 export default function SignUp() {
   const router = useRouter();
-  const { loading, user, signUp, error } = useAuth();
+  const { user } = useUser();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [state, setState] = useState<State>({
     email: "",
     password: "",
@@ -51,7 +54,14 @@ export default function SignUp() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    signUp(state.email, state.password);
+    setLoading(true);
+    setError("");
+    const { error } = await supabaseClient.auth.signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setError(error.message);
+    setLoading(false);
   };
 
   return (

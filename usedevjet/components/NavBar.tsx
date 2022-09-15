@@ -4,10 +4,10 @@ import { Button, Flex, Hide, HStack } from "@chakra-ui/react";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
-import { useAuth } from "utils/auth";
+import { useUser } from "@supabase/auth-helpers-react";
 
 function NavBar() {
-  const { user } = useAuth();
+  const { user } = useUser();
 
   return (
     <Flex my="8" justifyContent="space-between">
