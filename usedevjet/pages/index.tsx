@@ -22,7 +22,6 @@ import { allPosts, Post } from "contentlayer/generated";
 import QuickStartCard from "../components/QuickstartCard";
 import Pagination from "components/Pagination";
 import CategoriesFilter from "components/CategoriesFilter";
-import { useAuth } from "utils/auth";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -37,9 +36,6 @@ export default function Blog({ posts }: { posts: Post[] }) {
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("all");
   const itemsPerPage = 10;
-  const { user } = useAuth();
-
-  useEffect(() => console.log(user), [user]);
 
   useEffect(() => {
     setFilteredBlogPosts(
