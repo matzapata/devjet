@@ -17,12 +17,16 @@ import {
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
-import { useAuth } from "utils/auth";
 import { useRouter } from "next/router";
+import { useUser } from "@supabase/auth-helpers-react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 
 export default function Login() {
   const router = useRouter();
-  const { user, loading, error, signIn } = useAuth();
+  const { user } = useUser();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -45,7 +49,14 @@ export default function Login() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    signIn(state.email, state.password);
+    setLoading(true);
+    setError("");
+    const { error } = await supabaseClient.auth.signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setError(error.message);
+    setLoading(false);
   };
 
   return (
