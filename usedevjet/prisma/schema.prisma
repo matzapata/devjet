@@ -10,14 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id              String            @unique @id
-  UserReadingList UserReadingList[]
-}
-
 model UserReadingList {
   id        String @unique @id  @default(uuid())
-  user      User   @relation(fields: [user_id], references: [id])
   user_id   String
-  post_slug String
+  post_slug String 
+  
+  @@unique([user_id, post_slug])
 }

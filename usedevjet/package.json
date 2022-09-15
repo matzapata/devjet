@@ -16,6 +16,7 @@
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
+    "@prisma/client": "^4.3.1",
     "@supabase/auth-helpers-nextjs": "^0.2.7",
     "@supabase/auth-helpers-react": "^0.2.3",
     "@supabase/supabase-js": "^1.35.6",
