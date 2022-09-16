@@ -22,7 +22,7 @@ function BlogPostCard({ post }: { post: Post }) {
       mb="4"
       borderColor="gray.200"
       borderRadius="8"
-      shadow="md"
+      shadow="sm"
     >
       <NextLink href={post.url} passHref>
         <Link fontSize="lg" fontWeight="medium" color="blue.500">
