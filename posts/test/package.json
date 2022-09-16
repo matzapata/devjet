@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "create-api-endpoints": "file:..\\devjet-create-api-endpoints",
+    "devjet": "file:..\\..\\cli",
+    "devjet-create-api-endpoints": "file:..\\devjet-create-api-endpoints"
+  }
+}
