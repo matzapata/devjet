@@ -1,18 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchReadingList } from "./userThunk";
+import {
+  addToReadingList,
+  fetchReadingList,
+  removeFromReadingList,
+} from "./userThunk";
 
 export interface UserState {
-  readingList: {
-    loading: boolean;
-    postSlugs: string[];
-  };
+  readingList: string[];
 }
 
 const initialState: UserState = {
-  readingList: {
-    loading: false,
-    postSlugs: [],
-  },
+  readingList: [],
 };
 
 export const counterSlice = createSlice({
@@ -25,16 +23,20 @@ export const counterSlice = createSlice({
   },
   extraReducers: (builder) => {
     // fetchReadingList
-    builder.addCase(fetchReadingList.pending, (state) => {
-      state.readingList.loading = true;
-    });
     builder.addCase(fetchReadingList.fulfilled, (state, action) => {
-      state.readingList.postSlugs = action.payload;
-      state.readingList.loading = false;
+      state.readingList = action.payload;
     });
     builder.addCase(fetchReadingList.rejected, (state) => {
-      state.readingList.postSlugs = [];
-      state.readingList.loading = false;
+      state.readingList = [];
+    });
+
+    // addToReadingList
+    builder.addCase(addToReadingList.fulfilled, (state, action: any) => {
+      state.readingList = [...state.readingList, action.payload];
+    });
+    // removeFromReadingList
+    builder.addCase(removeFromReadingList.fulfilled, (state, action: any) => {
+      state.readingList = state.readingList.filter((p) => p !== action.payload);
     });
   },
 });

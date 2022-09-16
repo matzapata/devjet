@@ -12,3 +12,27 @@ export const fetchReadingList = createAsyncThunk(
     }
   }
 );
+
+export const addToReadingList = createAsyncThunk(
+  "user/addToReadingList",
+  async (payload: string, { rejectWithValue }) => {
+    try {
+      await axios.post(`/api/readinglist/add/${payload}`);
+      return payload;
+    } catch (e: any) {
+      return rejectWithValue(e.response.data.message);
+    }
+  }
+);
+
+export const removeFromReadingList = createAsyncThunk(
+  "user/removeFromReadingList",
+  async (payload: string, { rejectWithValue }) => {
+    try {
+      await axios.delete(`/api/readinglist/delete/${payload}`);
+      return payload;
+    } catch (e: any) {
+      return rejectWithValue(e.response.data.message);
+    }
+  }
+);
