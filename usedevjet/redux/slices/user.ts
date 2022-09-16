@@ -32,6 +32,10 @@ export const counterSlice = createSlice({
       state.readingList.postSlugs = action.payload;
       state.readingList.loading = false;
     });
+    builder.addCase(fetchReadingList.rejected, (state) => {
+      state.readingList.postSlugs = [];
+      state.readingList.loading = false;
+    });
   },
 });
 

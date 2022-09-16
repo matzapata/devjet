@@ -21,6 +21,11 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
 
 function Post({ post }: { post: Post }) {
   const MDXContent = useMDXComponent(post.body.code);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchReadingList());
+  }, [dispatch]);
 
   return (
     <PostLayout post={post}>

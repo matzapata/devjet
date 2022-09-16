@@ -12,12 +12,14 @@ function ToggleReadingList({ postSlug }: { postSlug: string }) {
 
   const addToReadingList = async () => {
     await axios.post(`/api/readinglist/add/${postSlug}`);
-    dispatch(fetchReadingList());
+    console.log("Added");
+    // dispatch(fetchReadingList());
   };
 
   const removeFromReadingList = async () => {
     await axios.delete(`/api/readinglist/delete/${postSlug}`);
-    dispatch(fetchReadingList());
+    console.log("Removed");
+    // dispatch(fetchReadingList());
   };
 
   if (readingList.postSlugs.includes(postSlug)) {
@@ -25,8 +27,9 @@ function ToggleReadingList({ postSlug }: { postSlug: string }) {
       <IconButton
         size="sm"
         variant="ghost"
+        color="gray.600"
         aria-label="Remove from reading list"
-        icon={<BookmarkIcon style={{ height: "1.2rem" }} />}
+        icon={<BookmarkIcon style={{ height: "1.1rem" }} />}
         onClick={removeFromReadingList}
       />
     );
@@ -35,8 +38,9 @@ function ToggleReadingList({ postSlug }: { postSlug: string }) {
       <IconButton
         size="sm"
         variant="ghost"
+        color="gray.600"
         aria-label="Add to reading list"
-        icon={<BookmarkIconOutline style={{ height: "1.2rem" }} />}
+        icon={<BookmarkIconOutline style={{ height: "1.1rem" }} />}
         onClick={addToReadingList}
       />
     );
