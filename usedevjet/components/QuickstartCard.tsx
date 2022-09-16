@@ -8,14 +8,14 @@ function QuickStartCard() {
       <Box
         border="1px"
         p="4"
-        shadow="md"
+        shadow="sm"
         borderColor="blue.200"
         bgColor="blue.50"
-        borderRadius="6"
+        borderRadius="4"
         cursor="pointer"
         mb="4"
       >
-        <Link fontWeight="500" fontSize="md" mb="2" color="gray.600">
+        <Link fontWeight="600" fontSize="md" mb="2" color="gray.900">
           Quickstart
         </Link>
         <Text color="gray.600" fontSize="sm">

@@ -11,6 +11,7 @@ import {
   Box,
   Divider,
   Flex,
+  InputRightElement,
 } from "@chakra-ui/react";
 
 import NavBar from "../components/NavBar";
@@ -84,9 +85,9 @@ export default function Blog({ posts }: { posts: Post[] }) {
               setSearchValue(e.target.value)
             }
           />
-          <InputLeftElement>
+          <InputRightElement>
             <SearchIcon color="gray.300" />
-          </InputLeftElement>
+          </InputRightElement>
         </InputGroup>
 
         <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
