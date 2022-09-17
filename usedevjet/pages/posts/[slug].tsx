@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import PostLayout from "../../layout/post";
+import PostLayout from "components/PostLayout";
 import { allPosts, Post } from "contentlayer/generated";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import { GetStaticPropsContext } from "next";
