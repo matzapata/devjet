@@ -10,11 +10,14 @@ function BlogPostCard({ post }: { post: Post }) {
   return (
     <Box py="6" borderBottom="1px" borderColor="gray.300">
       <Flex alignItems="center" justifyContent="space-between">
-        <NextLink href={post.pro ? "/pricing" : post.url} passHref>
-          <Link fontSize="xl" fontWeight="650">
-            {post.title}
-          </Link>
-        </NextLink>
+        <Text>
+          <NextLink href={post.pro ? "/pricing" : post.url} passHref>
+            <Link fontSize="xl" fontWeight="650">
+              {post.title}
+            </Link>
+          </NextLink>
+          {post.stack !== "all" && ` - ${post.stack}`}
+        </Text>
         {post.pro && <Icon as={LockClosedIcon} />}
       </Flex>
       <Text color="gray.600" mt="1">
