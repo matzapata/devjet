@@ -16,7 +16,7 @@ function CategoriesFilter({
 
   return (
     <Select
-      maxW="160px"
+      maxW={{ base: "", md: "160px" }}
       bg="white"
       onChange={(e) => setCategory(e.target.value)}
     >

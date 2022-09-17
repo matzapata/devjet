@@ -11,6 +11,9 @@ import {
   Divider,
   Flex,
   InputRightElement,
+  Button,
+  HStack,
+  Stack,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -52,7 +55,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
         .filter((p) =>
           p.title.toLowerCase().includes(searchValue.toLowerCase())
         )
-        .filter((p) => p.url !== "/posts/pern-quickstart")
+        .filter((p) => p.url !== "/posts/quickstart")
         .filter((p) => p.category === category || category === "all")
         .filter((p) => p.stack === stack || stack === "all")
         .sort((a, b) => (a.title > b.title ? 1 : -1))
@@ -77,30 +80,28 @@ export default function Blog({ posts }: { posts: Post[] }) {
           examples in the categories you&apos;re most curious about.
         </Text>
 
-        <InputGroup mb="4" mt="8" w="100%">
-          <Input
-            bg="white"
-            shadow={"sm"}
-            aria-label="Search by title"
-            placeholder="Search by title"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchValue(e.target.value)
-            }
-          />
-          <InputRightElement>
-            <SearchIcon color="gray.300" />
-          </InputRightElement>
-        </InputGroup>
+        <Divider mt="8" borderColor="gray.300" />
 
-        <Flex justifyContent="space-between">
+        <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
+          <InputGroup w="100%">
+            <Input
+              bg="white"
+              shadow={"sm"}
+              aria-label="Search by title"
+              placeholder="Search by title"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(e.target.value)
+              }
+            />
+            <InputRightElement>
+              <SearchIcon color="gray.300" />
+            </InputRightElement>
+          </InputGroup>
           <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
           <StackFilter setStack={(s) => setStack(s)} />
-        </Flex>
+        </Stack>
 
-        <Divider my="4" />
-
-        <Box mt="4">
-          <QuickStartCard />
+        <Box borderTop="1px" borderColor="gray.300">
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
             <PostCard key={i} post={p} />
