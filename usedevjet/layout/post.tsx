@@ -9,7 +9,6 @@ import {
   Tag,
   HStack,
   Icon,
-  IconButton,
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import NavBar from "../components/NavBar";
