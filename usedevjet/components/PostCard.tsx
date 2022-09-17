@@ -10,7 +10,7 @@ function BlogPostCard({ post }: { post: Post }) {
   return (
     <Box py="6" borderBottom="1px" borderColor="gray.300">
       <Flex alignItems="center" justifyContent="space-between">
-        <NextLink href={post.url} passHref>
+        <NextLink href={post.pro ? "/pricing" : post.url} passHref>
           <Link fontSize="xl" fontWeight="650">
             {post.title}
           </Link>

@@ -4,7 +4,7 @@ import PostLayout from "../../layout/post";
 import { allPosts, Post } from "contentlayer/generated";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import { GetStaticPropsContext } from "next";
-import { useAppDispatch, useAppSelector } from "redux/store";
+import { useAppDispatch } from "redux/store";
 import { fetchReadingList } from "redux/slices/userThunk";
 
 export async function getStaticPaths() {
