@@ -9,8 +9,8 @@ import {
   Tag,
   HStack,
   Icon,
+  Box,
 } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Post } from "contentlayer/generated";
@@ -22,9 +22,12 @@ import {
 } from "react-share";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/solid";
+import { useUser } from "@supabase/auth-helpers-react";
+import ProCardC2A from "./ProCardC2A";
 
 function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
   const [shareUrl, setShareUrl] = useState("");
+  const { user } = useUser();
 
   useEffect(() => {
     setShareUrl(window.location.href);
@@ -35,55 +38,55 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
       <Head>
         <title>{post.title}</title>
       </Head>
-      <Container as="article" w="full" maxW="container.md">
-        <NavBar />
-        <Flex justifyContent="space-between" mt="16" alignItems="center">
-          <Text fontSize="sm">
-            {format(parseISO(post.date), "MMMM dd, yyyy")}
-          </Text>
-          <HStack spacing="4">
-            <FacebookShareButton url={shareUrl}>
-              <Icon h="4" color="gray.500" as={FaFacebookF} />
-            </FacebookShareButton>
-            <TwitterShareButton url={shareUrl}>
-              <Icon h="4" color="gray.500" as={FaTwitter} />
-            </TwitterShareButton>
-            <LinkedinShareButton url={shareUrl}>
-              <Icon h="4" color="gray.500" as={FaLinkedinIn} />
-            </LinkedinShareButton>
-            <Icon
-              h="4"
-              color="gray.500"
-              cursor="pointer"
-              onClick={() => {
-                navigator.clipboard.writeText(shareUrl);
-              }}
-              as={ClipboardDocumentIcon}
-            />
+      <Box>
+        <Container as="article" w="full" maxW="container.md">
+          <NavBar />
+          <Flex justifyContent="space-between" mt="16" alignItems="center">
+            <Text fontSize="sm">
+              {format(parseISO(post.date), "MMMM dd, yyyy")}
+            </Text>
+            <HStack spacing="4">
+              <FacebookShareButton url={shareUrl}>
+                <Icon h="4" color="gray.500" as={FaFacebookF} />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareUrl}>
+                <Icon h="4" color="gray.500" as={FaTwitter} />
+              </TwitterShareButton>
+              <LinkedinShareButton url={shareUrl}>
+                <Icon h="4" color="gray.500" as={FaLinkedinIn} />
+              </LinkedinShareButton>
+              <Icon
+                h="4"
+                color="gray.500"
+                cursor="pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl);
+                }}
+                as={ClipboardDocumentIcon}
+              />
 
-            <ToggleReadingList postSlug={post.slug} />
-          </HStack>
-        </Flex>
-        <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">
-          {post.title}
-        </Heading>
-        <Text mt="4">{post.summary}</Text>
-        <Flex justifyContent="space-between" mt="2" alignItems="center">
-          <Flex>
-            {post.tags?.map((t, i) => (
-              <Tag size="sm" mr="2" key={i}>
-                {t}
-              </Tag>
-            ))}
+              <ToggleReadingList postSlug={post.slug} />
+            </HStack>
           </Flex>
-        </Flex>
+          <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">
+            {post.title}
+          </Heading>
+          <Text mt="4">{post.summary}</Text>
+          <Flex justifyContent="space-between" mt="2" alignItems="center">
+            <Flex>
+              {post.tags?.map((t, i) => (
+                <Tag size="sm" mr="2" key={i}>
+                  {t}
+                </Tag>
+              ))}
+            </Flex>
+          </Flex>
 
-        <Prose className="prose" mb="20">
-          {children}
-        </Prose>
-
-        <Footer />
-      </Container>
+          {(!post.pro || user?.user_metadata.pro === true) && children}
+          {(!post.pro || user?.user_metadata.pro === true) && <Footer />}
+        </Container>
+        {!(!post.pro || user?.user_metadata.pro === true) && <ProCardC2A />}
+      </Box>
     </>
   );
 }
