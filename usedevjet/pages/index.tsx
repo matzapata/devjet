@@ -14,6 +14,7 @@ import {
   Button,
   HStack,
   Stack,
+  Icon,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -22,12 +23,13 @@ import PostCard from "components/PostCard";
 
 import { compareDesc } from "date-fns";
 import { allPosts, Post } from "contentlayer/generated";
-import QuickStartCard from "components/QuickstartCard";
 import Pagination from "components/Pagination";
 import CategoriesFilter from "components/CategoriesFilter";
 import StackFilter from "components/StackFilter";
 import { useAppDispatch } from "redux/store";
 import { fetchReadingList } from "redux/slices/userThunk";
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
+import NextLink from "next/link";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -79,6 +81,16 @@ export default function Blog({ posts }: { posts: Post[] }) {
           started by checking out our free guides, or browsing all of the
           examples in the categories you&apos;re most curious about.
         </Text>
+
+        <NextLink href="/posts/quickstart">
+          <Button
+            colorScheme="blue"
+            mt="6"
+            rightIcon={<Icon as={ArrowLongRightIcon} />}
+          >
+            Quickstart
+          </Button>
+        </NextLink>
 
         <Divider mt="8" borderColor="gray.300" />
 

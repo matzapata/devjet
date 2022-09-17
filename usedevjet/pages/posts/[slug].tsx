@@ -31,7 +31,13 @@ function Post({ post }: { post: Post }) {
     dispatch(fetchReadingList());
   }, [dispatch]);
 
-  if (user?.user_metadata.pro === true) {
+  if (!post.pro) {
+    return (
+      <PostLayout post={post}>
+        <MDXContent />
+      </PostLayout>
+    );
+  } else if (user?.user_metadata.pro === true) {
     return (
       <PostLayout post={post}>
         <MDXContent />
