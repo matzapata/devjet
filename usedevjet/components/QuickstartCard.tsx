@@ -4,7 +4,7 @@ import ReactLink from "next/link";
 
 function QuickStartCard() {
   return (
-    <ReactLink href="/posts/quickstart">
+    <ReactLink href="/posts/pern-quickstart">
       <Box
         border="1px"
         p="4"
