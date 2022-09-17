@@ -3,10 +3,10 @@ html, body {
 }
 
 .prose pre {
-    border: 1px solid;
+    border: 2px solid;
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
-    border-color: var(--chakra-colors-gray-200) !important;
+    border-color: var(--chakra-colors-gray-300) !important;
     background-color: var(--chakra-colors-gray-50) !important;
 }
 
@@ -94,7 +94,7 @@ pre {
     padding-bottom: 0.75rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
-    background-color: var(--chakra-colors-gray-200);
+    background-color: var(--chakra-colors-gray-300);
     color: var(--chakra-colors-gray-800);
     font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 0.875rem;
@@ -105,7 +105,7 @@ pre {
     border-width: 1px;
     border-style: solid;
     border-bottom-width: 0;
-    border-color: var(--chakra-colors-gray-200);
+    border-color: var(--chakra-colors-gray-300);
 }
 
 .rehype-code-title+pre {
