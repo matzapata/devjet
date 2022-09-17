@@ -39,6 +39,10 @@ const Post = defineDocumentType(() => ({
       options: ["basics", "auth", "recipes", "snippets"],
       required: false,
     },
+    pro: {
+      type: "boolean",
+      required: false,
+    },
   },
   computedFields: {
     url: {

@@ -1,18 +1,22 @@
 import React from "react";
 import NextLink from "next/link";
-import { Text, Link, Box, Image, HStack, Flex } from "@chakra-ui/react";
+import { Text, Link, Box, Image, HStack, Flex, Icon } from "@chakra-ui/react";
 import { parseISO, format } from "date-fns";
 import { Post } from "contentlayer/generated";
 import ToggleReadingList from "./ToggleReadingList";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
 
 function BlogPostCard({ post }: { post: Post }) {
   return (
     <Box py="6" borderBottom="1px" borderColor="gray.300">
-      <NextLink href={post.url} passHref>
-        <Link fontSize="xl" fontWeight="650">
-          {post.title}
-        </Link>
-      </NextLink>
+      <Flex alignItems="center" justifyContent="space-between">
+        <NextLink href={post.url} passHref>
+          <Link fontSize="xl" fontWeight="650">
+            {post.title}
+          </Link>
+        </NextLink>
+        {post.pro && <Icon as={LockClosedIcon} />}
+      </Flex>
       <Text color="gray.600" mt="1">
         {post.summary}
       </Text>
