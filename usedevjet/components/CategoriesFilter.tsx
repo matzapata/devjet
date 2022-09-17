@@ -1,7 +1,6 @@
 import React from "react";
-import { Box, Button, HStack } from "@chakra-ui/react";
+import { Select } from "@chakra-ui/react";
 import { Post } from "contentlayer/generated";
-import { ChevronRightIcon } from "@chakra-ui/icons";
 
 function CategoriesFilter({
   setCategory,
@@ -10,47 +9,24 @@ function CategoriesFilter({
   setCategory: (category: string) => void;
   posts: Post[];
 }) {
-  const postCategories = [
-    "all",
-    ...posts?.map((p) => p.category).filter((c) => c !== undefined),
-  ] as string[];
+  const postCategories = posts
+    ?.map((p) => p.category)
+    .filter((c) => c !== undefined) as string[];
   const categories = Array.from(new Set(postCategories));
 
   return (
-    <Box position="relative">
-      <Box
-        overflowX="scroll"
-        css={{
-          "::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
-        <HStack width="fit-content">
-          {categories.map((c, i) => (
-            <Button
-              display="block"
-              size="sm"
-              key={i}
-              onClick={() => setCategory(c as string)}
-            >
-              {c}
-            </Button>
-          ))}
-        </HStack>
-      </Box>
-      <Box
-        px="2"
-        h="full"
-        bg="gray.50"
-        borderRadius="0"
-        position="absolute"
-        top="0"
-        right="0"
-      >
-        <ChevronRightIcon />
-      </Box>
-    </Box>
+    <Select
+      maxW="160px"
+      bg="white"
+      onChange={(e) => setCategory(e.target.value)}
+    >
+      <option value="all">All categories</option>
+      {categories.map((c, i) => (
+        <option key={i} value={c}>
+          {c}
+        </option>
+      ))}
+    </Select>
   );
 }
 

@@ -49,6 +49,19 @@ const Post = defineDocumentType(() => ({
       type: "string",
       resolve: (doc) => `/posts/${doc._raw.flattenedPath}`,
     },
+    slug: {
+      type: "string",
+      resolve: (doc) => doc._raw.flattenedPath,
+    },
+    stack: {
+      type: "string",
+      resolve: (doc) => {
+        const slug = doc._raw.flattenedPath;
+        if (slug.split("-")[0] === "pern") return "pern";
+        else if (slug.split("-")[0] === "nextjs") return "nextjs";
+        else return "all";
+      },
+    },
   },
 }));
 

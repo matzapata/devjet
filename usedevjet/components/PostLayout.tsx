@@ -61,7 +61,7 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
               as={ClipboardDocumentIcon}
             />
 
-            <ToggleReadingList postSlug={post.url.replace("/posts/", "")} />
+            <ToggleReadingList postSlug={post.slug} />
           </HStack>
         </Flex>
         <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">

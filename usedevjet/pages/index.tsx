@@ -5,7 +5,6 @@ import {
   Heading,
   Input,
   InputGroup,
-  InputLeftElement,
   Text,
   Container,
   Box,
@@ -14,15 +13,16 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
-import PostCard from "../components/PostCard";
+import NavBar from "components/NavBar";
+import Footer from "components/Footer";
+import PostCard from "components/PostCard";
 
 import { compareDesc } from "date-fns";
 import { allPosts, Post } from "contentlayer/generated";
-import QuickStartCard from "../components/QuickstartCard";
+import QuickStartCard from "components/QuickstartCard";
 import Pagination from "components/Pagination";
 import CategoriesFilter from "components/CategoriesFilter";
+import StackFilter from "components/StackFilter";
 import { useAppDispatch } from "redux/store";
 import { fetchReadingList } from "redux/slices/userThunk";
 
@@ -38,6 +38,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
   const [filteredBlogPosts, setFilteredBlogPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("all");
+  const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
   const dispatch = useAppDispatch();
 
@@ -51,12 +52,13 @@ export default function Blog({ posts }: { posts: Post[] }) {
         .filter((p) =>
           p.title.toLowerCase().includes(searchValue.toLowerCase())
         )
-        .filter((p) => p.url !== "/posts/quickstart")
+        .filter((p) => p.url !== "/posts/pern-quickstart")
         .filter((p) => p.category === category || category === "all")
+        .filter((p) => p.stack === stack || stack === "all")
         .sort((a, b) => (a.title > b.title ? 1 : -1))
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
-  }, [posts, searchValue, page, category]);
+  }, [posts, searchValue, page, category, stack]);
 
   return (
     <>
@@ -90,7 +92,10 @@ export default function Blog({ posts }: { posts: Post[] }) {
           </InputRightElement>
         </InputGroup>
 
-        <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
+        <Flex justifyContent="space-between">
+          <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
+          <StackFilter setStack={(s) => setStack(s)} />
+        </Flex>
 
         <Divider my="4" />
 
