@@ -1,7 +1,6 @@
 import { getUser, withApiAuth } from "@supabase/auth-helpers-nextjs";
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "lib/prisma";
-import { UserReadingList } from "@prisma/client";
 
 const handler = withApiAuth(
   async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,9 +11,7 @@ const handler = withApiAuth(
         where: { user_id: user.id },
       });
 
-      return res
-        .status(200)
-        .send(readingList.map((e: UserReadingList) => e.post_slug));
+      return res.status(200).send(readingList.map((e: any) => e.post_slug));
     } else return res.status(400).send("Method NOT allowed");
   }
 );
