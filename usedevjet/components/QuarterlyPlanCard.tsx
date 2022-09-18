@@ -4,10 +4,16 @@ import { useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-function QuarterlyPlanCard() {
+function QuarterlyPlanCard({
+  currentPlan,
+}: {
+  currentPlan?: "lifetime" | "quarterly";
+}) {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const isCurrentPlan = currentPlan === "quarterly";
+  const isDisabled = currentPlan !== undefined;
 
   const getQuarterlyAccess = async () => {
     if (!user) router.push("/auth/signin");
@@ -25,30 +31,31 @@ function QuarterlyPlanCard() {
   return (
     <Box
       p="6"
-      border="1px"
-      borderColor="gray.200"
-      maxW="300px"
+      border="2px"
+      borderColor={isDisabled ? "blue.100" : "gray.200"}
+      maxW={{ base: "", sm: "300px" }}
       borderRadius="4"
       textAlign="center"
-      _hover={{ borderColor: "blue.500", borderWidth: "2px" }}
+      _hover={isDisabled ? {} : { shadow: "lg" }}
     >
-      <Heading size="lg" mb="2">
+      <Heading size="lg" mb="2" color={isDisabled ? "gray.500" : "gray.900"}>
         $1500
       </Heading>
-      <Heading size="sm" mb="4">
+      <Heading size="sm" mb="4" color={isDisabled ? "gray.500" : "gray.900"}>
         3 Months access
       </Heading>
-      <Text mb="6">
+      <Text mb="6" color={isDisabled ? "gray.500" : "gray.900"}>
         Give your project a boost. <br /> Pay once and access all content for 3
         months
       </Text>
       <Button
+        disabled={isDisabled}
         isLoading={loading}
         onClick={() => getQuarterlyAccess()}
         colorScheme="blue"
         w="full"
       >
-        Select
+        {isCurrentPlan ? "Current plan" : "Select"}
       </Button>
     </Box>
   );

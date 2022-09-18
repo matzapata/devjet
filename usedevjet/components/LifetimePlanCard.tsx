@@ -4,10 +4,15 @@ import { useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-function LifetimePlanCard() {
+function LifetimePlanCard({
+  currentPlan,
+}: {
+  currentPlan?: "lifetime" | "quarterly";
+}) {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const isCurrentPlan = currentPlan === "lifetime";
 
   const getLifetimeAccess = async () => {
     if (!user) router.push("/auth/signin");
@@ -25,12 +30,22 @@ function LifetimePlanCard() {
   return (
     <Box
       p="6"
-      border="2px"
-      borderColor="blue.500"
-      maxW="300px"
+      border={isCurrentPlan ? "4px" : "2px"}
+      borderColor={isCurrentPlan ? "blue.500" : "gray.200"}
+      maxW={{ base: "", sm: "300px" }}
       borderRadius="4"
       textAlign="center"
-      _hover={{ borderColor: "blue.500", borderWidth: "4px" }}
+      _hover={
+        isCurrentPlan
+          ? {}
+          : {
+              shadow: "xl",
+              border: "none",
+              outline: "solid",
+              outlineColor: "blue.500",
+              outlineWidth: "4px",
+            }
+      }
     >
       <Heading size="lg" mb="2">
         $2000
@@ -42,12 +57,13 @@ function LifetimePlanCard() {
         Give your career a boost. <br /> Pay once and access all content forever
       </Text>
       <Button
+        disabled={isCurrentPlan}
         isLoading={loading}
         onClick={() => getLifetimeAccess()}
         colorScheme="blue"
         w="full"
       >
-        Select
+        {isCurrentPlan ? "Current plan" : "Select"}
       </Button>
     </Box>
   );

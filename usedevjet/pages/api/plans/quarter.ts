@@ -19,9 +19,9 @@ const handler = withApiAuth(
           },
         ],
         back_urls: {
-          failure: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plan/failure`,
-          pending: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plan/pending`,
-          success: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plan/success`,
+          failure: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans`,
+          pending: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans/pending`,
+          success: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans/success`,
         },
         auto_return: "approved",
         metadata: { user_id: user.id, plan: "quarter" },

@@ -8,8 +8,6 @@ import {
   ListItem,
   ListIcon,
   Stack,
-  Box,
-  Button,
   Flex,
 } from "@chakra-ui/react";
 
@@ -18,8 +16,11 @@ import Footer from "components/Footer";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import LifetimePlanCard from "components/LifetimePlanCard";
 import QuarterlyPlanCard from "components/QuarterlyPlanCard";
+import { useUser } from "@supabase/auth-helpers-react";
 
 export default function Pricing() {
+  const { user } = useUser();
+
   return (
     <>
       <Head>
@@ -62,9 +63,9 @@ export default function Pricing() {
         </List>
 
         <Flex justifyContent="center">
-          <Stack mt="8" direction={{ base: "column", md: "row" }}>
-            <QuarterlyPlanCard />
-            <LifetimePlanCard />
+          <Stack mt="8" direction={{ base: "column", sm: "row" }} spacing={4}>
+            <QuarterlyPlanCard currentPlan={user?.user_metadata.plan} />
+            <LifetimePlanCard currentPlan={user?.user_metadata.plan} />
           </Stack>
         </Flex>
 
