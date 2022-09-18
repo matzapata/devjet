@@ -1,6 +1,6 @@
 import { getUser, withApiAuth } from "@supabase/auth-helpers-nextjs";
 import type { NextApiRequest, NextApiResponse } from "next";
-import prisma from "utils/prisma";
+import prisma from "lib/prisma";
 
 const handler = withApiAuth(
   async (req: NextApiRequest, res: NextApiResponse) => {
