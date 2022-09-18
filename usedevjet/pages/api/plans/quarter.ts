@@ -9,12 +9,12 @@ const handler = withApiAuth(
       const response = await createPreference({
         items: [
           {
-            id: "lifetime_plan",
-            title: "Lifetime access to usedevjet.com",
+            id: "quarter_plan",
+            title: "3 months access to usedevjet.com",
             description:
-              "Get lifetime access to usedevjet receipes and generators for PERN and NEXTJS",
+              "Get 3 months access to usedevjet receipes and generators for PERN and NEXTJS",
             quantity: 1,
-            unit_price: 2000,
+            unit_price: 1500,
             currency_id: "ARS",
           },
         ],
@@ -24,7 +24,7 @@ const handler = withApiAuth(
           success: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plan/success`,
         },
         auto_return: "approved",
-        metadata: { user_id: user.id, plan: "lifetime" },
+        metadata: { user_id: user.id, plan: "quarter" },
       });
 
       return res.status(200).send({ init_point: response.data.init_point });

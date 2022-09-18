@@ -1,15 +1,25 @@
+import React, { useState } from "react";
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
+import axios from "axios";
 import { useRouter } from "next/router";
-import React from "react";
 
 function QuarterlyPlanCard() {
   const { user } = useUser();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-  const getQuarterlyAccess = () => {
+  const getQuarterlyAccess = async () => {
     if (!user) router.push("/auth/signin");
-    console.log("lifetime");
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/plans/quarter");
+      router.push(res.data.init_point);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,7 +42,12 @@ function QuarterlyPlanCard() {
         Give your project a boost. <br /> Pay once and access all content for 3
         months
       </Text>
-      <Button onClick={getQuarterlyAccess} colorScheme="blue" w="full">
+      <Button
+        isLoading={loading}
+        onClick={() => getQuarterlyAccess()}
+        colorScheme="blue"
+        w="full"
+      >
         Select
       </Button>
     </Box>

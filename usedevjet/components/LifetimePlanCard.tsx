@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
 
 function LifetimePlanCard() {
   const { user } = useUser();
