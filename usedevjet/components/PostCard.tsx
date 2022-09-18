@@ -18,7 +18,7 @@ function BlogPostCard({ post }: { post: Post }) {
           </NextLink>
           {post.stack !== "all" && ` - ${post.stack}`}
         </Text>
-        {post.pro && <Icon as={LockClosedIcon} />}
+        {post.pro && <Icon mx="2" as={LockClosedIcon} />}
       </Flex>
       <Text color="gray.600" mt="1">
         {post.summary}
