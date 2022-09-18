@@ -28,6 +28,7 @@ import ProCardC2A from "./ProCardC2A";
 function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
   const [shareUrl, setShareUrl] = useState("");
   const { user } = useUser();
+  const hasAccess = !post.pro || user?.user_metadata.plan !== undefined;
 
   useEffect(() => {
     setShareUrl(window.location.href);
@@ -82,10 +83,10 @@ function PostLayout({ post, children }: { post: Post; children: JSX.Element }) {
             </Flex>
           </Flex>
 
-          {(!post.pro || user?.user_metadata.pro === true) && children}
-          {(!post.pro || user?.user_metadata.pro === true) && <Footer />}
+          {hasAccess && children}
+          {hasAccess && <Footer />}
         </Container>
-        {!(!post.pro || user?.user_metadata.pro === true) && <ProCardC2A />}
+        {!hasAccess && <ProCardC2A />}
       </Box>
     </>
   );
