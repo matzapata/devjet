@@ -14,12 +14,16 @@ import {
   Flex,
   Alert,
   AlertIcon,
+  Stack,
+  HStack,
+  Divider,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useUser } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import GoogleAuthButton from "components/GoogleAuthButton";
 
 export default function Login() {
   const router = useRouter();
@@ -61,7 +65,7 @@ export default function Login() {
   };
 
   return (
-    <Center minH="100vh" py="10">
+    <Center minH="100vh" py="14">
       <Container maxW="md">
         <BrandFavicon mx="auto" mb="4" />
         <Heading mb="20" textAlign="center">
@@ -74,7 +78,7 @@ export default function Login() {
           </Alert>
         )}
         <Box as="form" w="full" onSubmit={onSubmit}>
-          <FormControl isInvalid={errors.email !== ""} mb="5">
+          <FormControl isInvalid={errors.email !== ""} mb="2">
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
@@ -109,21 +113,26 @@ export default function Login() {
               Forgot your password?
             </Link>
           </NextLink>
-          <Button
-            type="submit"
-            mt="8"
-            size="md"
-            colorScheme="blue"
-            w="full"
-            isLoading={loading}
-          >
-            Sign In
-          </Button>
-          <Text color="red.500" mt="2" fontWeight="500">
-            {error}
-          </Text>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+            <GoogleAuthButton />
+            {error !== "" && (
+              <Text color="red.500" mt="2" fontWeight="500">
+                {error}
+              </Text>
+            )}
+          </Stack>
         </Box>
-        <Flex justifyContent="center" mt="6">
+        <Flex justifyContent="center" mt="4">
           <Text as="span" fontWeight="500" mr="1" color="gray.600">
             Don&apos;t have an account?
           </Text>
