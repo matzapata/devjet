@@ -1,4 +1,5 @@
 import { getPayment } from "lib/mercadopago";
+import { sendEmail } from "lib/sendEmail";
 import { supabaseAdminClient } from "lib/suapabase";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -27,6 +28,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             date_approved,
             payment_id: paymentId,
           },
+        });
+        await sendEmail({
+          to: user.email as string,
+          subject: "usedevjet successful payment!!",
+          html: "Heyy!! Welcome to usedevjet! Your payment has been processed successfully e are glad you joined us. If there is anything we can help you with please let us know",
         });
       }
     }
