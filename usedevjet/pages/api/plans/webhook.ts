@@ -10,6 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const payment = await getPayment(paymentId);
     const {
       status,
+      date_approved,
       metadata: { user_id, plan },
     } = payment.data;
 
@@ -20,7 +21,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (user?.user_metadata.plan !== plan) {
         await supabaseAdminClient.auth.api.updateUserById(user_id, {
-          user_metadata: { ...user?.user_metadata, plan },
+          user_metadata: {
+            ...user?.user_metadata,
+            plan,
+            date_approved,
+            payment_id: paymentId,
+          },
         });
       }
     }

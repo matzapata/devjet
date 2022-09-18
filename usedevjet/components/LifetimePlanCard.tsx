@@ -63,7 +63,12 @@ function LifetimePlanCard({
         colorScheme="blue"
         w="full"
       >
-        {isCurrentPlan ? "Current plan" : "Select"}
+        {isCurrentPlan
+          ? "Current plan"
+          : currentPlan === "quarterly"
+          ? "Upgrade"
+          : "Select"}
+        {}
       </Button>
     </Box>
   );

@@ -56,7 +56,7 @@ export default function SignUp() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const { error } = await supabaseClient.auth.signIn({
+    const { error } = await supabaseClient.auth.signUp({
       email: state.email,
       password: state.password,
     });

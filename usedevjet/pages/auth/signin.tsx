@@ -37,7 +37,8 @@ export default function Login() {
   });
 
   useEffect(() => {
-    if (user) router.push("/plans");
+    if (user && user.user_metadata.plan !== "lifetime") router.push("/plans");
+    else if (user) router.push("/");
   }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

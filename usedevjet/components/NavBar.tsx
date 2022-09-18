@@ -10,7 +10,7 @@ function NavBar() {
   const { user } = useUser();
 
   return (
-    <Flex my="8" justifyContent="space-between">
+    <Flex py="8" justifyContent="space-between">
       <BrandLogo />
       <HStack spacing="4">
         <Hide below="sm">

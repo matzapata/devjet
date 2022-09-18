@@ -3,11 +3,14 @@ import { supabaseAdminClient } from "lib/suapabase";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== "POST") res.status(400).send("Invalid method");
+
   try {
     const { paymentId } = req.query;
     const payment = await getPayment(paymentId as string);
     const {
       status,
+      date_approved,
       metadata: { user_id, plan },
     } = payment.data;
 
@@ -18,15 +21,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (user?.user_metadata.plan !== plan) {
         await supabaseAdminClient.auth.api.updateUserById(user_id, {
-          user_metadata: { ...user?.user_metadata, plan },
+          user_metadata: {
+            ...user?.user_metadata,
+            plan,
+            date_approved,
+            payment_id: paymentId,
+          },
         });
       }
     }
-  } catch (e) {
+    res.status(200).send({ status, plan });
+  } catch (e: any) {
     console.log(e);
+    res.status(400).send(e?.message);
   }
-
-  res.status(200).send("OK");
 };
 
 export default handler;

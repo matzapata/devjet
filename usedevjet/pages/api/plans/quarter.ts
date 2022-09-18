@@ -20,11 +20,11 @@ const handler = withApiAuth(
         ],
         back_urls: {
           failure: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans`,
-          pending: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans/pending`,
-          success: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans/success`,
+          pending: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans`,
+          success: `${process.env.NEXT_PUBLIC_CLIENT_URL}/plans`,
         },
         auto_return: "approved",
-        metadata: { user_id: user.id, plan: "quarter" },
+        metadata: { user_id: user.id, plan: "quarterly" },
       });
 
       return res.status(200).send({ init_point: response.data.init_point });
