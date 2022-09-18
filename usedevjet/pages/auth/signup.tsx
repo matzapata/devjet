@@ -12,6 +12,8 @@ import {
   Box,
   Text,
   Flex,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
@@ -30,6 +32,7 @@ export default function SignUp() {
   const { user } = useUser();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [displayEmailAlert, setDisplayEmailAlert] = useState(false);
   const [state, setState] = useState<State>({
     email: "",
     password: "",
@@ -61,6 +64,12 @@ export default function SignUp() {
       password: state.password,
     });
     if (error) setError(error.message);
+    else setDisplayEmailAlert(true);
+    setState({
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    });
     setLoading(false);
   };
 
@@ -71,6 +80,12 @@ export default function SignUp() {
         <Heading mb="20" textAlign="center">
           Create your account
         </Heading>
+        {displayEmailAlert && (
+          <Alert status="success" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            Account created successfully. Please check your email.
+          </Alert>
+        )}
         <Box as="form" w="full" onSubmit={onSubmit}>
           <FormControl isInvalid={errors.email !== ""} mb="5">
             <FormLabel>Email</FormLabel>

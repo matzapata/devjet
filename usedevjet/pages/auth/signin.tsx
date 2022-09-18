@@ -68,7 +68,7 @@ export default function Login() {
           Log in to your account
         </Heading>
         {router.query.recover && (
-          <Alert status="success" mb="5" fontSize="sm">
+          <Alert status="success" mb="5" fontSize="sm" fontWeight="medium">
             <AlertIcon h="4" />
             Recovery email sent successfully
           </Alert>
