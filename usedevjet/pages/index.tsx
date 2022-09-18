@@ -92,7 +92,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
           </Button>
         </NextLink>
 
-        <Divider mt="8" borderColor="gray.300" />
+        <Divider mt="8" borderColor="gray.200" />
 
         <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
           <InputGroup w="100%">
@@ -113,7 +113,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
           <StackFilter setStack={(s) => setStack(s)} />
         </Stack>
 
-        <Box borderTop="1px" borderColor="gray.300">
+        <Box borderTop="1px" borderColor="gray.200">
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
             <PostCard key={i} post={p} />
