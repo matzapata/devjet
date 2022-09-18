@@ -37,7 +37,7 @@ export default function Login() {
   });
 
   useEffect(() => {
-    if (user) router.push("/");
+    if (user) router.push("/plans");
   }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -17,6 +17,9 @@ function NavBar() {
           <Link href="/">
             <Button variant="ghost">Explore</Button>
           </Link>
+          <Link href="/plans">
+            <Button variant="ghost">Plans</Button>
+          </Link>
         </Hide>
         {user ? (
           <LogoutButton colorScheme="blue" />
