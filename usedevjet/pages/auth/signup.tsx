@@ -15,8 +15,6 @@ import {
   Alert,
   AlertIcon,
   Stack,
-  HStack,
-  Divider,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "../../components/Brand";
 import NextLink from "next/link";
