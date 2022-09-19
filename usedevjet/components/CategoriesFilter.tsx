@@ -1,15 +1,15 @@
 import React from "react";
 import { Select } from "@chakra-ui/react";
-import { Post } from "contentlayer/generated";
+import { PostMetadata } from "types/Post";
 
 function CategoriesFilter({
   setCategory,
-  posts,
+  postsMetadata,
 }: {
   setCategory: (category: string) => void;
-  posts: Post[];
+  postsMetadata: PostMetadata[];
 }) {
-  const postCategories = posts
+  const postCategories = postsMetadata
     ?.map((p) => p.category)
     .filter((c) => c !== undefined) as string[];
   const categories = Array.from(new Set(postCategories));

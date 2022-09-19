@@ -29,17 +29,41 @@ import { useAppDispatch } from "redux/store";
 import { fetchReadingList } from "redux/slices/userThunk";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
+import { PostMetadata } from "types/Post";
+
+function extractMetadata(post: Post): PostMetadata {
+  return {
+    title: post.title,
+    date: post.date,
+    summary: post.summary,
+    tags: post.tags,
+    image: post.image,
+    category: post.category,
+    pro: post.pro,
+    url: post.url,
+    slug: post.slug,
+    stack: post.stack,
+  };
+}
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
     return compareDesc(new Date(a.date), new Date(b.date));
   });
-  return { props: { posts } };
+  const postsMetadata: PostMetadata[] = posts.map((p) => extractMetadata(p));
+
+  return { props: { postsMetadata } };
 }
 
-export default function Blog({ posts }: { posts: Post[] }) {
+export default function Blog({
+  postsMetadata,
+}: {
+  postsMetadata: PostMetadata[];
+}) {
   const [searchValue, setSearchValue] = useState("");
-  const [filteredBlogPosts, setFilteredBlogPosts] = useState<Post[]>([]);
+  const [filteredBlogPosts, setFilteredBlogPosts] = useState<PostMetadata[]>(
+    []
+  );
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("all");
   const [stack, setStack] = useState("all");
@@ -52,7 +76,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
 
   useEffect(() => {
     setFilteredBlogPosts(
-      posts
+      postsMetadata
         .filter((p) =>
           p.title.toLowerCase().includes(searchValue.toLowerCase())
         )
@@ -62,7 +86,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
         .sort((a, b) => (a.title > b.title ? 1 : -1))
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
-  }, [posts, searchValue, page, category, stack]);
+  }, [postsMetadata, searchValue, page, category, stack]);
 
   return (
     <>
@@ -133,20 +157,23 @@ export default function Blog({ posts }: { posts: Post[] }) {
               <SearchIcon color="gray.300" />
             </InputRightElement>
           </InputGroup>
-          <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
+          <CategoriesFilter
+            postsMetadata={postsMetadata}
+            setCategory={(c) => setCategory(c)}
+          />
           <StackFilter setStack={(s) => setStack(s)} />
         </Stack>
 
         <Box borderTop="1px" borderColor="gray.200">
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
-            <PostCard key={i} post={p} />
+            <PostCard key={i} postMetadata={p} />
           ))}
           <Flex justifyContent="center" mt="8">
             <Pagination
               onPageChange={(page) => setPage(page)}
               initialPage={page}
-              lastPage={Math.ceil(posts.length / itemsPerPage) - 1}
+              lastPage={Math.ceil(postsMetadata.length / itemsPerPage) - 1}
             />
           </Flex>
         </Box>
