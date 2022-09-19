@@ -71,27 +71,52 @@ export default function Blog({ posts }: { posts: Post[] }) {
       </Head>
       <Container w="full" maxW="container.md">
         <NavBar />
-        <Heading letterSpacing="tight" mb="4" mt="16" as="h1" size="2xl">
-          All the resources you need to speed up your development
+        <Heading
+          textAlign="center"
+          letterSpacing="tight"
+          mb="4"
+          mt="16"
+          as="h1"
+          size="3xl"
+        >
+          All the resources you need to{" "}
+          <Box as={"span"} color="blue.400">
+            speed up
+          </Box>{" "}
+          your development
         </Heading>
-        <Text>
-          At devjet we&apos;ve created expertly crafted guides, examples,
-          templates, and resources to help you build your websites faster. Get
-          started by checking out our free guides, or browsing all of the
-          examples in the categories you&apos;re most curious about.
+        <Text
+          textAlign="center"
+          mx="auto"
+          maxW="xl"
+          fontSize="lg"
+          fontWeight="medium"
+          color="gray.600"
+        >
+          Devjet is a collection of code guides, receipes and generators to help
+          your build your PERN and NEXTJS projects in no time.
         </Text>
 
-        <NextLink href="/posts/quickstart">
-          <Button
-            colorScheme="blue"
-            mt="6"
-            rightIcon={<Icon as={ArrowLongRightIcon} />}
-          >
-            Quickstart
-          </Button>
-        </NextLink>
+        <Flex justifyContent="center">
+          <NextLink href="/plans">
+            <Button
+              mt="6"
+              mr="6"
+              size="lg"
+              colorScheme="blue"
+              rightIcon={<Icon as={ArrowLongRightIcon} />}
+            >
+              Get all access
+            </Button>
+          </NextLink>
+          <NextLink href="/posts/quickstart">
+            <Button colorScheme="blue" variant="link" mt="6" size="lg">
+              Quickstart
+            </Button>
+          </NextLink>
+        </Flex>
 
-        <Divider mt="8" borderColor="gray.200" />
+        <Divider mt="14" borderColor="gray.200" />
 
         <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
           <InputGroup w="100%">
