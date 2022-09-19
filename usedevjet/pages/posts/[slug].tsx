@@ -1,40 +1,53 @@
 import React, { useEffect } from "react";
 
 import PostLayout from "components/PostLayout";
-import { allPosts, Post } from "contentlayer/generated";
-import { useMDXComponent } from "next-contentlayer/hooks";
-import { GetStaticPropsContext } from "next";
+import { allPosts } from "contentlayer/generated";
+import { GetServerSidePropsContext } from "next";
 import { useAppDispatch } from "redux/store";
 import { fetchReadingList } from "redux/slices/userThunk";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import { extractMetadata } from "lib/posts";
+import { PostMetadata } from "types/Post";
+import PostLayoutProtected from "components/PostLayoutProtected";
+import { getUser } from "@supabase/auth-helpers-nextjs";
+import NotFound from "components/NotFound";
 
-export async function getStaticPaths() {
-  const paths: string[] = allPosts.map((post) => post.url);
-  return { paths, fallback: false };
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const post = allPosts.find((p) => p.slug === ctx.params?.slug);
+  if (post === undefined) return {};
+
+  if (post.pro === true) {
+    const { user } = await getUser(ctx);
+
+    if (user?.user_metadata.plan !== undefined) {
+      return {
+        props: {
+          postMetadata: extractMetadata(post),
+          body: post.body.code,
+        },
+      };
+    } else return { props: { postMetadata: extractMetadata(post) } };
+  } else {
+    return {
+      props: { postMetadata: extractMetadata(post), body: post.body.code },
+    };
+  }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const post: Post | undefined = allPosts.find(
-    (post) => post._raw.flattenedPath === params?.slug
-  );
-  return { props: { post } };
-}
-
-function Post({ post }: { post: Post }) {
-  const MDXContent = useMDXComponent(post.body.code);
+function Post({
+  postMetadata,
+  body,
+}: {
+  postMetadata?: PostMetadata;
+  body?: string;
+}) {
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(fetchReadingList());
   }, [dispatch]);
 
-  return (
-    <PostLayout post={post}>
-      <Prose className="prose" mb="20">
-        <MDXContent />
-      </Prose>
-    </PostLayout>
-  );
+  if (!postMetadata) return <NotFound />;
+  else if (body) return <PostLayout postMetadata={postMetadata} body={body} />;
+  else return <PostLayoutProtected postMetadata={postMetadata} />;
 }
 
 export default Post;

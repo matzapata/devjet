@@ -29,17 +29,27 @@ import { useAppDispatch } from "redux/store";
 import { fetchReadingList } from "redux/slices/userThunk";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
+import { PostMetadata } from "types/Post";
+import { extractMetadata } from "lib/posts";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
     return compareDesc(new Date(a.date), new Date(b.date));
   });
-  return { props: { posts } };
+  const postsMetadata = posts.map((p) => extractMetadata(p));
+
+  return { props: { postsMetadata } };
 }
 
-export default function Blog({ posts }: { posts: Post[] }) {
+export default function Blog({
+  postsMetadata,
+}: {
+  postsMetadata: PostMetadata[];
+}) {
   const [searchValue, setSearchValue] = useState("");
-  const [filteredBlogPosts, setFilteredBlogPosts] = useState<Post[]>([]);
+  const [filteredBlogPosts, setFilteredBlogPosts] = useState<PostMetadata[]>(
+    []
+  );
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("all");
   const [stack, setStack] = useState("all");
@@ -52,7 +62,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
 
   useEffect(() => {
     setFilteredBlogPosts(
-      posts
+      postsMetadata
         .filter((p) =>
           p.title.toLowerCase().includes(searchValue.toLowerCase())
         )
@@ -62,7 +72,7 @@ export default function Blog({ posts }: { posts: Post[] }) {
         .sort((a, b) => (a.title > b.title ? 1 : -1))
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
-  }, [posts, searchValue, page, category, stack]);
+  }, [postsMetadata, searchValue, page, category, stack]);
 
   return (
     <>
@@ -71,27 +81,52 @@ export default function Blog({ posts }: { posts: Post[] }) {
       </Head>
       <Container w="full" maxW="container.md">
         <NavBar />
-        <Heading letterSpacing="tight" mb="4" mt="16" as="h1" size="2xl">
-          All the resources you need to speed up your development
+        <Heading
+          textAlign="center"
+          letterSpacing="tight"
+          mb="4"
+          mt="16"
+          as="h1"
+          size="3xl"
+        >
+          All the resources you need to{" "}
+          <Box as={"span"} color="blue.400">
+            speed up
+          </Box>{" "}
+          your development
         </Heading>
-        <Text>
-          At devjet we&apos;ve created expertly crafted guides, examples,
-          templates, and resources to help you build your websites faster. Get
-          started by checking out our free guides, or browsing all of the
-          examples in the categories you&apos;re most curious about.
+        <Text
+          textAlign="center"
+          mx="auto"
+          maxW="xl"
+          fontSize="lg"
+          fontWeight="medium"
+          color="gray.600"
+        >
+          Devjet is a collection of code guides, receipes and generators to help
+          your build your PERN and NEXTJS projects in no time.
         </Text>
 
-        <NextLink href="/posts/quickstart">
-          <Button
-            colorScheme="blue"
-            mt="6"
-            rightIcon={<Icon as={ArrowLongRightIcon} />}
-          >
-            Quickstart
-          </Button>
-        </NextLink>
+        <Flex justifyContent="center">
+          <NextLink href="/plans">
+            <Button
+              mt="6"
+              mr="6"
+              size="lg"
+              colorScheme="blue"
+              rightIcon={<Icon as={ArrowLongRightIcon} />}
+            >
+              Get all access
+            </Button>
+          </NextLink>
+          <NextLink href="/posts/quickstart">
+            <Button colorScheme="blue" variant="link" mt="6" size="lg">
+              Quickstart
+            </Button>
+          </NextLink>
+        </Flex>
 
-        <Divider mt="8" borderColor="gray.200" />
+        <Divider mt="14" borderColor="gray.200" />
 
         <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
           <InputGroup w="100%">
@@ -108,20 +143,23 @@ export default function Blog({ posts }: { posts: Post[] }) {
               <SearchIcon color="gray.300" />
             </InputRightElement>
           </InputGroup>
-          <CategoriesFilter posts={posts} setCategory={(c) => setCategory(c)} />
+          <CategoriesFilter
+            postsMetadata={postsMetadata}
+            setCategory={(c) => setCategory(c)}
+          />
           <StackFilter setStack={(s) => setStack(s)} />
         </Stack>
 
         <Box borderTop="1px" borderColor="gray.200">
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
-            <PostCard key={i} post={p} />
+            <PostCard key={i} postMetadata={p} />
           ))}
           <Flex justifyContent="center" mt="8">
             <Pagination
               onPageChange={(page) => setPage(page)}
               initialPage={page}
-              lastPage={Math.ceil(posts.length / itemsPerPage) - 1}
+              lastPage={Math.ceil(postsMetadata.length / itemsPerPage) - 1}
             />
           </Flex>
         </Box>
