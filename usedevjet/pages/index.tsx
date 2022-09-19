@@ -30,27 +30,13 @@ import { fetchReadingList } from "redux/slices/userThunk";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
-
-function extractMetadata(post: Post): PostMetadata {
-  return {
-    title: post.title,
-    date: post.date,
-    summary: post.summary,
-    tags: post.tags,
-    image: post.image,
-    category: post.category,
-    pro: post.pro,
-    url: post.url,
-    slug: post.slug,
-    stack: post.stack,
-  };
-}
+import { extractMetadata } from "lib/posts";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
     return compareDesc(new Date(a.date), new Date(b.date));
   });
-  const postsMetadata: PostMetadata[] = posts.map((p) => extractMetadata(p));
+  const postsMetadata = posts.map((p) => extractMetadata(p));
 
   return { props: { postsMetadata } };
 }
