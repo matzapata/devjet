@@ -8,6 +8,7 @@ import { store } from "redux/store";
 import { Provider } from "react-redux";
 import { ChakraProvider } from "@chakra-ui/react";
 import chakraTheme from "utils/chakraTheme";
+import { AuthProvider } from "utils/authHook";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -17,9 +18,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <ChakraProvider theme={chakraTheme}>
-          <App />
-        </ChakraProvider>
+        <AuthProvider>
+          <ChakraProvider theme={chakraTheme}>
+            <App />
+          </ChakraProvider>
+        </AuthProvider>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>
