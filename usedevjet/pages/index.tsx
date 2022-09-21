@@ -31,6 +31,7 @@ import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
 import { extractMetadata } from "lib/posts";
+import Newsletter from "components/Newsletter";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -89,11 +90,7 @@ export default function Blog({
           as="h1"
           size="3xl"
         >
-          All the resources you need to{" "}
-          <Box as={"span"} color="blue.400">
-            speed up
-          </Box>{" "}
-          your development
+          All the resources you need to speed up your development
         </Heading>
         <Text
           textAlign="center"
@@ -150,7 +147,7 @@ export default function Blog({
           <StackFilter setStack={(s) => setStack(s)} />
         </Stack>
 
-        <Box borderTop="1px" borderColor="gray.200">
+        <Box borderTop="1px" borderColor="gray.200" mb="20">
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
             <PostCard key={i} postMetadata={p} />
@@ -163,6 +160,8 @@ export default function Blog({
             />
           </Flex>
         </Box>
+
+        <Newsletter />
 
         <Footer />
       </Container>
