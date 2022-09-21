@@ -25,9 +25,13 @@ function PostHeader({ postMetadata }: { postMetadata: PostMetadata }) {
         <title>{postMetadata.title}</title>
       </Head>
       <Flex justifyContent="space-between" mt="16" alignItems="center">
-        <Text fontSize="sm">
-          {format(parseISO(postMetadata.date), "MMMM dd, yyyy")}
-        </Text>
+        {postMetadata.comingsoon ? (
+          <Tag colorScheme="green">Coming soon</Tag>
+        ) : (
+          <Text fontSize="sm">
+            {format(parseISO(postMetadata.date), "MMMM dd, yyyy")}
+          </Text>
+        )}
         <HStack spacing="4">
           <FacebookShareButton url={shareUrl}>
             <Icon h="4" color="gray.500" as={FaFacebookF} />
