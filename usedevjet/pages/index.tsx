@@ -14,6 +14,7 @@ import {
   Button,
   Stack,
   Icon,
+  useColorMode,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -56,6 +57,7 @@ export default function Blog({
   const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
   const dispatch = useAppDispatch();
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     dispatch(fetchReadingList());
@@ -98,7 +100,7 @@ export default function Blog({
           maxW="xl"
           fontSize="lg"
           fontWeight="medium"
-          color="gray.600"
+          color={colorMode === "light" ? "gray.600" : "gray.400"}
         >
           Devjet is a collection of code guides, receipes and generators to help
           your build your PERN and NEXTJS projects in no time.
@@ -123,12 +125,15 @@ export default function Blog({
           </NextLink>
         </Flex>
 
-        <Divider mt="14" borderColor="gray.200" />
+        <Divider
+          mt="14"
+          borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
+        />
 
         <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
           <InputGroup w="100%">
             <Input
-              bg="white"
+              bg={colorMode === "light" ? "white" : "gray.800"}
               shadow={"sm"}
               aria-label="Search by title"
               placeholder="Search by title"
@@ -147,7 +152,11 @@ export default function Blog({
           <StackFilter setStack={(s) => setStack(s)} />
         </Stack>
 
-        <Box borderTop="1px" borderColor="gray.200" mb="20">
+        <Box
+          borderTop="1px"
+          borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
+          mb="20"
+        >
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
             <PostCard key={i} postMetadata={p} />

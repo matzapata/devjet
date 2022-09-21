@@ -1,5 +1,5 @@
 import React from "react";
-import { Select } from "@chakra-ui/react";
+import { Select, useColorMode } from "@chakra-ui/react";
 import { PostMetadata } from "types/Post";
 
 function CategoriesFilter({
@@ -13,11 +13,12 @@ function CategoriesFilter({
     ?.map((p) => p.category)
     .filter((c) => c !== undefined) as string[];
   const categories = Array.from(new Set(postCategories));
+  const { colorMode } = useColorMode();
 
   return (
     <Select
       maxW={{ base: "", md: "160px" }}
-      bg="white"
+      bg={colorMode === "light" ? "white" : "gray.800"}
       onChange={(e) => setCategory(e.target.value)}
     >
       <option value="all">All categories</option>
