@@ -9,6 +9,7 @@ import {
   Flex,
   Icon,
   Tag,
+  useColorMode,
 } from "@chakra-ui/react";
 import { parseISO, format } from "date-fns";
 import ToggleReadingList from "./ToggleReadingList";
@@ -16,8 +17,14 @@ import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { PostMetadata } from "types/Post";
 
 function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
+  const { colorMode } = useColorMode();
+
   return (
-    <Box py="6" borderBottom="1px" borderColor="gray.300">
+    <Box
+      py="6"
+      borderBottom="1px"
+      borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
+    >
       <Flex alignItems="center" justifyContent="space-between">
         <Text>
           <NextLink href={postMetadata.url} passHref>
@@ -29,7 +36,7 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
         </Text>
         {postMetadata.pro && <Icon mx="2" as={LockClosedIcon} />}
       </Flex>
-      <Text color="gray.600" mt="1">
+      <Text color={colorMode === "light" ? "gray.600" : "gray.400"} mt="1">
         {postMetadata.summary}
       </Text>
       {postMetadata.comingsoon ? (
@@ -46,14 +53,17 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
           <Image
             bg="white"
             border="1px solid"
-            borderColor="gray.200"
+            borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
             src={postMetadata.image}
             h="5"
             w="5"
             borderRadius="full"
             alt="post-logo"
           />
-          <Text color="gray.600" fontWeight="500">
+          <Text
+            color={colorMode === "light" ? "gray.600" : "gray.400"}
+            fontWeight="500"
+          >
             {postMetadata.category}
           </Text>
         </HStack>

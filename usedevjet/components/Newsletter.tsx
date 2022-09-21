@@ -7,15 +7,17 @@ import {
   Input,
   Link,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 
 function Newsletter() {
+  const { colorMode } = useColorMode();
   return (
     <Box
       p="6"
-      bg="blue.50"
+      bg={colorMode === "light" ? "blue.50" : "gray.800"}
       border="1px"
-      borderColor="blue.200"
+      borderColor={colorMode === "light" ? "blue.200" : "gray.400"}
       borderRadius={4}
     >
       <Heading size="md" mb="1">
@@ -34,7 +36,7 @@ function Newsletter() {
       >
         <HStack>
           <Input
-            bg="white"
+            bg={colorMode === "light" ? "white" : "gray.900"}
             className="revue-form-field"
             placeholder="Your email address..."
             type="email"

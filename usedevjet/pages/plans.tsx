@@ -13,6 +13,7 @@ import {
   Spinner,
   Alert,
   AlertIcon,
+  useColorMode,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -34,6 +35,7 @@ export default function Pricing() {
   const [success, setSuccess] = useState(false);
   const [successPlan, setSuccessPlan] = useState("");
   const { width, height } = useWindowDimensions();
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     if (router.query.payment_id !== undefined) {
@@ -71,7 +73,7 @@ export default function Pricing() {
             mb="2"
             fontWeight="medium"
             fontSize="lg"
-            color="gray.600"
+            color={colorMode === "light" ? "gray.600" : "gray.300"}
             textAlign="center"
           >
             All-access

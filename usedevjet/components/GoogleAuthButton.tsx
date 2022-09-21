@@ -1,14 +1,15 @@
 import React from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, useColorMode } from "@chakra-ui/react";
 import { GoogleIcon } from "./GoogleIcon";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 
 function GoogleAuthButton() {
+  const { colorMode } = useColorMode();
   return (
     <Button
       onClick={() => supabaseClient.auth.signIn({ provider: "google" })}
       variant="outline"
-      bg="white"
+      bg={colorMode === "light" ? "white" : "gray.800"}
       size="md"
       leftIcon={<GoogleIcon />}
     >

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Heading, Text, useColorMode } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -38,13 +38,13 @@ function QuarterlyPlanCard({
       textAlign="center"
       _hover={isDisabled ? {} : { shadow: "lg" }}
     >
-      <Heading size="lg" mb="2" color={isDisabled ? "gray.500" : "gray.900"}>
-        $1500
+      <Heading size="lg" mb="2" color={isDisabled ? "gray.500" : ""}>
+        $1500 ARS
       </Heading>
-      <Heading size="sm" mb="4" color={isDisabled ? "gray.500" : "gray.900"}>
+      <Heading size="sm" mb="4" color={isDisabled ? "gray.500" : ""}>
         3 Months access
       </Heading>
-      <Text mb="6" color={isDisabled ? "gray.500" : "gray.900"}>
+      <Text mb="6" color={isDisabled ? "gray.500" : ""}>
         Give your project a boost. <br /> Pay once and access all content for 3
         months
       </Text>
