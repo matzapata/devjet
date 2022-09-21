@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Heading, HStack, Icon, Tag, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  HStack,
+  Icon,
+  Tag,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -14,6 +22,7 @@ import Head from "next/head";
 
 function PostHeader({ postMetadata }: { postMetadata: PostMetadata }) {
   const [shareUrl, setShareUrl] = useState("");
+  const [copyLabel, setCopyLabel] = useState("Copy to clipboard");
 
   useEffect(() => {
     setShareUrl(window.location.href);
@@ -33,24 +42,33 @@ function PostHeader({ postMetadata }: { postMetadata: PostMetadata }) {
           </Text>
         )}
         <HStack spacing="4">
-          <FacebookShareButton url={shareUrl}>
-            <Icon h="4" color="gray.500" as={FaFacebookF} />
-          </FacebookShareButton>
-          <TwitterShareButton url={shareUrl}>
-            <Icon h="4" color="gray.500" as={FaTwitter} />
-          </TwitterShareButton>
-          <LinkedinShareButton url={shareUrl}>
-            <Icon h="4" color="gray.500" as={FaLinkedinIn} />
-          </LinkedinShareButton>
-          <Icon
-            h="4"
-            color="gray.500"
-            cursor="pointer"
-            onClick={() => {
-              navigator.clipboard.writeText(shareUrl);
-            }}
-            as={ClipboardDocumentIcon}
-          />
+          <Tooltip label="Share on facebook">
+            <FacebookShareButton url={shareUrl}>
+              <Icon h="4" color="gray.500" as={FaFacebookF} />
+            </FacebookShareButton>
+          </Tooltip>
+          <Tooltip label="Share on twitter">
+            <TwitterShareButton url={shareUrl}>
+              <Icon h="4" color="gray.500" as={FaTwitter} />
+            </TwitterShareButton>
+          </Tooltip>
+          <Tooltip label="Share on linkedin">
+            <LinkedinShareButton url={shareUrl}>
+              <Icon h="4" color="gray.500" as={FaLinkedinIn} />
+            </LinkedinShareButton>
+          </Tooltip>
+          <Tooltip label={copyLabel}>
+            <Icon
+              h="4"
+              color="gray.500"
+              cursor="pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(shareUrl);
+                setCopyLabel("Copied to clipboard");
+              }}
+              as={ClipboardDocumentIcon}
+            />
+          </Tooltip>
 
           <ToggleReadingList postSlug={postMetadata.slug} />
         </HStack>
