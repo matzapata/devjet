@@ -16,7 +16,13 @@ const Post = defineDocumentType(() => ({
     date: {
       type: "date",
       description: "The date of the post",
+      required: false,
+      default: new Date(Date.now()).toISOString(),
+    },
+    comingsoon: {
+      type: "boolean",
       required: true,
+      default: false,
     },
     summary: {
       type: "string",
@@ -27,21 +33,22 @@ const Post = defineDocumentType(() => ({
       type: "list",
       of: { type: "string" },
       description: "Keywords representing the the post content",
-      required: false,
+      required: true,
     },
     image: {
       type: "string",
       description: "Image that will be rendered on the post card",
-      required: false,
+      required: true,
     },
     category: {
       type: "enum",
       options: ["basics", "auth", "recipes", "snippets"],
-      required: false,
+      required: true,
     },
     pro: {
       type: "boolean",
-      required: false,
+      required: true,
+      default: false,
     },
   },
   computedFields: {

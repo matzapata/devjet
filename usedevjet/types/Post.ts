@@ -9,4 +9,5 @@ export type PostMetadata = {
   url: string;
   slug: string;
   stack: string;
+  comingsoon?: boolean;
 };

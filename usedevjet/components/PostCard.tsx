@@ -1,6 +1,15 @@
 import React from "react";
 import NextLink from "next/link";
-import { Text, Link, Box, Image, HStack, Flex, Icon } from "@chakra-ui/react";
+import {
+  Text,
+  Link,
+  Box,
+  Image,
+  HStack,
+  Flex,
+  Icon,
+  Tag,
+} from "@chakra-ui/react";
 import { parseISO, format } from "date-fns";
 import ToggleReadingList from "./ToggleReadingList";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
@@ -23,9 +32,15 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
       <Text color="gray.600" mt="1">
         {postMetadata.summary}
       </Text>
-      <Text fontSize="sm" mb="2" color="gray.600">
-        Updated on {format(parseISO(postMetadata.date), "MMMM dd, yyyy")}
-      </Text>
+      {postMetadata.comingsoon ? (
+        <Tag colorScheme="green" variant="subtle" mt="2">
+          Coming soon
+        </Tag>
+      ) : (
+        <Text fontSize="sm" mb="2" color="gray.600">
+          Updated on {format(parseISO(postMetadata.date), "MMMM dd, yyyy")}
+        </Text>
+      )}
       <Flex alignItems="center" mt="4" justifyContent="space-between">
         <HStack alignItems="center">
           <Image

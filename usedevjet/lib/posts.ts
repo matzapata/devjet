@@ -16,6 +16,7 @@ export function extractMetadata(post: Post | undefined): PostMetadata | null {
   if (post.image !== undefined) metadata.image = post.image;
   if (post.category !== undefined) metadata.category = post.category;
   if (post.pro !== undefined) metadata.pro = post.pro;
+  if (post.comingsoon !== undefined) metadata.comingsoon = post.comingsoon;
 
   return metadata;
 }
