@@ -19,7 +19,7 @@ function EmailAndPassword() {
 
   return (
     <VStack>
-      <Heading size="md" mb="2">
+      <Heading size="md" mb="2" color="white">
         Email and password
       </Heading>
       <Input
@@ -68,7 +68,7 @@ function EmailMagicLink() {
 
   return (
     <VStack>
-      <Heading size="md" mb="2">
+      <Heading size="md" mb="2" color="white">
         Email magic link
       </Heading>
       <Input
@@ -96,7 +96,7 @@ function ResetPasswordForEmail() {
 
   return (
     <VStack>
-      <Heading size="md" mb="2">
+      <Heading size="md" mb="2" color="white">
         Reset Password
       </Heading>
       <Input
@@ -125,17 +125,29 @@ function Auth() {
     <Center bg="gray.900" minH="100vh" py="20">
       <Container>
         <VStack>
-          <Heading size="md" mb="2">
+          <Heading size="md" mb="2" color="white">
             User Data
           </Heading>
-          {user && <Text textAlign="center">{JSON.stringify(user)}</Text>}
-          {!user && <Text textAlign="center">No User</Text>}
+          {user && (
+            <Text color="white" textAlign="center">
+              {JSON.stringify(user)}
+            </Text>
+          )}
+          {!user && (
+            <Text color="white" textAlign="center">
+              No User
+            </Text>
+          )}
           {errorMessage && (
             <Text textAlign="center" color="red.500">
               {errorMessage}
             </Text>
           )}
-          {loading && <Text textAlign="center">Loading...</Text>}
+          {loading && (
+            <Text color="white" textAlign="center">
+              Loading...
+            </Text>
+          )}
         </VStack>
 
         <Divider my="8" />
