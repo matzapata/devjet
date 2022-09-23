@@ -11,7 +11,19 @@ image: "/images/react.png"
 
 ## Tech stack
 
-Devjet by default makes use of two tech stacks, PERN and NEXTJS. The best way to maximize the value that you get from us is by using the `devjet` generators to boostrap your project. Otherwise you have to figure out how our receipes fit in your current work.
+Devjet by default makes use of three tech stacks, REACT with optional serverless functions by vercel, PERN and NEXTJS. The best way to maximize the value that you get from us is by using the `devjet` generators to boostrap your project. Otherwise you have to figure out how our receipes fit in your current work.
+
+The PERN tech stack used is:
+
+- React: Frontend framework.
+- Typescript: Type checking in Backend as well as frontend.
+- Eslint: Code formatting with prettier.
+- Serverless api funtions by vercel on `api` folder.
+- Prisma: ORM.
+- Supabase: For authentication and database hosting.
+- Chakra UI: UI components and styling made easy.
+- Redux with redux-toolkit: State management.
+- React router
 
 The PERN tech stack used is:
 
@@ -37,12 +49,45 @@ The NEXTJS tech stack used is:
 
 Some other services may be opted on receipes themselves to build different functionalities for your app like stripe for payments or postmark for emails.
 
+## React quickstart
+
+1. Create your project base and install dependencies
+
+```
+npx devjet new my-react-project
+# Choose react when prompted about your stack
+```
+
+That's it. Now navigate into de project folder and install the dependencies. 
+
+```
+cd my-react-project
+npm install
+```
+
+2. Setup your enviroment variables
+
+Copy `.env.example` file to `.env` then fill with the necesary values.
+
+3. Create a postgress database (you'll need to have postgress already installed on your device)
+
+```
+psql
+> password: _ 
+
+# create database my-react-project;
+# \q
+```
+
+4. Set your postgress url on the `.env` file
+
 ## PERN quickstart
 
 1. Create your project base and install dependencies
 
 ```
-npx devjet new my-pern-project --pern
+npx devjet new my-pern-project
+# Choose pern when prompted about your stack
 ```
 
 That's it. Now navigate into de project folder and install the dependencies. 
@@ -75,7 +120,8 @@ psql
 1. Create your project base and install dependencies
 
 ```
-npx devjet new my-nextjs-project --nextjs
+npx devjet new my-nextjs-project
+# Choose nextjs when prompted about your stack
 ```
 
 That's it. Now navigate into de project folder and install the dependencies. 
