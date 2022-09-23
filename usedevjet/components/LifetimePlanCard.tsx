@@ -48,7 +48,7 @@ function LifetimePlanCard({
       }
     >
       <Heading size="lg" mb="2">
-        $2000
+        $2000 ars
       </Heading>
       <Heading size="sm" mb="4">
         Lifetime access!!

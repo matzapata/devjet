@@ -14,6 +14,7 @@ import {
   Button,
   Stack,
   Icon,
+  useColorMode,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -31,6 +32,7 @@ import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
 import { extractMetadata } from "lib/posts";
+import Newsletter from "components/Newsletter";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -55,6 +57,7 @@ export default function Blog({
   const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
   const dispatch = useAppDispatch();
+  const { colorMode } = useColorMode();
 
   useEffect(() => {
     dispatch(fetchReadingList());
@@ -68,7 +71,7 @@ export default function Blog({
         )
         .filter((p) => p.url !== "/posts/quickstart")
         .filter((p) => p.category === category || category === "all")
-        .filter((p) => p.stack === stack || stack === "all")
+        .filter((p) => p.stacks.includes(stack) || stack === "all")
         .sort((a, b) => (a.title > b.title ? 1 : -1))
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
@@ -89,11 +92,7 @@ export default function Blog({
           as="h1"
           size="3xl"
         >
-          All the resources you need to{" "}
-          <Box as={"span"} color="blue.400">
-            speed up
-          </Box>{" "}
-          your development
+          All the resources you need to speed up your development
         </Heading>
         <Text
           textAlign="center"
@@ -101,7 +100,7 @@ export default function Blog({
           maxW="xl"
           fontSize="lg"
           fontWeight="medium"
-          color="gray.600"
+          color={colorMode === "light" ? "gray.600" : "gray.400"}
         >
           Devjet is a collection of code guides, receipes and generators to help
           your build your PERN and NEXTJS projects in no time.
@@ -126,12 +125,15 @@ export default function Blog({
           </NextLink>
         </Flex>
 
-        <Divider mt="14" borderColor="gray.200" />
+        <Divider
+          mt="14"
+          borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
+        />
 
         <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
           <InputGroup w="100%">
             <Input
-              bg="white"
+              bg={colorMode === "light" ? "white" : "gray.800"}
               shadow={"sm"}
               aria-label="Search by title"
               placeholder="Search by title"
@@ -150,7 +152,11 @@ export default function Blog({
           <StackFilter setStack={(s) => setStack(s)} />
         </Stack>
 
-        <Box borderTop="1px" borderColor="gray.200">
+        <Box
+          borderTop="1px"
+          borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
+          mb="20"
+        >
           {!filteredBlogPosts.length && "No posts found :(("}
           {filteredBlogPosts.map((p, i) => (
             <PostCard key={i} postMetadata={p} />
@@ -159,10 +165,12 @@ export default function Blog({
             <Pagination
               onPageChange={(page) => setPage(page)}
               initialPage={page}
-              lastPage={Math.ceil(postsMetadata.length / itemsPerPage) - 1}
+              lastPage={Math.ceil(postsMetadata.length / itemsPerPage)}
             />
           </Flex>
         </Box>
+
+        <Newsletter />
 
         <Footer />
       </Container>

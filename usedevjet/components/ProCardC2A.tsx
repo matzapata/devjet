@@ -1,11 +1,27 @@
 import React from "react";
-import { Box, Button, Container, Heading, Icon, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  Icon,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 
 function ProCardC2A() {
+  const { colorMode } = useColorMode();
+
   return (
-    <Box py="12" mt="20" borderColor="gray.300" borderTop="1px" bg="white">
+    <Box
+      py="12"
+      mt="20"
+      borderColor="gray.300"
+      borderTop="1px"
+      bg={colorMode === "light" ? "white" : "gray.800"}
+    >
       <Container maxW="container.md">
         <Heading size="lg" mb="4">
           How to get access to this recipe - and everything on Devjet.

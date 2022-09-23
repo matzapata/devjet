@@ -1,9 +1,22 @@
 import React from "react";
-import { Divider, Flex, Text, VStack, Icon, Link } from "@chakra-ui/react";
+import {
+  Divider,
+  Flex,
+  Text,
+  VStack,
+  Icon,
+  Link,
+  HStack,
+  IconButton,
+  useColorMode,
+} from "@chakra-ui/react";
 import { BrandFavicon } from "./Brand";
 import { FaLinkedin } from "react-icons/fa";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 function Footer() {
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <VStack pt="20" pb="10">
       <Divider />
@@ -14,9 +27,21 @@ function Footer() {
             @2022 Devjet
           </Text>
         </Flex>
-        <Link href="https://www.linkedin.com/in/matias-zapata-b57406143/?locale=en_US">
-          <Icon as={FaLinkedin} h="7" cursor="pointer" />
-        </Link>
+        <HStack alignItems="center" spacing="4">
+          <Link
+            h="7"
+            href="https://www.linkedin.com/in/matias-zapata-b57406143/?locale=en_US"
+          >
+            <Icon as={FaLinkedin} h="7" cursor="pointer" />
+          </Link>
+          <IconButton
+            size="sm"
+            aria-label="Toggle Mode"
+            onClick={toggleColorMode}
+          >
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </IconButton>
+        </HStack>
       </Flex>
     </VStack>
   );
