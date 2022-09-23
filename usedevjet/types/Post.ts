@@ -8,6 +8,6 @@ export type PostMetadata = {
   pro?: boolean | undefined;
   url: string;
   slug: string;
-  stack: string;
+  stacks: string[];
   comingsoon?: boolean;
 };

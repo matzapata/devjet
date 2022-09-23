@@ -10,7 +10,7 @@ export function extractMetadata(post: Post | undefined): PostMetadata | null {
     tags: post.tags,
     url: post.url,
     slug: post.slug,
-    stack: post.stack,
+    stacks: post.stacks,
   };
   if (post.tags !== undefined) metadata.tags = post.tags;
   if (post.image !== undefined) metadata.image = post.image;
