@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -15,18 +15,12 @@ import {
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { BrandFavicon } from "components/Brand";
 import { Link as ReactLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 function Recover() {
-  const navigate = useNavigate();
   const { colorMode } = useColorMode();
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   if (user) navigate("/");
-  // }, [user, router]);
+  const [error] = useState("");
+  const [loading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

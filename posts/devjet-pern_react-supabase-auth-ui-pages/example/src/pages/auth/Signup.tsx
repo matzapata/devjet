@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Container,
@@ -27,25 +27,15 @@ type State = {
 };
 
 export default function SignUp() {
-  const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [displayEmailAlert, setDisplayEmailAlert] = useState(false);
+  const [error] = useState("");
+  const [loading] = useState(false);
+  const [displayEmailAlert] = useState(false);
   const { colorMode } = useColorMode();
   const [state, setState] = useState<State>({
     email: "",
     password: "",
     passwordConfirmation: "",
   });
-  const [errors] = useState({
-    email: "",
-    password: "",
-    passwordConfirmation: "",
-  });
-
-  // useEffect(() => {
-  //   if (user) router.push("/");
-  // }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -72,7 +62,7 @@ export default function SignUp() {
           </Alert>
         )}
         <Box as="form" w="full" onSubmit={onSubmit}>
-          <FormControl isInvalid={errors.email !== ""} mb="2">
+          <FormControl mb="2">
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
@@ -82,9 +72,8 @@ export default function SignUp() {
               value={state.email}
               onChange={onChange}
             />
-            <FormErrorMessage>{errors.email}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.password !== ""} mb="2">
+          <FormControl mb="2">
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
@@ -94,9 +83,8 @@ export default function SignUp() {
               value={state.password}
               onChange={onChange}
             />
-            <FormErrorMessage>{errors.password}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.passwordConfirmation !== ""}>
+          <FormControl>
             <FormLabel>Confirm password</FormLabel>
             <Input
               type="password"
@@ -106,7 +94,6 @@ export default function SignUp() {
               value={state.passwordConfirmation}
               onChange={onChange}
             />
-            <FormErrorMessage>{errors.passwordConfirmation}</FormErrorMessage>
           </FormControl>
           <Stack spacing="4">
             <Button

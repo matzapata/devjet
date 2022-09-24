@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Container,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -18,27 +17,18 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { useNavigate, Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useSearchParams } from "react-router-dom";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [error] = useState("");
+  const [loading] = useState(false);
   const { colorMode } = useColorMode();
 
   const [state, setState] = useState({
     email: "",
     password: "",
   });
-  const [errors] = useState({
-    email: "",
-    password: "",
-  });
-
-  // useEffect(() => {
-  //   if (user && user.user_metadata.plan !== "lifetime") router.push("/plans");
-  //   else if (user) router.push("/");
-  // }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -58,14 +48,14 @@ export default function Login() {
         <Heading mb="20" textAlign="center">
           Log in to your account
         </Heading>
-        {/* {router.query.recover && (
+        {searchParams.get("recovery") && (
           <Alert status="success" mb="5" fontSize="sm" fontWeight="medium">
             <AlertIcon h="4" />
             Recovery email sent successfully
           </Alert>
-        )} */}
+        )}
         <Box as="form" w="full" onSubmit={onSubmit}>
-          <FormControl isInvalid={errors.email !== ""} mb="2">
+          <FormControl mb="2">
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
@@ -75,9 +65,8 @@ export default function Login() {
               value={state.email}
               onChange={onChange}
             />
-            <FormErrorMessage>{errors.email}</FormErrorMessage>
           </FormControl>
-          <FormControl isInvalid={errors.password !== ""}>
+          <FormControl>
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
@@ -87,7 +76,6 @@ export default function Login() {
               value={state.password}
               onChange={onChange}
             />
-            <FormErrorMessage>{errors.password}</FormErrorMessage>
           </FormControl>
           <ReactLink to="/auth/recover">
             <Link
