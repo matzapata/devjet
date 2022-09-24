@@ -1,6 +1,6 @@
 {
   "name": "devjet",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "usedevjet cli for bootstrapping pern projects",
   "types": "build/types/types.d.ts",
   "bin": {

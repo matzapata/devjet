@@ -11,18 +11,18 @@ pro: false
 1. Install dependencies
 
 ```bash
-yarn add @supabase/supabase-js
+yarn add @supabase/supabase-js@^1.35.6
 ```
 
 2. Create your supabase application and copy your credentials to `client/.env`. Remember to update `.env.example` with your new enviroment variable
 
-```bash client/.env
+```bash:client/.env
 # ...
 REACT_APP_SUPABASE_URL= # your api key value
 REACT_APP_SUPABASE_API_KEY= # your api key value
 ```
 
-```bash client/.env.example
+```bash:client/.env.example
 # ...
 REACT_APP_SUPABASE_URL= # empty, just for reference
 REACT_APP_SUPABASE_API_KEY= # empty, just for reference
@@ -31,7 +31,7 @@ REACT_APP_SUPABASE_API_KEY= # empty, just for reference
 
 3. Create supabase client in `client/src/utils/supabase.ts`
 
-```ts
+```ts:client/src/utils/supabase.ts
 import { createClient } from "@supabase/supabase-js";
 
 export const supabase = createClient(
@@ -42,7 +42,7 @@ export const supabase = createClient(
 
 4. Create an authentication context hook
 
-```ts
+```ts:client/src/utils/authHook.ts
 import React, { useContext, useState, useEffect, createContext } from "react";
 import { supabase } from "utils/supabase";
 import { User, UserCredentials, UserAttributes } from "@supabase/supabase-js";
@@ -137,7 +137,7 @@ export const useAuth = () => {
 
 5. Add your context provider to `client/src/index.ts`
 
-```ts client/src/index.ts {11,21,25}
+```ts:client/src/index.ts {11,21,25}
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "styles/index.css";
@@ -184,7 +184,7 @@ reportWebVitals();
 
 7. Now you can start using your auth hook to authenticate your users. Here are some small examples.
 
-```tsx EmailAndPassword
+```tsx:EmailAndPassword
 // ...
 import { useAuth } from "utils/authHook";
 
@@ -239,7 +239,7 @@ function EmailAndPassword() {
 }
 ```
 
-```tsx EmailMagicLink
+```tsx:EmailMagicLink
 // ...
 import { useAuth } from "utils/authHook";
 
@@ -274,7 +274,7 @@ function EmailMagicLink() {
 
 
 
-```tsx ResetPasswordForEmail
+```tsx:ResetPasswordForEmail
 // ...
 import { useAuth } from "utils/authHook";
 
@@ -307,7 +307,7 @@ function ResetPasswordForEmail() {
 }
 ```
 
-```tsx GetUserData
+```tsx:GetUserData
 // ...
 import { useAuth } from "utils/authHook";
 
