@@ -60,13 +60,19 @@ const Post = defineDocumentType(() => ({
       type: "string",
       resolve: (doc) => doc._raw.flattenedPath,
     },
-    stack: {
-      type: "string",
+    stacks: {
+      type: "list",
+      of: "string",
       resolve: (doc) => {
         const slug = doc._raw.flattenedPath;
-        if (slug.split("-")[0] === "pern") return "pern";
-        else if (slug.split("-")[0] === "nextjs") return "nextjs";
-        else return "all";
+        const stacks = slug.split("-")[0].split("_");
+
+        const postStacks = [];
+        if (stacks.includes("pern")) postStacks.push("pern");
+        if (stacks.includes("nextjs")) postStacks.push("nextjs");
+        if (stacks.includes("react")) postStacks.push("react");
+
+        return postStacks;
       },
     },
   },

@@ -7,11 +7,25 @@ category: "basics"
 image: "/images/react.png"
 ---
 
+
+
 ## Tech stack
 
-All devjet posts work with the same tech stack and folder structure, that's why it's importante that you get confident with the tech stack used throuout. The good part is that once you can position yourself in the base, you'll be capable of building anything you want in no time with devjet help.
+Devjet by default makes use of three tech stacks, REACT with optional serverless functions by vercel, PERN and NEXTJS. The best way to maximize the value that you get from us is by using the `devjet` generators to boostrap your project. Otherwise you have to figure out how our receipes fit in your current work.
 
-The tech stack used is:
+The PERN tech stack used is:
+
+- React: Frontend framework.
+- Typescript: Type checking in Backend as well as frontend.
+- Eslint: Code formatting with prettier.
+- Serverless api funtions by vercel on `api` folder.
+- Prisma: ORM.
+- Supabase: For authentication and database hosting.
+- Chakra UI: UI components and styling made easy.
+- Redux with redux-toolkit: State management.
+- React router
+
+The PERN tech stack used is:
 
 - React: Frontend framework.
 - Typescript: Type checking in Backend as well as frontend.
@@ -22,25 +36,58 @@ The tech stack used is:
 - Chakra UI: UI components and styling made easy.
 - Redux with redux-toolkit: State management.
 - React router
-- Vercel: Front and backend deployment
+
+The NEXTJS tech stack used is:
+
+- Next.js: Frontend framework and api routes.
+- Typescript: Type checking in Backend as well as frontend.
+- Eslint: Code formatting with prettier.
+- Prisma: ORM.
+- Supabase: For authentication and database hosting.
+- Chakra UI: UI components and styling made easy.
+- Redux with redux-toolkit: State management.
 
 Some other services may be opted on receipes themselves to build different functionalities for your app like stripe for payments or postmark for emails.
 
-## Create your first project and get started using devjet receipes
+## React quickstart
 
-In order to get you started easily, we've created a CLI tool that you'll use frecuently along with the code receipes provided.
-
-Install `devjet` CLI 
+1. Create your project base and install dependencies
 
 ```
-npm install -g devjet
-devjet init my-pern-project
+npx devjet new my-react-project
+# Choose react when prompted about your stack
 ```
 
-Or directly create your project with 
+That's it. Now navigate into de project folder and install the dependencies. 
 
 ```
-npx devjet init my-pern-project
+cd my-react-project
+npm install
+```
+
+2. Setup your enviroment variables
+
+Copy `.env.example` file to `.env` then fill with the necesary values.
+
+3. Create a postgress database (you'll need to have postgress already installed on your device)
+
+```
+psql
+> password: _ 
+
+# create database my-react-project;
+# \q
+```
+
+4. Set your postgress url on the `.env` file
+
+## PERN quickstart
+
+1. Create your project base and install dependencies
+
+```
+npx devjet new my-pern-project
+# Choose pern when prompted about your stack
 ```
 
 That's it. Now navigate into de project folder and install the dependencies. 
@@ -51,9 +98,50 @@ cd api && npm install
 cd ../client && npm install
 ```
 
-You can already get started working with your cliente application. 
-For your backend there are still a couple of settings we have to do like creating a postgress database for local development and configuring enviroment variables.
+2. Setup your enviroment variables
 
-Let's first setup our enviroment variables. In order to do that copy your `api/.env.example` file to `api/.env`.
+Copy `api/.env.example` file to `api/.env` and `client/.env.example` to `client/.env` then fill with the necesary values.
 
-Now we have to create a postgress database to work locally.
+3. Create a postgress database (you'll need to have postgress already installed on your device)
+
+```
+psql
+> password: _ 
+
+# create database my-pern-project;
+# \q
+```
+
+4. Set your postgress url on the `api/.env` file
+
+
+## NEXTJS quickstart
+
+1. Create your project base and install dependencies
+
+```
+npx devjet new my-nextjs-project
+# Choose nextjs when prompted about your stack
+```
+
+That's it. Now navigate into de project folder and install the dependencies. 
+
+```
+cd my-netjs-project && npm install
+```
+
+2. Setup your enviroment variables
+
+Copy `.env.local.example` to `.env.local` and `.env.example` to `.env` then fill with the necesary values.
+
+3. Create a postgress database (you'll need to have postgress already installed on your device)
+
+```
+psql
+> password: _ 
+
+# create database my-pern-project;
+# \q
+```
+
+4. Set your postgress url on the `.env.local` file

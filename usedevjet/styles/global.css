@@ -5,8 +5,7 @@ body {
 
 .prose pre {
   border: 2px solid;
-  border-top-left-radius: 0 !important;
-  border-top-right-radius: 0 !important;
+  border-radius: 0 !important;
   border-color: var(--chakra-colors-gray-700) !important;
   background-color: var(--chakra-colors-gray-900) !important;
 }
@@ -102,7 +101,7 @@ pre {
   font-weight: 700;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
   border-bottom-width: 0;
   border-color: var(--chakra-colors-gray-700);

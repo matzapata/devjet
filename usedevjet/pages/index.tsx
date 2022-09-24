@@ -71,7 +71,7 @@ export default function Blog({
         )
         .filter((p) => p.url !== "/posts/quickstart")
         .filter((p) => p.category === category || category === "all")
-        .filter((p) => p.stack === stack || stack === "all")
+        .filter((p) => p.stacks.includes(stack) || stack === "all")
         .sort((a, b) => (a.title > b.title ? 1 : -1))
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
@@ -165,7 +165,7 @@ export default function Blog({
             <Pagination
               onPageChange={(page) => setPage(page)}
               initialPage={page}
-              lastPage={Math.ceil(postsMetadata.length / itemsPerPage) - 1}
+              lastPage={Math.ceil(postsMetadata.length / itemsPerPage)}
             />
           </Flex>
         </Box>

@@ -26,14 +26,12 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
       borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
     >
       <Flex alignItems="center" justifyContent="space-between">
-        <Text>
-          <NextLink href={postMetadata.url} passHref>
-            <Link fontSize="xl" fontWeight="650">
-              {postMetadata.title}
-            </Link>
-          </NextLink>
-          {postMetadata.stack !== "all" && ` - ${postMetadata.stack}`}
-        </Text>
+        <NextLink href={postMetadata.url} passHref>
+          <Link fontSize="xl" fontWeight="650">
+            {postMetadata.title}
+          </Link>
+        </NextLink>
+
         {postMetadata.pro && <Icon mx="2" as={LockClosedIcon} />}
       </Flex>
       <Text color={colorMode === "light" ? "gray.600" : "gray.400"} mt="1">
@@ -67,7 +65,17 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
             {postMetadata.category}
           </Text>
         </HStack>
-        <ToggleReadingList postSlug={postMetadata.url.replace("/posts/", "")} />
+        <HStack>
+          {postMetadata.stacks.map((s, i) => (
+            <Tag key={i} size="sm">
+              {s}
+            </Tag>
+          ))}
+
+          <ToggleReadingList
+            postSlug={postMetadata.url.replace("/posts/", "")}
+          />
+        </HStack>
       </Flex>
     </Box>
   );
