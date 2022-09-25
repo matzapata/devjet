@@ -3,7 +3,6 @@ import {
   Button,
   Container,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -18,7 +17,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
 
 type State = {
   email: string;
