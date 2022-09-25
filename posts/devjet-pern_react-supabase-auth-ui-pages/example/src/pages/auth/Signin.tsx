@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Container,
@@ -17,13 +17,13 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink, useSearchParams } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "utils/authHook";
 
 export default function Login() {
-  const [searchParams] = useSearchParams();
-  const [error] = useState("");
-  const [loading] = useState(false);
   const { colorMode } = useColorMode();
+  const navigate = useNavigate();
+  const { signIn, user, loading, errorMessage } = useAuth();
 
   const [state, setState] = useState({
     email: "",
@@ -37,8 +37,17 @@ export default function Login() {
     });
   };
 
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const error = await signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (!error) navigate("/");
   };
 
   return (
@@ -48,10 +57,10 @@ export default function Login() {
         <Heading mb="20" textAlign="center">
           Log in to your account
         </Heading>
-        {searchParams.get("recovery") && (
-          <Alert status="success" mb="5" fontSize="sm" fontWeight="medium">
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
             <AlertIcon h="4" />
-            Recovery email sent successfully
+            {errorMessage}
           </Alert>
         )}
         <Box as="form" w="full" onSubmit={onSubmit}>
@@ -99,11 +108,6 @@ export default function Login() {
             >
               Sign In
             </Button>
-            {error !== "" && (
-              <Text color="red.500" mt="2" fontWeight="500">
-                {error}
-              </Text>
-            )}
           </Stack>
         </Box>
         <Flex justifyContent="center" mt="4">
@@ -115,11 +119,14 @@ export default function Login() {
           >
             Don&apos;t have an account?
           </Text>
-          <ReactLink to="/auth/signup">
-            <Link color="blue.600" fontWeight="500">
-              Sign up
-            </Link>
-          </ReactLink>
+          <Link
+            as={ReactLink}
+            to="/auth/signup"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign up
+          </Link>
         </Flex>
       </Container>
     </Center>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -14,16 +14,26 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "utils/authHook";
 
 function Recover() {
   const { colorMode } = useColorMode();
   const [email, setEmail] = useState("");
-  const [error] = useState("");
-  const [loading] = useState(false);
+  const { user, loading, resetPasswordForEmail, errorMessage } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const error = await resetPasswordForEmail(email);
+    if (!error) {
+      alert("Recovery email sent successfully");
+      navigate("/auth/signin");
+    }
   };
 
   return (
@@ -42,7 +52,7 @@ function Recover() {
           No worries, we&apos;ll send you reset instructions.
         </Text>
         <Box as="form" w="full" onSubmit={onSubmit}>
-          <FormControl isInvalid={error !== ""} mb="5">
+          <FormControl isInvalid={errorMessage !== ""} mb="5">
             <Input
               type="email"
               name="email"
@@ -52,7 +62,7 @@ function Recover() {
               value={email}
               onChange={(e: any) => setEmail(e.target.value)}
             />
-            <FormErrorMessage>{error}</FormErrorMessage>
+            <FormErrorMessage>{errorMessage}</FormErrorMessage>
           </FormControl>
           <Button
             isLoading={loading}
@@ -66,16 +76,16 @@ function Recover() {
           </Button>
         </Box>
         <Box textAlign="center" mt="4">
-          <ReactLink to="/auth/signin">
-            <Link
-              color={colorMode === "light" ? "gray.600" : "gray.500"}
-              fontWeight="500"
-              justifyItems="center"
-            >
-              <ArrowBackIcon mr="1" />
-              Back to login
-            </Link>
-          </ReactLink>
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+            fontWeight="500"
+            justifyItems="center"
+          >
+            <ArrowBackIcon mr="1" />
+            Back to login
+          </Link>
         </Box>
       </Container>
     </Center>

@@ -30,6 +30,22 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
         setUser(session?.user ?? null);
         setLoading(false);
         setEvent(event);
+
+        if (event == "PASSWORD_RECOVERY") {
+          const newPassword = prompt(
+            "What would you like your new password to be?"
+          );
+          if (newPassword === null) {
+            alert("There was an error updating your password.");
+          } else {
+            const { data, error } = await supabase.auth.update({
+              password: newPassword,
+            });
+
+            if (data) alert("Password updated successfully!");
+            if (error) alert("There was an error updating your password.");
+          }
+        }
       }
     );
 
@@ -47,6 +63,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     ) => {
       const { error } = await supabase.auth.signUp(userCredentials, options);
       if (error) setErrorMessage(error.message);
+      return error;
     },
     signIn: async (
       userCredentials: UserCredentials,
@@ -54,6 +71,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     ) => {
       const { error } = await supabase.auth.signIn(userCredentials, options);
       if (error) setErrorMessage(error.message);
+      return error;
     },
     signInWithEmail: async (
       email: string,
@@ -61,14 +79,17 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     ) => {
       const { error } = await supabase.auth.signIn({ email }, options);
       if (error) setErrorMessage(error.message);
+      return error;
     },
     resetPasswordForEmail: async (email: string) => {
       const { error } = await supabase.auth.api.resetPasswordForEmail(email);
       if (error) setErrorMessage(error.message);
+      return error;
     },
     updatePassword: async (password: string) => {
       const { error } = await supabase.auth.update({ password });
       if (error) setErrorMessage(error.message);
+      return error;
     },
     updateUser: (attributes: UserAttributes) =>
       supabase.auth.update(attributes),

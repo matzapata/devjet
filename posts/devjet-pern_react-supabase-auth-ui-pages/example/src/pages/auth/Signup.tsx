@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Container,
@@ -13,11 +13,12 @@ import {
   Flex,
   Alert,
   AlertIcon,
-  Stack,
   useColorMode,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "utils/authHook";
 
 type State = {
   email: string;
@@ -26,10 +27,9 @@ type State = {
 };
 
 export default function SignUp() {
-  const [error] = useState("");
-  const [loading] = useState(false);
-  const [displayEmailAlert] = useState(false);
   const { colorMode } = useColorMode();
+  const navigate = useNavigate();
+  const { signUp, user, loading, errorMessage } = useAuth();
   const [state, setState] = useState<State>({
     email: "",
     password: "",
@@ -43,8 +43,17 @@ export default function SignUp() {
     });
   };
 
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const error = await signUp({
+      email: state.email,
+      password: state.password,
+    });
+    if (!error) navigate("/auth/signin");
   };
 
   return (
@@ -54,12 +63,14 @@ export default function SignUp() {
         <Heading mb="20" textAlign="center">
           Create your account
         </Heading>
-        {displayEmailAlert && (
-          <Alert status="success" mb="5" fontSize="sm" fontWeight="medium">
+
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
             <AlertIcon h="4" />
-            Account created successfully. Please check your email.
+            {errorMessage}
           </Alert>
         )}
+
         <Box as="form" w="full" onSubmit={onSubmit}>
           <FormControl mb="2">
             <FormLabel>Email</FormLabel>
@@ -83,7 +94,9 @@ export default function SignUp() {
               onChange={onChange}
             />
           </FormControl>
-          <FormControl>
+          <FormControl
+            isInvalid={state.password !== state.passwordConfirmation}
+          >
             <FormLabel>Confirm password</FormLabel>
             <Input
               type="password"
@@ -93,40 +106,36 @@ export default function SignUp() {
               value={state.passwordConfirmation}
               onChange={onChange}
             />
+            <FormErrorMessage>Passwords doesn&apos;t match</FormErrorMessage>
           </FormControl>
-          <Stack spacing="4">
-            <Button
-              isLoading={loading}
-              type="submit"
-              mt="8"
-              size="md"
-              colorScheme="blue"
-              w="full"
-            >
-              Sign up
-            </Button>
-
-            {error !== "" && (
-              <Text color="red.500" mt="2" fontWeight="500">
-                {error}
-              </Text>
-            )}
-          </Stack>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Sign up
+          </Button>
         </Box>
         <Flex justifyContent="center" mt="4">
           <Text
+            mr="1"
             as="span"
             fontWeight="500"
-            mr="1"
             color={colorMode === "light" ? "gray.600" : "gray.500"}
           >
             Already have an account?
           </Text>
-          <ReactLink to="/auth/signin">
-            <Link color="blue.600" fontWeight="500">
-              Sign in
-            </Link>
-          </ReactLink>
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign in
+          </Link>
         </Flex>
       </Container>
     </Center>
