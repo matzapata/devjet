@@ -5,7 +5,7 @@ module.exports = {
   hidden: true,
   description: `Create a new devjet generator asociated to a post`,
   run: async (toolbox: GluegunToolbox) => {
-    const { filesystem, print, prompt } = toolbox;
+    const { filesystem, print, prompt, template } = toolbox;
 
     const { postSlug } = await prompt.ask({
       name: 'postSlug',
@@ -28,8 +28,15 @@ module.exports = {
 
     filesystem.copy(
       filesystem.path(__dirname, '..', '..', 'templates', 'generator'),
-      projectDirectory
+      projectDirectory,
+      { matching: '!package.json' }
     );
+
+    template.generate({
+      template: 'generator/package.json',
+      target: `${projectDirectory}/package.json`,
+      props: { postSlug },
+    });
 
     print.success('All done!');
     print.info('Create your example at example folder with npx devjet new');
