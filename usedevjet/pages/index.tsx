@@ -72,7 +72,10 @@ export default function Blog({
         .filter((p) => p.url !== "/posts/quickstart")
         .filter((p) => p.category === category || category === "all")
         .filter((p) => p.stacks.includes(stack) || stack === "all")
-        .sort((a, b) => (a.title > b.title ? 1 : -1))
+        .sort((a, b) => {
+          if (a.comingsoon === true || b.comingsoon === true) return -1;
+          else return Number(new Date(b.date)) - Number(new Date(a.date));
+        })
         .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     );
   }, [postsMetadata, searchValue, page, category, stack]);

@@ -113,9 +113,9 @@ export default function Pricing() {
 
           <Flex justifyContent="center">
             <Stack mt="8" direction={{ base: "column", sm: "row" }} spacing={4}>
-              <QuarterlyPlanCard
+              {/* <QuarterlyPlanCard
                 currentPlan={success ? successPlan : user?.user_metadata.plan}
-              />
+              /> */}
               <LifetimePlanCard
                 currentPlan={success ? successPlan : user?.user_metadata.plan}
               />
