@@ -27,6 +27,7 @@ function PostLayout({
         <Prose
           className={colorMode === "light" ? "prose" : "prose-dark"}
           mb="20"
+          mt="16"
         >
           <MDXContent components={MDXComponents} />
         </Prose>
