@@ -6,6 +6,7 @@ import { useMDXComponent } from "next-contentlayer/hooks";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { PostMetadata } from "types/Post";
 import PostHeader from "./PostHeader";
+import MDXComponents from "components/MDXComponents";
 
 function PostLayout({
   postMetadata,
@@ -27,7 +28,7 @@ function PostLayout({
           className={colorMode === "light" ? "prose" : "prose-dark"}
           mb="20"
         >
-          <MDXContent />
+          <MDXContent components={MDXComponents} />
         </Prose>
         <Footer />
       </Container>
