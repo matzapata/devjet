@@ -17,7 +17,7 @@ This receipe is only about creating the UI for the authentication pages. To comp
 
 2. Create UI components
 
-```tsx:src/pages/Signin.tsx
+```tsx:src/pages/auth/Signin.tsx
 import React, { useState } from "react";
 import {
   Button,
@@ -144,7 +144,7 @@ export default function Login() {
 }
 ```
 
-```tsx:src/pages/Signup.tsx
+```tsx:src/pages/auth/Signup.tsx
 import React, { useState } from "react";
 import {
   Button,
@@ -280,7 +280,7 @@ export default function SignUp() {
 }
 ```
 
-```tsx:src/pages/Recover.tsx
+```tsx:src/pages/auth/Recover.tsx
 import React, { useState } from "react";
 import {
   Box,
@@ -397,7 +397,7 @@ export default App;
 
 4. Make your pages functional with supabase auth hook
 
-```tsx:src/pages/Signup.tsx {20,21,31,32,46-49,52-56,}
+```tsx:src/pages/auth/Signup.tsx {20,21,31,32,46-49,52-56,}
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -543,7 +543,7 @@ export default function SignUp() {
 }
 ```
 
-```tsx:src/pages/Signin.tsx {20,21,25,26,40-43,46-50}
+```tsx:src/pages/auth/Signin.tsx {20,21,25,26,40-43,46-50}
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -632,17 +632,17 @@ export default function Login() {
               onChange={onChange}
             />
           </FormControl>
-          <ReactLink to="/auth/recover">
-            <Link
-              color="blue.600"
-              fontWeight="medium"
-              display="block"
-              textAlign="right"
-              mt="1"
-            >
-              Forgot your password?
-            </Link>
-          </ReactLink>
+          <Link
+            as={ReactLink}
+            to="/auth/recover"
+            color="blue.600"
+            fontWeight="medium"
+            display="block"
+            textAlign="right"
+            mt="1"
+          >
+            Forgot your password?
+          </Link>
           <Stack spacing="4">
             <Button
               type="submit"
@@ -680,7 +680,7 @@ export default function Login() {
 }
 ```
 
-```tsx:src/pages/Recover.tsx {1,17,18,23-28,32-36}
+```tsx:src/pages/auth/Recover.tsx {1,17,18,23-28,32-36}
 import React, { useState, useEffect } from "react";
 import {
   Box,
