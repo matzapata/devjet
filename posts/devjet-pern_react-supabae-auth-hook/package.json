@@ -2,5 +2,11 @@
   "name": "devjet-pern_react-supabae-auth-hook",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "gluegun": "^5.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.21"
+  }
 }

@@ -1,7 +1,31 @@
+import { GluegunToolbox } from 'gluegun'
+
+async function step(
+    toolbox: GluegunToolbox, 
+    message: string, 
+    stack: "react" | "nextjs" | "pern", 
+    action: {
+        all?: () => Promise<any>,
+        react?: () => Promise<any>,
+        pern?: () => Promise<any>,
+        nextjs?: () => Promise<any>,
+    }
+) {
+    try {
+        if (action.all !== undefined) await action.all()
+        if (action[stack] !== undefined) await action[stack]()
+
+        toolbox.print.success(`✅ ${message}`)
+    } catch (e) {
+        toolbox.print.error(`❌ ${message}`)
+        toolbox.print.error(e.message)
+    }
+}
+
 module.exports = {
     name: "pern_react-supabase-auth-hook",
     description: "Add authentication with supabase to your pern project",
-    run: async (toolbox) => {
+    run: async (toolbox: GluegunToolbox) => {
         const { stack } = await toolbox.prompt.ask({
             type: "select",
             name: "stack",
@@ -18,9 +42,9 @@ module.exports = {
         
         if (stack === "react") {
             // Add dependencies to package.json
-            await toolbox.patching.update('package.json', package => {
-                package.dependencies["@supabase/supabase-js"] = "^1.35.6"
-                return package
+            await toolbox.patching.update('package.json', (pkg) => {
+                pkg.dependencies["@supabase/supabase-js"] = "^1.35.6"
+                return pkg;
             })
             toolbox.print.success("✅ 1. Added dependencies to package.json")
             
