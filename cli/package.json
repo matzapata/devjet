@@ -10,7 +10,7 @@
     "clean-build": "rmdir-cli ./build",
     "compile": "tsc -p .",
     "clean-templates": "rmdir-cli ./src/templates/api/node_modules/**/* && rmdir-cli ./src/templates/client/node_modules/**/*",
-    "copy-templates": "copyfiles ./src/templates/**/* ./build/templates",
+    "copy-templates": "cpy --dot src/templates/**/* build/templates",
     "build": "yarn clean-build && yarn compile && yarn copy-templates",
     "prepublishOnly": "yarn build",
     "format": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix && prettier \"**/*.{js,jsx,ts,tsx,json}\" --write",
@@ -31,15 +31,14 @@
   "license": "MIT",
   "dependencies": {
     "gitly": "^2.2.2",
-    "gluegun": "latest",
-    "tab": "^1.0.0"
+    "gluegun": "latest"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "@types/node": "^12.7.11",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
-    "copyfiles": "^2.4.1",
+    "cpy-cli": "^4.2.0",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.2.0",
