@@ -36,8 +36,9 @@ module.exports = {
       )
 
       print.success(`Successfully generated project at ${projectDirectory}`)
-      print.info(`Please install dependencies. 
-        For further information visit https://www.usedevjet.com/`)
+      print.info(
+        `Please install dependencies.\nFor further information visit https://www.usedevjet.com/`
+      )
     } catch (e) {
       print.error('Error creating devjet boilerplate')
       print.error(e)
