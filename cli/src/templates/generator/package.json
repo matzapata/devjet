@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "clean-build": "rmdir-cli ./build",
     "compile": "tsc -p .",
@@ -12,10 +15,8 @@
     "lint": "eslint ./src/**/*.ts",
     "lint:fix": "eslint --fix ./src/**/*.ts"
   },
-  "dependencies": {
-    "gluegun": "^5.1.2"
-  },
   "devDependencies": {
+    "gluegun": "^5.1.2",
     "cpy-cli": "^4.2.0",
     "@types/node": "^12.7.11",
     "@typescript-eslint/eslint-plugin": "^4.17.0",

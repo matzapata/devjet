@@ -8,7 +8,7 @@ const command = {
       toolbox.print.colors.bold('\nUsage: devjet <command> [OPTIONS]')
     );
     console.log(toolbox.print.colors.bold('\nCommands:'));
-
+    console.log(toolbox.runtime.plugins);
     toolbox.runtime.plugins.forEach((plugin) => {
       if (plugin.name !== 'devjet')
         console.log(`${toolbox.print.colors.bold(plugin.name)} - (plugin)`);

@@ -1,6 +1,6 @@
 import { GluegunToolbox } from "gluegun";
-import getContext from "lib/context";
-import step from "lib/step";
+import getContext from "../lib/context";
+import step from "../lib/step";
 
 module.exports = {
   name: "supabase-auth-hook",
