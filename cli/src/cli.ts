@@ -9,7 +9,7 @@ async function run(argv) {
   const cli = build()
     .brand('devjet')
     .src(__dirname)
-    .plugins('./node_modules', { matching: 'devjet-*', hidden: true })
+    .plugins('./node_modules', { matching: 'devjet-*', hidden: false })
     .version() // provides default for version, v, --version, -v
     .defaultCommand(helpCommand)
     .create();
