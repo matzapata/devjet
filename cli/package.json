@@ -31,7 +31,8 @@
   "license": "MIT",
   "dependencies": {
     "gitly": "^2.2.2",
-    "gluegun": "latest"
+    "gluegun": "latest",
+    "tab": "^1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
