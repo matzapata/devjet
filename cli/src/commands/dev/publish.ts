@@ -25,6 +25,8 @@ module.exports = {
       __dirname,
       '..',
       '..',
+      '..',
+      '..',
       'usedevjet',
       'posts',
       postFilename

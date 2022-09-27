@@ -1,19 +1,3 @@
----
-title: "Newsletter with revue"
-date: 
-summary: "Create a newsletter with revue"
-tags: ["newsletter","marketing"]
-category: "recipes"
-image: "/images/revue.png"
-pro: false
-comingsoon: false
----
-
-1. Create your account at [revue](https://www.getrevue.co/)
-
-2. Create the newsletter component. Make sure to update the form action link with your revue username. Feel free to change the styling.
-
-```tsx:Newsletter.tsx {31}
 import React from "react";
 import {
   Box,
@@ -94,4 +78,3 @@ function Newsletter() {
 }
 
 export default Newsletter;
-```

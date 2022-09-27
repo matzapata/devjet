@@ -1,5 +1,6 @@
 import React from "react";
 import { Center, Image, Link, Text, VStack } from "@chakra-ui/react";
+import Newsletter from "components/Newsletter";
 
 function Home() {
   return (
@@ -18,6 +19,7 @@ function Home() {
         >
           Devjet quickstart
         </Link>
+        <Newsletter />
       </VStack>
     </Center>
   );
