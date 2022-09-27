@@ -8,6 +8,7 @@ const command = {
       toolbox.print.colors.bold('\nUsage: devjet <command> [OPTIONS]')
     );
     console.log(toolbox.print.colors.bold('\nCommands:'));
+    toolbox.print.info('  help');
 
     toolbox.runtime.plugins.forEach((plugin) => {
       if (plugin.name !== 'devjet') {
@@ -15,14 +16,17 @@ const command = {
       }
 
       plugin.commands.forEach((command) => {
-        const commandPath = command.commandPath.join(' ');
-        let help = `  ${commandPath}`;
+        const commandPath = command.commandPath;
+        commandPath[commandPath.length - 1] = command.name;
+
+        let help = `  ${commandPath.join(' ')}`;
         if (command.description) help += ` - ${command.description}`;
         if (
-          commandPath !== 'devjet' &&
+          command.name !== 'devjet' &&
           (!command.hidden || toolbox.parameters.options.all)
-        )
+        ) {
           toolbox.print.info(help);
+        }
       });
     });
 

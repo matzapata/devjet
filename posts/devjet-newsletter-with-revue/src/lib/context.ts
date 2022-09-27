@@ -28,8 +28,8 @@ const getContext = async (
     process.exit();
   }
 
-  toolbox.print.info(
-    "Hey, if you changed the default folder structure, some things may break, just a small disclosure..."
+  toolbox.print.warning(
+    "Hey, if you changed the default folder structure, some things may break, just a small disclosure...\n"
   );
 
   return {
