@@ -4,6 +4,7 @@
   "description": "usedevjet cli for bootstrapping pern projects",
   "types": "build/types/types.d.ts",
   "bin": {
+    "devjet": "bin/cli",
     "jet": "bin/cli"
   },
   "scripts": {
