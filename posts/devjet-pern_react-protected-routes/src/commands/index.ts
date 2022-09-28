@@ -22,5 +22,8 @@ module.exports = {
     });
 
     toolbox.print.success("All done!!");
+    toolbox.print.info(
+      "Remove generator with `yarn remove devjet-pern_react-protected-routes`"
+    );
   },
 };

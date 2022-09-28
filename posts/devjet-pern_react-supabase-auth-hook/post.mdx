@@ -18,14 +18,14 @@ yarn add @supabase/supabase-js@^1.35.6
 
 ```bash:client/.env
 # ...
-REACT_APP_SUPABASE_URL= # your api key value
-REACT_APP_SUPABASE_API_KEY= # your api key value
+REACT_APP_SUPABASE_URL=
+REACT_APP_SUPABASE_API_KEY=
 ```
 
 ```bash:client/.env.example
 # ...
-REACT_APP_SUPABASE_URL= # empty, just for reference
-REACT_APP_SUPABASE_API_KEY= # empty, just for reference
+REACT_APP_SUPABASE_URL=
+REACT_APP_SUPABASE_API_KEY=
 ```
 
 
@@ -157,7 +157,7 @@ export const useAuth = () => {
 
 5. Add your context provider to `client/src/index.ts`
 
-```ts:client/src/index.tsx {11,21,25}
+```ts:client/src/index.ts {11,21,25}
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "styles/index.css";
@@ -197,7 +197,7 @@ reportWebVitals();
 6. Further reading
 
 
-- <a href="/posts/authentication-pages">Create beatifull authentication pages</a>
+- <a href="/posts/pearn_react-supabase-auth-ui-pages">Create beatifull authentication pages</a>
 - <a href="/posts/pern_react-authentication-with-google">SignIn with google and supabase</a>
 - <a href="/posts/pern_react-protected-routes">Create protected routes</a>
 

@@ -5,7 +5,7 @@ module.exports = {
   hidden: true,
   description: `Publish your post to usedejet.com`,
   run: async (toolbox: GluegunToolbox) => {
-    const { filesystem, print, prompt } = toolbox;
+    const { filesystem, print, prompt, patching } = toolbox;
 
     const isAtRoot = await prompt.confirm(
       'Please confirm that you are at the root folder of your post (a small help, is the folder that contains the post.mdx file!)'
@@ -20,12 +20,27 @@ module.exports = {
     const pkg = filesystem.read('./package.json', 'json');
     if (!pkg.name) return print.error("Couldn't read package.json name");
     const slug = pkg.name.replace('devjet-', '');
-
-    filesystem.copy(
-      'post.mdx',
-      filesystem.path('..', '..', 'usedevjet', 'posts', `${slug}.mdx`),
-      { overwrite: true }
+    const postFilename = `${slug}.mdx`;
+    const publishPath = filesystem.path(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'usedevjet',
+      'posts',
+      postFilename
     );
+
+    filesystem.remove(publishPath);
+    filesystem.copy('post.mdx', publishPath, { overwrite: true });
+
+    // Update date
+    await patching.update(publishPath, (data) => {
+      const today = new Date();
+      const dateFrontmatter = `date: ${today.toLocaleDateString('en-US')}`;
+      return data.replace(/(date:)'?(.*)/, dateFrontmatter);
+    });
 
     print.success('All done!');
     print.info(`Update the date at usedevjet/posts/${slug}.mdx`);

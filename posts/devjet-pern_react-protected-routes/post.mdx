@@ -1,5 +1,5 @@
 ---
-title: "Private routes with react-router-dom@6"
+title: "Private routes with react-router-dom"
 date: 2022-09-26
 summary: "Create a component to protect your routes"
 tags: ["auth", "react-roouter-dom"]
@@ -12,6 +12,18 @@ comingsoon: false
 {/*  SOURCES:  */}
 {/*  https://www.robinwieruch.de/react-router-private-routes/  */}
 
+> Save up some time running devjet generators. Before running make sure you are at the root of your project (optional)
+
+```sh:generators
+yarn add devjet-pern_react-protected-routes # Install generator
+
+# Run generator to create ProtectedRoute component
+npx devjet add-protected-routes 
+
+yarn remove devjet-pern_react-protected-routes # Remove generator
+```
+
+
 1. Create ProtectedRoute component
 
 ```tsx:src/components/ProtectedRoute.tsx
@@ -20,7 +32,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = ({
   isAllowed,
-  redirectPath = "/auth/login",
+  redirectPath = "/auth/signin",
   children,
 }: {
   isAllowed: boolean;
