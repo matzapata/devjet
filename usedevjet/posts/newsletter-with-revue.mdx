@@ -9,6 +9,18 @@ pro: false
 comingsoon: false
 ---
 
+> Save up some time running devjet generators. Before running make sure you are at the root of your project (optional)
+
+```sh:generators
+yarn add devjet-newsletter-with-revue # Install generator
+
+# Run generator to create Newsletter component
+npx devjet newsletter-with-revue 
+
+yarn remove devjet-newsletter-with-revue # Remove generator
+```
+
+
 1. Create your account at [revue](https://www.getrevue.co/)
 
 2. Create the newsletter component. Make sure to update the form action link with your revue username `https://www.getrevue.co/profile/{{revue_username}}/add_subscriber`.
