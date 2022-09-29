@@ -26,8 +26,6 @@ import { allPosts, Post } from "contentlayer/generated";
 import Pagination from "components/Pagination";
 import CategoriesFilter from "components/CategoriesFilter";
 import StackFilter from "components/StackFilter";
-import { useAppDispatch } from "redux/store";
-import { fetchReadingList } from "redux/slices/userThunk";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
@@ -56,12 +54,7 @@ export default function Blog({
   const [category, setCategory] = useState("all");
   const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
-  const dispatch = useAppDispatch();
   const { colorMode } = useColorMode();
-
-  useEffect(() => {
-    dispatch(fetchReadingList());
-  }, [dispatch]);
 
   useEffect(() => {
     setFilteredBlogPosts(

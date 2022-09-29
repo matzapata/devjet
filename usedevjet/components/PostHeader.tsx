@@ -14,7 +14,6 @@ import {
   TwitterShareButton,
 } from "react-share";
 import { PostMetadata } from "types/Post";
-import ToggleReadingList from "./ToggleReadingList";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/solid";
 import { format, parseISO } from "date-fns";
@@ -69,8 +68,6 @@ function PostHeader({ postMetadata }: { postMetadata: PostMetadata }) {
               as={ClipboardDocumentIcon}
             />
           </Tooltip>
-
-          <ToggleReadingList postSlug={postMetadata.slug} />
         </HStack>
       </Flex>
       <Heading letterSpacing="tight" mb="2" mt="2" as="h1" size="2xl">
