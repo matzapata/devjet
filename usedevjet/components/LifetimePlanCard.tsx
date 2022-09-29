@@ -1,42 +1,26 @@
-import React, { useState } from "react";
-import { Box, Button, Heading, Text } from "@chakra-ui/react";
-import { useUser } from "@supabase/auth-helpers-react";
-import axios from "axios";
-import { useRouter } from "next/router";
+import React from "react";
+import {
+  Box,
+  Button,
+  Heading,
+  List,
+  ListIcon,
+  ListItem,
+} from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 
-function LifetimePlanCard({
-  currentPlan,
-}: {
-  currentPlan?: "lifetime" | "quarterly";
-}) {
-  const { user } = useUser();
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const isCurrentPlan = currentPlan === "lifetime";
-
-  const getLifetimeAccess = async () => {
-    if (!user) router.push("/auth/signin");
-    setLoading(true);
-    try {
-      const res = await axios.get("/api/plans/lifetime");
-      router.push(res.data.init_point);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+function LifetimePlanCard({ isPro }: { isPro: boolean }) {
   return (
     <Box
       p="6"
-      border={isCurrentPlan ? "4px" : "2px"}
-      borderColor={isCurrentPlan ? "blue.500" : "gray.200"}
-      maxW={{ base: "", sm: "300px" }}
+      border={isPro ? "4px" : "2px"}
+      borderColor={isPro ? "blue.500" : "gray.200"}
+      maxW={{ base: "", sm: "400px" }}
       borderRadius="4"
+      w="full"
       textAlign="center"
       _hover={
-        isCurrentPlan
+        isPro
           ? {}
           : {
               shadow: "xl",
@@ -48,28 +32,40 @@ function LifetimePlanCard({
       }
     >
       <Heading size="lg" mb="2">
-        $2000 ars
+        $10 USD
       </Heading>
-      <Heading size="sm" mb="4">
-        Lifetime access!!
+      <Heading size="md" mb="4">
+        Unlimited access!!
       </Heading>
-      <Text mb="6">
-        Give your career a boost. <br /> Pay once and access all content forever
-      </Text>
       <Button
-        disabled={isCurrentPlan}
-        isLoading={loading}
-        onClick={() => getLifetimeAccess()}
+        as="a"
+        href={isPro ? "#" : "https://usedevjet.gumroad.com/l/all-access"}
+        disabled={isPro}
         colorScheme="blue"
         w="full"
       >
-        {isCurrentPlan
-          ? "Current plan"
-          : currentPlan === "quarterly"
-          ? "Upgrade"
-          : "Select"}
-        {}
+        {isPro ? "Current plan" : "Get License"}
       </Button>
+      <List
+        spacing="1"
+        display="flex"
+        flexDir="column"
+        mt="4"
+        alignItems="center"
+      >
+        <ListItem>
+          <ListIcon as={CheckIcon} color="green.600" />
+          All PERN code receipes and generators
+        </ListItem>
+        <ListItem>
+          <ListIcon as={CheckIcon} color="green.600" />
+          All Nextjs code receipes and generators
+        </ListItem>
+        <ListItem>
+          <ListIcon as={CheckIcon} color="green.600" />
+          Free updates
+        </ListItem>
+      </List>
     </Box>
   );
 }

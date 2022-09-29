@@ -1,0 +1,43 @@
+---
+title: "Learn how to create api endpoint with nextjs or react with vercel functions"
+date: 
+summary: "Learn how to work with dynamic routes to create api endpoint for your nextjs and react projects. Optionally use express to handle requests."
+tags: ["api","express","rest"]
+category: "basics"
+image: ""
+pro: false
+comingsoon: false
+---
+
+Serverless functions are an excelent way to quickly create api endpoints for your aplication. In this case we'll show you how to make use of them in both `nextjs` and `react` projects bootstraped with `devjet`.
+
+The good news is that both nextjs and vercel functions work with pretty much the same principles.
+
+> Note that when we talk about react Serverless functions we are actually refering to the functionality provided by vercel that maps all files in `/api` folder to Serverless functions. If you deploy somewhere else things may change.
+
+## Dynamic api routes file naming rules
+
+In a react project all api files must be located inside the `/api` folder at the root of your project. In nextjs locate those files at `/pages/api` instead.
+
+> All files inside `/api` or `/pages/api` will be mapped to a serverless function and must export a `handler` function.
+
+
+- **SLUG**: `.../api/users/[username].ts` will match all routes that specify a username param like `/api/users/juan` or `/api/users/pepe`
+- **CATCH ALL SLUGS**: `.../api/post/[...slug].js` matches `/api/post/a`, but also `/api/post/a/b`, `/api/post/a/b/c` and so on. Matched params will be available in the `query` object allways as an array. So `/api/post/a` for example will be `{ "slug": ["a"] }`
+- **OPTIONALLY CATCH ALL SLUGS**: To optionally cacth all slugs add double brackets like `[[...slug]]`. For example, `pages/api/post/[[...slug]].js` will match `/api/post`, `/api/post/a`, `/api/post/a/b`, and so on.
+- `.../api/hello.ts` will match all requests to `/api/hello`
+- `.../api/index.ts` will match all requests to `/api`
+
+
+### Cavets
+
+Predefined API routes take precedence over dynamic API routes, and dynamic API routes over catch all API routes. Take a look at the following examples:
+
+- `pages/api/post/create.js` - Will match `/api/post/create`
+- `pages/api/post/[pid].js` - Will match `/api/post/1`, `/api/post/abc`, etc. But not `/api/post/create`
+- `pages/api/post/[...slug].js` - Will match `/api/post/1/2`, `/api/post/a/b/c`, etc. But not `/api/post/create`, `/api/post/abc`
+
+
+## Create api endpoints
+
+Once you have deceided on your folder structure you have to write the function itself that will handle the requests. 
