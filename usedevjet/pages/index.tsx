@@ -98,8 +98,9 @@ export default function Blog({
           fontWeight="medium"
           color={colorMode === "light" ? "gray.600" : "gray.400"}
         >
-          Devjet is a collection of code guides, receipes and generators to help
-          your build your PERN and NEXTJS projects in no time.
+          Devjet is a collection of code guides, recipes and generators to help
+          your build full stack web applications with REACT, PERN and NEXTJS
+          stacks in no time.
         </Text>
 
         <Flex justifyContent="center">

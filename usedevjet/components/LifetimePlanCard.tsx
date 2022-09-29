@@ -55,11 +55,15 @@ function LifetimePlanCard({ isPro }: { isPro: boolean }) {
       >
         <ListItem>
           <ListIcon as={CheckIcon} color="green.600" />
-          All PERN code receipes and generators
+          All REACT code recipes and generators
         </ListItem>
         <ListItem>
           <ListIcon as={CheckIcon} color="green.600" />
-          All Nextjs code receipes and generators
+          All PERN code recipes and generators
+        </ListItem>
+        <ListItem>
+          <ListIcon as={CheckIcon} color="green.600" />
+          All NEXTJS code recipes and generators
         </ListItem>
         <ListItem>
           <ListIcon as={CheckIcon} color="green.600" />
