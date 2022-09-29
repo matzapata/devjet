@@ -7,6 +7,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { PostMetadata } from "types/Post";
 import PostHeader from "./PostHeader";
 import MDXComponents from "components/MDXComponents";
+import Newsletter from "./Newsletter";
 
 function PostLayout({
   postMetadata,
@@ -24,13 +25,30 @@ function PostLayout({
         <NavBar />
         <PostHeader postMetadata={postMetadata} />
 
-        <Prose
-          className={colorMode === "light" ? "prose" : "prose-dark"}
-          mb="20"
-          mt="16"
-        >
-          <MDXContent components={MDXComponents} />
-        </Prose>
+        {postMetadata.comingsoon ? (
+          <Box>
+            <Prose
+              className={colorMode === "light" ? "prose" : "prose-dark"}
+              mb="8"
+              mt="16"
+            >
+              <blockquote>
+                Hey! we are still working on this one. Glad to know our work is
+                gonna worth it. In the meantime subscribe to the newsletter so
+                we can let you know once the post is out!!
+              </blockquote>
+            </Prose>
+            <Newsletter />
+          </Box>
+        ) : (
+          <Prose
+            className={colorMode === "light" ? "prose" : "prose-dark"}
+            mb="20"
+            mt="16"
+          >
+            <MDXContent components={MDXComponents} />
+          </Prose>
+        )}
         <Footer />
       </Container>
     </Box>
