@@ -12,7 +12,6 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { parseISO, format } from "date-fns";
-import ToggleReadingList from "./ToggleReadingList";
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { PostMetadata } from "types/Post";
 
@@ -71,10 +70,6 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
               {s}
             </Tag>
           ))}
-
-          <ToggleReadingList
-            postSlug={postMetadata.url.replace("/posts/", "")}
-          />
         </HStack>
       </Flex>
     </Box>

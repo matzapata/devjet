@@ -26,8 +26,6 @@ import { allPosts, Post } from "contentlayer/generated";
 import Pagination from "components/Pagination";
 import CategoriesFilter from "components/CategoriesFilter";
 import StackFilter from "components/StackFilter";
-import { useAppDispatch } from "redux/store";
-import { fetchReadingList } from "redux/slices/userThunk";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
@@ -56,12 +54,7 @@ export default function Blog({
   const [category, setCategory] = useState("all");
   const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
-  const dispatch = useAppDispatch();
   const { colorMode } = useColorMode();
-
-  useEffect(() => {
-    dispatch(fetchReadingList());
-  }, [dispatch]);
 
   useEffect(() => {
     setFilteredBlogPosts(
@@ -105,8 +98,9 @@ export default function Blog({
           fontWeight="medium"
           color={colorMode === "light" ? "gray.600" : "gray.400"}
         >
-          Devjet is a collection of code guides, receipes and generators to help
-          your build your PERN and NEXTJS projects in no time.
+          Devjet is a collection of code guides, recipes and generators to help
+          your build full stack web applications with REACT, PERN and NEXTJS
+          stacks in no time.
         </Text>
 
         <Flex justifyContent="center">

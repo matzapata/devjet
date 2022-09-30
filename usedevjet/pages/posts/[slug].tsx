@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import PostLayout from "components/PostLayout";
 import { allPosts } from "contentlayer/generated";
 import { GetServerSidePropsContext } from "next";
-import { useAppDispatch } from "redux/store";
-import { fetchReadingList } from "redux/slices/userThunk";
 import { extractMetadata } from "lib/posts";
 import { PostMetadata } from "types/Post";
 import PostLayoutProtected from "components/PostLayoutProtected";
@@ -40,11 +38,6 @@ function Post({
   postMetadata?: PostMetadata;
   body?: string;
 }) {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchReadingList());
-  }, [dispatch]);
-
   if (!postMetadata) return <NotFound />;
   else if (body) return <PostLayout postMetadata={postMetadata} body={body} />;
   else return <PostLayoutProtected postMetadata={postMetadata} />;
