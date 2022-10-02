@@ -126,9 +126,8 @@ module.exports = {
     // npx devjet run pluginname commandname
     const dev = parameters.options.dev;
     const pluginName = `devjet-${parameters.first}`;
-    const commandName = parameters.second;
+    const commandName = parameters.second ? parameters.second : 'index';
     if (!pluginName) return toolbox.print.error(helpMessage);
-    if (!commandName) return toolbox.print.error(helpMessage);
 
     // Check techstack and cd to root dir. Create context
     const root = findProjectRoot();
