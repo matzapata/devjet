@@ -1,20 +1,13 @@
 import { GluegunToolbox } from 'gluegun';
-import getContext from '../lib/context';
-import step from '../lib/step';
 
 module.exports = {
-  name: '',
-  description: '',
+  description: 'Add page loading to your nextjs app',
   run: async (toolbox: GluegunToolbox) => {
-    const { stack } = await getContext(toolbox);
-
-    await step(toolbox, '1. First step', stack, {
+    await toolbox.step('1. First step', {
       all: async () => console.log('All actions'),
       react: async () => console.log('React actions'),
       pern: async () => console.log('Pern actions'),
       nextjs: async () => console.log('Nextjs actions'),
     });
-
-    toolbox.print.success('All done!!');
   },
 };

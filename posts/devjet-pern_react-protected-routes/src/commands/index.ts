@@ -1,14 +1,9 @@
 import { GluegunToolbox } from "gluegun";
-import getContext from "../lib/context";
-import step from "../lib/step";
 
 module.exports = {
-  name: "add-protected-routes",
   description: "Create protected route component",
   run: async (toolbox: GluegunToolbox) => {
-    const { stack } = await getContext(toolbox);
-
-    await step(toolbox, "1. Create ProtectedRoute component", stack, {
+    await toolbox.step("1. Create ProtectedRoute component", {
       react: () =>
         toolbox.template.generate({
           template: "ProtectedRoute.tsx",
@@ -20,10 +15,5 @@ module.exports = {
           target: "client/src/components/ProtectedRoute.tsx",
         }),
     });
-
-    toolbox.print.success("All done!!");
-    toolbox.print.info(
-      "Remove generator with `yarn remove devjet-pern_react-protected-routes`"
-    );
   },
 };

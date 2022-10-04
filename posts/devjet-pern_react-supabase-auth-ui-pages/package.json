@@ -1,6 +1,33 @@
 {
-  "name": "devjet-pern-supabae-auth",
+  "name": "devjet-generator-template",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "clean-build": "rmdir-cli ./build",
+    "compile": "tsc -p .",
+    "copy-templates": "cpy --dot src/templates/**/* build/templates",
+    "build": "yarn clean-build && yarn compile && yarn copy-templates",
+    "prepublishOnly": "yarn build",
+    "lint": "eslint ./src/**/*.ts",
+    "lint:fix": "eslint --fix ./src/**/*.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.23",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
+    "cpy-cli": "^4.2.0",
+    "eslint": "^7.22.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.2.0",
+    "gluegun": "^5.1.2",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0",
+    "rmdir-cli": "^2.0.6",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.8.3"
+  }
 }
