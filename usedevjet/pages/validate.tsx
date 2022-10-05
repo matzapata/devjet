@@ -115,6 +115,7 @@ export default function License() {
               )}
               <Input
                 required
+                borderRadius="3px"
                 value={licenseKey}
                 onChange={(e) => setLicenseKey(e.target.value)}
                 type="text"
@@ -125,6 +126,7 @@ export default function License() {
                 w="full"
                 type="submit"
                 borderRadius="3px"
+                colorScheme="blue"
               >
                 Activate
               </Button>
@@ -132,12 +134,7 @@ export default function License() {
                 href="https://usedevjet.gumroad.com/l/full-access"
                 passHref
               >
-                <Link
-                  color="blue.300"
-                  fontWeight="500"
-                  fontSize="md"
-                  textAlign="center"
-                >
+                <Link fontWeight="500" fontSize="md" textAlign="center">
                   I don&apos;t have a license key yet
                 </Link>
               </NextLink>

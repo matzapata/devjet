@@ -18,11 +18,7 @@ function NavBar() {
             <Button variant="ghost">Activate</Button>
           </Link>
           {user ? (
-            <LogoutButton
-              borderRadius="3px"
-              colorScheme="blue"
-              bgColor="blue.600"
-            />
+            <LogoutButton borderRadius="3px" colorScheme="blue" />
           ) : (
             <LoginButton borderRadius="3px" colorScheme="blue" />
           )}

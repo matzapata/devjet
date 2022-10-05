@@ -65,6 +65,7 @@ function Recover() {
           <Box as="form" w="full" onSubmit={onSubmit}>
             <FormControl isInvalid={error !== ""} mb="5">
               <Input
+                borderRadius="3px"
                 type="email"
                 name="email"
                 bg={colorMode === "light" ? "white" : "gray.800"}

@@ -169,6 +169,7 @@ export default function Blog({
           <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
             <InputGroup w="100%">
               <Input
+                borderRadius="3px"
                 bg={colorMode === "light" ? "white" : "gray.800"}
                 shadow={"sm"}
                 aria-label="Search by title"
