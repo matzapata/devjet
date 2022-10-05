@@ -120,7 +120,10 @@ export default function License() {
               <Button isLoading={loading} w="full" type="submit">
                 Activate
               </Button>
-              <NextLink href="/plans" passHref>
+              <NextLink
+                href="https://usedevjet.gumroad.com/l/full-access"
+                passHref
+              >
                 <Link
                   color="blue.300"
                   fontWeight="500"

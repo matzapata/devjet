@@ -17,6 +17,7 @@ import {
   Image,
   Grid,
   GridItem,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -33,6 +34,7 @@ import { PostMetadata } from "types/Post";
 import { extractMetadata } from "lib/posts";
 import Newsletter from "components/Newsletter";
 import LifetimePlanCard from "components/LifetimePlanCard";
+import Script from "next/script";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -57,6 +59,10 @@ export default function Blog({
   const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
   const { colorMode } = useColorMode();
+  const consoleExample = useBreakpointValue({
+    base: "/landing-console-example-sm.png",
+    md: "/landing-console-example.png",
+  });
 
   useEffect(() => {
     setFilteredBlogPosts(
@@ -81,20 +87,22 @@ export default function Blog({
         <title>Devjet</title>
       </Head>
       <Box>
-        <Container w="full" maxW="container.md">
-          <NavBar />
+        <NavBar />
+        <Container w="full" maxW="container.lg">
           <Heading
             textAlign="center"
             letterSpacing="tight"
+            fontFamily="Fira code"
             mb="10"
-            mt="16"
+            mt="20"
             as="h1"
-            size="3xl"
+            size={{ base: "2xl", md: "3xl" }}
           >
             Making it easy and fast to build full-stack web apps
           </Heading>
           <Text
             textAlign="center"
+            fontFamily="Fira code"
             mx="auto"
             maxW="xl"
             fontSize="lg"
@@ -104,216 +112,40 @@ export default function Blog({
             build full stack web applications with REACT, and NEXTJS in no time.
           </Text>
 
-          <Flex justifyContent="center">
-            <Stack w="full" mt="6" spacing="4">
-              <NextLink href="/plans">
-                <Button
-                  size="lg"
-                  w={{ base: "full" }}
-                  colorScheme="blue"
-                  bg="blue.600"
-                  borderRadius="3px"
-                >
-                  Get all access
-                </Button>
-              </NextLink>
-              <NextLink href="/posts/quickstart">
-                <Button
-                  borderRadius="3px"
-                  colorScheme="gray"
-                  variant="outline"
-                  mt="6"
-                  size="lg"
-                  color="gray.500"
-                  border="1px"
-                >
-                  Quickstart
-                </Button>
-              </NextLink>
-            </Stack>
-          </Flex>
+          <Stack
+            justifyContent="center"
+            w="full"
+            mt="6"
+            spacing="4"
+            direction={{ base: "column", md: "row" }}
+          >
+            <NextLink href="https://usedevjet.gumroad.com/l/full-access">
+              <Button size="lg" colorScheme="blue" borderRadius="3px">
+                Get all access
+              </Button>
+            </NextLink>
+            <NextLink href="/posts/quickstart">
+              <Button
+                borderRadius="3px"
+                colorScheme="gray"
+                variant="outline"
+                mt="6"
+                size="lg"
+                color="gray.500"
+                border="1px"
+              >
+                Quickstart
+              </Button>
+            </NextLink>
+          </Stack>
         </Container>
 
-        <Container pt="96px">
-          <Text
-            textAlign="center"
-            fontFamily="monospace"
-            mb="6"
-            color="gray.500"
-            fontWeight="semibold"
-            fontSize="md"
-            maxW="200px"
-            mx="auto"
-          >
-            Work with your favorite technologies
-          </Text>
-          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/typescript.png" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Typescript
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/redux.png" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Redux
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/chakra-ui.png" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Chakra ui
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/vercel.svg" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Vercel
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/react.png" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                React
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/nextjs.png" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Nextjs
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/prisma.png" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Prisma
-              </Text>
-            </GridItem>
-            <GridItem
-              p="2"
-              borderRadius="2"
-              border="1px solid"
-              borderColor="gray.200"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-            >
-              <Image h="10" mb="1" src="/images/supabase.jpg" alt="" />
-              <Text color="gray.600" fontWeight="medium">
-                Supabase
-              </Text>
-            </GridItem>
-          </Grid>
-        </Container>
-
-        <Container pt="96px">
-          <Text
-            textAlign="center"
-            fontFamily="monospace"
-            mb="6"
-            color="gray.500"
-            fontWeight="semibold"
-            fontSize="md"
-            maxW="250px"
-            mx="auto"
-          >
-            Scaffold complete projects or useful parts with devjet generators.
-          </Text>
+        <Container pt="96px" maxW="container.lg">
           <Image
-            src="/landing-console-example-sm.png"
+            shadow="lg"
+            src={consoleExample}
             alt="devjet console interaction example"
           />
-        </Container>
-
-        <Container>
-          <Text
-            mt="16"
-            mb="2"
-            fontWeight="medium"
-            fontSize="lg"
-            color={colorMode === "light" ? "gray.600" : "gray.300"}
-            textAlign="center"
-          >
-            all-access
-          </Text>
-          <Heading
-            textAlign="center"
-            letterSpacing="tight"
-            mb="8"
-            as="h1"
-            size="xl"
-          >
-            Get unlimited access to everything on devjet
-          </Heading>
-
-          <Flex justifyContent="center">
-            <LifetimePlanCard />
-          </Flex>
         </Container>
 
         <Divider
@@ -321,15 +153,18 @@ export default function Blog({
           borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
         />
 
-        <Container>
+        <Container maxW="container.lg">
           <Heading
             textAlign="center"
             letterSpacing="tight"
-            mb="8"
+            mb="24"
             as="h1"
-            size="xl"
+            size="2xl"
+            maxW="2xl"
+            mx="auto"
+            fontFamily="Fira code"
           >
-            Explore receipes and generators to grow your web app ideas
+            Explore recipes and generators to grow your web app ideas
           </Heading>
           <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
             <InputGroup w="100%">
@@ -375,7 +210,7 @@ export default function Blog({
           </Box>
         </Container>
 
-        <Container>
+        <Container maxW="container.lg">
           <Newsletter />
         </Container>
 

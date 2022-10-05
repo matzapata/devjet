@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Select, Tag, useColorMode } from "@chakra-ui/react";
+import { Flex, Tag } from "@chakra-ui/react";
 import { PostMetadata } from "types/Post";
 
 function CategoriesFilter({
@@ -24,9 +24,10 @@ function CategoriesFilter({
 
         return (
           <Tag
-            border={isActive ? "2px solid" : ""}
-            borderColor="blue.600"
+            outline={isActive ? "2px solid" : ""}
+            outlineColor="teal.400"
             onClick={() => setCategory(c)}
+            cursor="pointer"
             mr="2"
             key={i}
             size="md"
