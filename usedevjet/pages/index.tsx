@@ -33,8 +33,6 @@ import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
 import { extractMetadata } from "lib/posts";
 import Newsletter from "components/Newsletter";
-import LifetimePlanCard from "components/LifetimePlanCard";
-import Script from "next/script";
 
 export async function getStaticProps() {
   const posts: Post[] = allPosts.sort((a, b) => {
@@ -56,7 +54,7 @@ export default function Blog({
   );
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("all");
-  const [stack, setStack] = useState("react");
+  const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
   const { colorMode } = useColorMode();
   const consoleExample = useBreakpointValue({
@@ -197,7 +195,15 @@ export default function Blog({
             borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
             mb="20"
           >
-            {!filteredBlogPosts.length && "No posts found :(("}
+            {!filteredBlogPosts.length && (
+              <Box mt="4">
+                <Text>No recipes found :((</Text>
+                <Text>
+                  Subscribe to the newsletter so we can let you know when
+                  something new is added.
+                </Text>
+              </Box>
+            )}
             {filteredBlogPosts.map((p, i) => (
               <PostCard key={i} postMetadata={p} />
             ))}
