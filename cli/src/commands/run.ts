@@ -6,12 +6,8 @@ function getProjectStack(toolbox: GluegunToolbox, root: string) {
 
   const isNextjs = filesystem.exists(filesystem.path(root, 'next.config'));
   const isReact = filesystem.exists(filesystem.path(root, 'src', 'index.tsx'));
-  const isPern = filesystem.exists(
-    filesystem.path(root, 'client', 'src', 'index.tsx')
-  );
 
   if (isNextjs) return 'nextjs';
-  else if (isPern) return 'pern';
   else if (isReact) return 'react';
   else return null;
 }
