@@ -4,7 +4,7 @@ export type PostMetadata = {
   summary: string;
   tags?: string[] | undefined;
   image?: string | undefined;
-  category?: "basics" | "auth" | "recipes" | "snippets" | undefined;
+  category?: string | undefined;
   pro?: boolean | undefined;
   url: string;
   slug: string;
