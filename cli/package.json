@@ -31,6 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "find-git-root": "^1.0.4",
     "gitly": "^2.2.2",
     "gluegun": "latest"
   },

@@ -1,14 +1,9 @@
 import { GluegunToolbox } from "gluegun";
-import getContext from "../lib/context";
-import step from "../lib/step";
 
 module.exports = {
-  name: "supabase-auth-hook",
   description: "Add authentication with supabase to your pern project",
   run: async (toolbox: GluegunToolbox) => {
-    const { stack } = await getContext(toolbox);
-
-    await step(toolbox, "1. Add dependencies to package.json", stack, {
+    await toolbox.step("1. Add dependencies to package.json", {
       react: () =>
         toolbox.patching.update("package.json", (pkg) => {
           pkg.dependencies["@supabase/supabase-js"] = "^1.35.6";
@@ -21,7 +16,7 @@ module.exports = {
         }),
     });
 
-    await step(toolbox, "2. Append env variables to .env", stack, {
+    await toolbox.step("2. Append env variables to .env", {
       react: () =>
         toolbox.patching.append(
           ".env",
@@ -34,7 +29,7 @@ module.exports = {
         ),
     });
 
-    await step(toolbox, "3. Update .env.example", stack, {
+    await toolbox.step("3. Update .env.example", {
       react: () =>
         toolbox.patching.append(
           ".env.example",
@@ -47,7 +42,7 @@ module.exports = {
         ),
     });
 
-    await step(toolbox, "4. Create supabase client", stack, {
+    await toolbox.step("4. Create supabase client", {
       react: () =>
         toolbox.template.generate({
           template: "supabase.ts",
@@ -60,7 +55,7 @@ module.exports = {
         }),
     });
 
-    await step(toolbox, "5. Create Authentication hook", stack, {
+    await toolbox.step("5. Create Authentication hook", {
       react: () =>
         toolbox.template.generate({
           template: "authHook.tsx",
@@ -73,7 +68,7 @@ module.exports = {
         }),
     });
 
-    await step(toolbox, "6. Add context provider to index.tsx", stack, {
+    await toolbox.step(toolbox, "6. Add context provider to index.tsx", {
       react: async () => {
         await toolbox.patching.patch("src/index.tsx", {
           insert: 'import { AuthProvider } from "utils/authHook";',
@@ -103,7 +98,5 @@ module.exports = {
         });
       },
     });
-
-    toolbox.print.success("All done!!");
   },
 };

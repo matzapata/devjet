@@ -1,21 +1,14 @@
 import { GluegunToolbox } from "gluegun";
-import getContext from "../lib/context";
-import step from "../lib/step";
 
 module.exports = {
-  name: "newsletter-with-revue",
   description: "Create a newsletter component with revue",
   run: async (toolbox: GluegunToolbox) => {
-    const { stack } = await getContext(toolbox);
 
-    await step(
-      toolbox,
+    await toolbox.step(
       "1. Create your account at https://www.getrevue.co/ (This one is on you 😉​)",
-      stack,
-      {}
     );
 
-    await step(toolbox, "2. Create the newsletter component", stack, {
+    await toolbox.step("2. Create the newsletter component", {
       all: async () =>
         toolbox.print.warning(
           " - Remember to update the username in your form action url"
@@ -36,7 +29,5 @@ module.exports = {
           target: "components/Newsletter.tsx",
         }),
     });
-
-    toolbox.print.success("All done!!");
   },
 };
