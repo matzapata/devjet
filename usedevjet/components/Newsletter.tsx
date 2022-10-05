@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Heading,
-  HStack,
+  Stack,
   Input,
   Link,
   Text,
@@ -34,7 +34,7 @@ function Newsletter() {
         name="revue-form"
         target="_blank"
       >
-        <HStack>
+        <Stack direction={{ base: "column", md: "row" }}>
           <Input
             bg={colorMode === "light" ? "white" : "gray.900"}
             className="revue-form-field"
@@ -54,7 +54,7 @@ function Newsletter() {
           >
             Subscribe
           </Button>
-        </HStack>
+        </Stack>
 
         <Text mt="2" fontSize="sm" color="gray.600">
           By subscribing, you agree with Revues{" "}
