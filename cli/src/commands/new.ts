@@ -15,13 +15,12 @@ module.exports = {
     let stack = null;
     if (toolbox.parameters.options.react) stack = 'react';
     else if (toolbox.parameters.options.nextjs) stack = 'nextjs';
-    else if (toolbox.parameters.options.pern) stack = 'pern';
     else {
       const { promptStack } = await prompt.ask({
         type: 'select',
         name: 'promptStack',
         message: 'Chose your stack:',
-        choices: ['react', 'nextjs', 'pern'],
+        choices: ['react', 'nextjs'],
       });
       stack = promptStack;
     }
