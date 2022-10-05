@@ -120,7 +120,7 @@ module.exports = {
   name: 'run',
   description: `Bootstrap your Devjet project. Usage: devjet new projectname`,
   run: async (toolbox: GluegunToolbox) => {
-    const { print, parameters, prompt } = toolbox;
+    const { print, parameters } = toolbox;
     const helpMessage = 'Usage: devjet run pluginname commandname';
 
     // npx devjet run pluginname commandname
@@ -162,18 +162,10 @@ module.exports = {
 
     // Prompt for uninstall
     if (!dev) {
-      const removePlugin = await prompt.confirm(
-        'Would you like to remove the plugin (recommended if one time)',
-        true
-      );
-      if (removePlugin) {
-        const pluginRemoveSpinner = toolbox.print.spin(
-          'Removing plugin package'
-        );
-        pluginRemoveSpinner.start();
-        await toolbox.packageManager.remove(pluginName, { dryRun: false });
-        pluginRemoveSpinner.succeed('Plugin removed successfully');
-      }
+      const pluginRemoveSpinner = toolbox.print.spin('Removing plugin package');
+      pluginRemoveSpinner.start();
+      await toolbox.packageManager.remove(pluginName, { dryRun: false });
+      pluginRemoveSpinner.succeed('Plugin removed successfully');
     }
 
     return print.success(`${print.checkmark} All done!`);
