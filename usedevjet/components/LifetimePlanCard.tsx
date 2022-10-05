@@ -2,68 +2,58 @@ import React from "react";
 import {
   Box,
   Button,
+  Divider,
   Heading,
   List,
   ListIcon,
   ListItem,
+  Text,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 
-function LifetimePlanCard({ isPro }: { isPro: boolean }) {
+function LifetimePlanCard() {
   return (
     <Box
       p="6"
-      border={isPro ? "4px" : "2px"}
-      borderColor={isPro ? "blue.500" : "gray.200"}
+      border={"2px"}
+      borderColor={"gray.200"}
       maxW={{ base: "", sm: "400px" }}
       borderRadius="4"
       w="full"
-      textAlign="center"
-      _hover={
-        isPro
-          ? {}
-          : {
-              shadow: "xl",
-              border: "none",
-              outline: "solid",
-              outlineColor: "blue.500",
-              outlineWidth: "4px",
-            }
-      }
+      _hover={{
+        shadow: "xl",
+        border: "none",
+        outline: "solid",
+        outlineColor: "blue.500",
+        outlineWidth: "4px",
+      }}
     >
-      <Heading size="lg" mb="2">
+      <Heading size="xl" mb="2" textAlign="center">
         $10 USD
       </Heading>
-      <Heading size="md" mb="4">
-        Unlimited access!!
-      </Heading>
+      <Text mb="6" textAlign="center" color="gray.600" fontWeight="medium">
+        One time payment
+      </Text>
       <Button
         as="a"
-        href={isPro ? "#" : "https://usedevjet.gumroad.com/l/all-access"}
-        disabled={isPro}
+        href="https://usedevjet.gumroad.com/l/all-access"
         colorScheme="blue"
+        bg="blue.600"
+        size="lg"
         w="full"
+        borderRadius="3px"
       >
-        {isPro ? "Current plan" : "Get License"}
+        Buy now
       </Button>
-      <List
-        spacing="1"
-        display="flex"
-        flexDir="column"
-        mt="4"
-        alignItems="center"
-      >
+      <Divider my="6"></Divider>
+      <List spacing="1" mt="4">
         <ListItem>
           <ListIcon as={CheckIcon} color="green.600" />
-          All REACT code recipes and generators
+          React code recipes and generators
         </ListItem>
         <ListItem>
           <ListIcon as={CheckIcon} color="green.600" />
-          All PERN code recipes and generators
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckIcon} color="green.600" />
-          All NEXTJS code recipes and generators
+          Nextjs code recipes and generators
         </ListItem>
         <ListItem>
           <ListIcon as={CheckIcon} color="green.600" />

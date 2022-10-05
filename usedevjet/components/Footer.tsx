@@ -18,7 +18,7 @@ function Footer() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <VStack pt="20" pb="10">
+    <VStack pt="20" pb="10" mx="4">
       <Divider />
       <Flex justifyContent="space-between" alignItems="center" w="100%">
         <Flex w="full" py="4">
