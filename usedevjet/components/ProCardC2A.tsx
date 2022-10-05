@@ -22,7 +22,7 @@ function ProCardC2A() {
       borderTop="1px"
       bg={colorMode === "light" ? "white" : "gray.800"}
     >
-      <Container maxW="container.md">
+      <Container maxW="container.lg">
         <Heading size="lg" mb="4">
           How to get access to this recipe - and everything on Devjet.
         </Heading>
@@ -30,7 +30,7 @@ function ProCardC2A() {
           Not everythig on devjet is free, like this one. Become a member and
           get unlimeted access to boost your projects productivity.
         </Text>
-        <NextLink href="/plans">
+        <NextLink href="https://usedevjet.gumroad.com/l/full-access">
           <Button
             colorScheme="blue"
             mt="6"
