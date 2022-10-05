@@ -15,8 +15,6 @@ import {
   Stack,
   useColorMode,
   Image,
-  Grid,
-  GridItem,
   useBreakpointValue,
 } from "@chakra-ui/react";
 

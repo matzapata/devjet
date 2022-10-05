@@ -10,4 +10,5 @@ export type PostMetadata = {
   slug: string;
   stacks: string[];
   comingsoon?: boolean;
+  generators: number;
 };

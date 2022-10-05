@@ -68,6 +68,11 @@ const Post = defineDocumentType(() => ({
       required: true,
       default: false,
     },
+    generators: {
+      type: "number",
+      required: true,
+      default: 0,
+    },
   },
   computedFields: {
     url: {
