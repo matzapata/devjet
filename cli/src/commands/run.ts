@@ -162,18 +162,10 @@ module.exports = {
 
     // Prompt for uninstall
     if (!dev) {
-      const removePlugin = await prompt.confirm(
-        'Would you like to remove the plugin (recommended if one time)',
-        true
-      );
-      if (removePlugin) {
-        const pluginRemoveSpinner = toolbox.print.spin(
-          'Removing plugin package'
-        );
-        pluginRemoveSpinner.start();
-        await toolbox.packageManager.remove(pluginName, { dryRun: false });
-        pluginRemoveSpinner.succeed('Plugin removed successfully');
-      }
+      const pluginRemoveSpinner = toolbox.print.spin('Removing plugin package');
+      pluginRemoveSpinner.start();
+      await toolbox.packageManager.remove(pluginName, { dryRun: false });
+      pluginRemoveSpinner.succeed('Plugin removed successfully');
     }
 
     return print.success(`${print.checkmark} All done!`);
