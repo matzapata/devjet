@@ -1,5 +1,26 @@
 import { GluegunToolbox } from 'gluegun';
 
+async function publish(filesystem, patching, src, dst) {
+  const postFilename = `${dst}.mdx`;
+  const publishPath = filesystem.path(
+    __dirname,
+    '..',
+    '..',
+    '..',
+    '..',
+    'usedevjet',
+    'posts',
+    postFilename
+  );
+  filesystem.remove(publishPath);
+  filesystem.copy(src, publishPath, { overwrite: true });
+  await patching.update(publishPath, (data) => {
+    const today = new Date();
+    const dateFrontmatter = `date: ${today.toLocaleDateString('en-US')}`;
+    return data.replace(/(date:)'?(.*)/, dateFrontmatter);
+  });
+}
+
 module.exports = {
   name: 'publish',
   hidden: true,
@@ -20,27 +41,26 @@ module.exports = {
     const pkg = filesystem.read('./package.json', 'json');
     if (!pkg.name) return print.error("Couldn't read package.json name");
     const slug = pkg.name.replace('devjet-', '');
-    const postFilename = `${slug}.mdx`;
-    const publishPath = filesystem.path(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      '..',
-      'usedevjet',
-      'posts',
-      postFilename
-    );
 
-    filesystem.remove(publishPath);
-    filesystem.copy('post.mdx', publishPath, { overwrite: true });
+    const publishReact = await prompt.confirm('Publish react?');
+    const publishNextjs = await prompt.confirm('Publish nextjs?');
 
-    // Update date
-    await patching.update(publishPath, (data) => {
-      const today = new Date();
-      const dateFrontmatter = `date: ${today.toLocaleDateString('en-US')}`;
-      return data.replace(/(date:)'?(.*)/, dateFrontmatter);
-    });
+    if (publishReact) {
+      await publish(
+        filesystem,
+        patching,
+        'posts/react-post.mdx',
+        `react-${slug}.mdx`
+      );
+    }
+    if (publishNextjs) {
+      await publish(
+        filesystem,
+        patching,
+        'posts/nextjs-post.mdx',
+        `nextjs-${slug}.mdx`
+      );
+    }
 
     print.success('All done!');
     print.info(`Update the date at usedevjet/posts/${slug}.mdx`);
