@@ -126,6 +126,7 @@ export default function Login() {
                 colorScheme="blue"
                 w="full"
                 isLoading={loading}
+                borderRadius="3px"
               >
                 Sign In
               </Button>

@@ -56,7 +56,7 @@ export default function Blog({
   );
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState("all");
-  const [stack, setStack] = useState("all");
+  const [stack, setStack] = useState("react");
   const itemsPerPage = 10;
   const { colorMode } = useColorMode();
   const consoleExample = useBreakpointValue({

@@ -78,7 +78,7 @@ function Recover() {
             <Button
               isLoading={loading}
               type="submit"
-              mt="8"
+              borderRadius="3px"
               size="md"
               colorScheme="blue"
               w="full"

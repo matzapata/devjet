@@ -140,6 +140,7 @@ export default function SignUp() {
                 size="md"
                 colorScheme="blue"
                 w="full"
+                borderRadius="3px"
               >
                 Sign up
               </Button>

@@ -73,9 +73,10 @@ export default function License() {
         <title>Devjet</title>
       </Head>
       {success && <Confetti height={height} width={width} recycle={true} />}
-      <Container w="full" maxW="container.md">
-        <NavBar />
 
+      <NavBar />
+
+      <Container w="full" maxW="container.md">
         <Text
           mt="16"
           mb="2"
@@ -83,6 +84,7 @@ export default function License() {
           fontSize="lg"
           color={colorMode === "light" ? "gray.600" : "gray.300"}
           textAlign="center"
+          fontFamily="Fira code"
         >
           all-access
         </Text>
@@ -92,6 +94,7 @@ export default function License() {
           mb="8"
           as="h1"
           size="2xl"
+          fontFamily="Fira code"
         >
           Get unlimited access to everything on devjet
         </Heading>
@@ -117,7 +120,12 @@ export default function License() {
                 type="text"
                 placeholder="Enter your license key..."
               />
-              <Button isLoading={loading} w="full" type="submit">
+              <Button
+                isLoading={loading}
+                w="full"
+                type="submit"
+                borderRadius="3px"
+              >
                 Activate
               </Button>
               <NextLink
@@ -136,9 +144,8 @@ export default function License() {
             </VStack>
           </Flex>
         </form>
-
-        <Footer />
       </Container>
+      <Footer />
     </>
   );
 }

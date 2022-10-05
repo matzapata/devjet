@@ -7,6 +7,7 @@ function GoogleAuthButton() {
   const { colorMode } = useColorMode();
   return (
     <Button
+      borderRadius="3px"
       onClick={() => supabaseClient.auth.signIn({ provider: "google" })}
       variant="outline"
       bg={colorMode === "light" ? "white" : "gray.800"}
