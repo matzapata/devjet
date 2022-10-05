@@ -70,6 +70,12 @@ function BlogPostCard({ postMetadata }: { postMetadata: PostMetadata }) {
               {s}
             </Tag>
           ))}
+          {postMetadata.generators && (
+            <Tag size="sm">
+              {postMetadata.generators} generator
+              {postMetadata.generators === 1 ? "" : "s"}
+            </Tag>
+          )}
         </HStack>
       </Flex>
     </Box>

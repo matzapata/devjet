@@ -86,6 +86,7 @@ export default function Login() {
             <FormControl isInvalid={errors.email !== ""} mb="2">
               <FormLabel>Email</FormLabel>
               <Input
+                borderRadius="3px"
                 type="email"
                 name="email"
                 bg={colorMode === "light" ? "white" : "gray.800"}
@@ -98,6 +99,7 @@ export default function Login() {
             <FormControl isInvalid={errors.password !== ""}>
               <FormLabel>Password</FormLabel>
               <Input
+                borderRadius="3px"
                 type="password"
                 name="password"
                 bg={colorMode === "light" ? "white" : "gray.800"}
@@ -126,6 +128,7 @@ export default function Login() {
                 colorScheme="blue"
                 w="full"
                 isLoading={loading}
+                borderRadius="3px"
               >
                 Sign In
               </Button>

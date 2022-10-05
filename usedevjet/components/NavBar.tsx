@@ -1,6 +1,6 @@
 import React from "react";
 import { BrandLogo } from "./Brand";
-import { Button, Flex, Hide, HStack } from "@chakra-ui/react";
+import { Button, Container, Flex, HStack } from "@chakra-ui/react";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
@@ -10,24 +10,21 @@ function NavBar() {
   const { user } = useUser();
 
   return (
-    <Flex py="8" justifyContent="space-between">
-      <BrandLogo />
-      <HStack spacing="4">
-        <Hide below="sm">
-          <Link href="/">
-            <Button variant="ghost">Explore</Button>
+    <Container maxW="container.lg">
+      <Flex py="3" justifyContent="space-between">
+        <BrandLogo />
+        <HStack spacing="2">
+          <Link href="/validate">
+            <Button variant="ghost">Activate</Button>
           </Link>
-          <Link href="/plans">
-            <Button variant="ghost">Plans</Button>
-          </Link>
-        </Hide>
-        {user ? (
-          <LogoutButton colorScheme="blue" />
-        ) : (
-          <LoginButton colorScheme="blue" />
-        )}
-      </HStack>
-    </Flex>
+          {user ? (
+            <LogoutButton borderRadius="3px" colorScheme="blue" />
+          ) : (
+            <LoginButton borderRadius="3px" colorScheme="blue" />
+          )}
+        </HStack>
+      </Flex>
+    </Container>
   );
 }
 

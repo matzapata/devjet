@@ -12,12 +12,18 @@ module.exports = {
       return print.error('Project name was not provided');
     }
 
-    const { stack } = await prompt.ask({
-      type: 'select',
-      name: 'stack',
-      message: 'Chose your stack:',
-      choices: ['react', 'nextjs', 'pern'],
-    });
+    let stack = null;
+    if (toolbox.parameters.options.react) stack = 'react';
+    else if (toolbox.parameters.options.nextjs) stack = 'nextjs';
+    else {
+      const { promptStack } = await prompt.ask({
+        type: 'select',
+        name: 'promptStack',
+        message: 'Chose your stack:',
+        choices: ['react', 'nextjs'],
+      });
+      stack = promptStack;
+    }
 
     print.info(
       `Creating a new ${stack} app at ${projectDirectory} with devjet`

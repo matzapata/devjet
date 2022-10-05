@@ -8,8 +8,8 @@ import { PostMetadata } from "types/Post";
 function PostLayoutProtected({ postMetadata }: { postMetadata: PostMetadata }) {
   return (
     <Box>
-      <Container as="article" w="full" maxW="container.md">
-        <NavBar />
+      <NavBar />
+      <Container as="article" w="full" maxW="container.lg">
         <PostHeader postMetadata={postMetadata} />
       </Container>
       <ProCardC2A />

@@ -1,0 +1,25 @@
+---
+title: "Absolute imports"
+date: 9/27/2022
+summary: "Make use of usedevjet absolut imports setup to improve your code speed"
+tags: ["basics", "utils"]
+category: "basics" 
+image: "/images/react.png"
+generators: 0
+---
+
+With usedevjet pern boilerplate you can use absolute imports by default in yout react client aplication. We've acomplished this by configuring tsconfig `baseUrl`.
+
+```json:tsconfig.json {4,7}
+{
+  "compilerOptions": {
+    ...,
+    "baseUrl": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+This means you can use `redux/stores.ts` instead of `../../../redux/stores.ts` for example. Access all folders from `src` without relative paths.

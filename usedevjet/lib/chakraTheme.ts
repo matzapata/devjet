@@ -5,10 +5,10 @@ import { mode, Styles } from "@chakra-ui/theme-tools";
 const styles: Styles = {
   global: (props) => ({
     body: {
-      bg: mode("gray.50", "gray.900")(props),
+      bg: mode("white", "gray.900")(props),
     },
     html: {
-      bg: mode("gray.50", "gray.900")(props),
+      bg: mode("white", "gray.900")(props),
     },
   }),
 };

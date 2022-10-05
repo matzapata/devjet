@@ -1,0 +1,370 @@
+---
+title: "Authenticate users with supabase"
+date: 2022-09-23
+summary: "Create an authentication hook with supabase to SignIn, SignUp, ResetPassword and more"
+tags: ["auth"]
+category: "auth"
+image: "/images/supabase.jpg"
+pro: false
+generators: 0
+---
+
+1. Install dependencies
+
+```bash
+yarn add @supabase/supabase-js@^1.35.6
+```
+
+2. Create your supabase application and copy your credentials to `client/.env`. Remember to update `.env.example` with your new enviroment variable
+
+```bash:client/.env
+# ...
+REACT_APP_SUPABASE_URL=
+REACT_APP_SUPABASE_API_KEY=
+```
+
+```bash:client/.env.example
+# ...
+REACT_APP_SUPABASE_URL=
+REACT_APP_SUPABASE_API_KEY=
+```
+
+
+3. Create supabase client in `client/src/utils/supabase.ts`
+
+```ts:client/src/utils/supabase.ts
+import { createClient } from "@supabase/supabase-js";
+
+export const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL as string,
+  process.env.REACT_APP_SUPABASE_API_KEY as string
+);
+```
+
+4. Create an authentication context hook
+
+```ts:client/src/utils/authHook.ts
+import React, { useContext, useState, useEffect, createContext } from "react";
+import { supabase } from "utils/supabase";
+import { User, UserCredentials, UserAttributes } from "@supabase/supabase-js";
+
+export interface SupabaseSignInOptions {
+  redirectTo?: string | undefined;
+  data?: object | undefined;
+  captchaToken?: string | undefined;
+}
+
+// create a context for authentication
+const AuthContext = createContext<any>({});
+
+export const AuthProvider = ({ children }: { children: JSX.Element }) => {
+  const [user, setUser] = useState<User | null>();
+  const [loading, setLoading] = useState(true);
+  const [event, setEvent] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    // get session data if there is an active session
+    const session = supabase.auth.session();
+
+    setUser(session?.user ?? null);
+    setLoading(false);
+
+    // listen for changes to auth
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+        setEvent(event);
+
+        if (event == "PASSWORD_RECOVERY") {
+          const newPassword = prompt(
+            "What would you like your new password to be?"
+          );
+          if (newPassword === null) {
+            alert("There was an error updating your password.");
+          } else {
+            const { data, error } = await supabase.auth.update({
+              password: newPassword,
+            });
+
+            if (data) alert("Password updated successfully!");
+            if (error) alert("There was an error updating your password.");
+          }
+        }
+      }
+    );
+
+    // cleanup the useEffect hook
+    return () => {
+      listener?.unsubscribe();
+    };
+  }, []);
+
+  // create signUp, signIn, signOut functions
+  const value = {
+    signUp: async (
+      userCredentials: UserCredentials,
+      options: SupabaseSignInOptions | undefined
+    ) => {
+      const { error } = await supabase.auth.signUp(userCredentials, options);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    signIn: async (
+      userCredentials: UserCredentials,
+      options: SupabaseSignInOptions | undefined
+    ) => {
+      const { error } = await supabase.auth.signIn(userCredentials, options);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    signInWithEmail: async (
+      email: string,
+      options: SupabaseSignInOptions | undefined
+    ) => {
+      const { error } = await supabase.auth.signIn({ email }, options);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    resetPasswordForEmail: async (email: string) => {
+      const { error } = await supabase.auth.api.resetPasswordForEmail(email);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    updatePassword: async (password: string) => {
+      const { error } = await supabase.auth.update({ password });
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    updateUser: (attributes: UserAttributes) =>
+      supabase.auth.update(attributes),
+    signOut: () => supabase.auth.signOut(),
+    errorMessage,
+    loading,
+    event,
+    user,
+  };
+
+  // use a provider to pass down the value
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+// export the useAuth hook
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+```
+
+5. Add your context provider to `client/src/index.ts`
+
+```ts:client/src/index.ts {11,21,25}
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "styles/index.css";
+import App from "App";
+import reportWebVitals from "reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { store } from "redux/store";
+import { Provider } from "react-redux";
+import { ChakraProvider } from "@chakra-ui/react";
+import chakraTheme from "utils/chakraTheme";
+import { AuthProvider } from "utils/authHook";
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>
+        <AuthProvider>
+          <ChakraProvider theme={chakraTheme}>
+            <App />
+          </ChakraProvider>
+        </AuthProvider>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+6. Further reading
+
+
+- <a href="/posts/pearn_react-supabase-auth-ui-pages">Create beatifull authentication pages</a>
+- <a href="/posts/pern_react-authentication-with-google">SignIn with google and supabase</a>
+- <a href="/posts/pern_react-protected-routes">Create protected routes</a>
+
+
+7. Now you can start using your auth hook to authenticate your users. Here are some small examples.
+
+```tsx:EmailAndPassword
+// ...
+import { useAuth } from "utils/authHook";
+
+function EmailAndPassword() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { signIn, signUp, signOut, user, loading } = useAuth();
+
+  return (
+    <VStack>
+      <Heading size="md" mb="2" color="white">
+        Email and password
+      </Heading>
+      <Input
+        required
+        type="email"
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Input
+        required
+        type="password"
+        placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Button
+        disabled={user !== null}
+        isLoading={loading}
+        w="full"
+        onClick={() => signIn({ email, password })}
+      >
+        SignIn
+      </Button>
+      <Button
+        disabled={user !== null}
+        isLoading={loading}
+        w="full"
+        onClick={() => signUp({ email, password })}
+      >
+        SignUp
+      </Button>
+      <Button
+        disabled={user === null}
+        isLoading={loading}
+        w="full"
+        onClick={() => signOut()}
+      >
+        SignOut
+      </Button>
+    </VStack>
+  );
+}
+```
+
+```tsx:EmailMagicLink
+// ...
+import { useAuth } from "utils/authHook";
+
+function EmailMagicLink() {
+  const [email, setEmail] = useState("");
+  const { user, signIn, loading } = useAuth();
+
+  return (
+    <VStack>
+      <Heading size="md" mb="2" color="white">
+        Email magic link
+      </Heading>
+      <Input
+        required
+        type="email"
+        value={email}
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Button
+        disabled={user !== null}
+        isLoading={loading}
+        w="full"
+        onClick={() => signIn({ email })}
+      >
+        SignIn
+      </Button>
+    </VStack>
+  );
+}
+```
+
+
+
+```tsx:ResetPasswordForEmail
+// ...
+import { useAuth } from "utils/authHook";
+
+function ResetPasswordForEmail() {
+  const [email, setEmail] = useState("");
+  const { user, loading, resetPasswordForEmail } = useAuth();
+
+  return (
+    <VStack>
+      <Heading size="md" mb="2" color="white">
+        Reset Password
+      </Heading>
+      <Input
+        required
+        type="email"
+        value={email}
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Button
+        disabled={user !== null}
+        isLoading={loading}
+        w="full"
+        onClick={() => resetPasswordForEmail(email)}
+      >
+        Reset
+      </Button>
+    </VStack>
+  );
+}
+```
+
+```tsx:GetUserData
+// ...
+import { useAuth } from "utils/authHook";
+
+function Auth() {
+  const { user, loading, errorMessage } = useAuth();
+
+  return (
+    <Center bg="gray.900" minH="100vh" py="20">
+      <Container>
+        <VStack>
+          <Heading size="md" mb="2" color="white">
+            User Data
+          </Heading>
+          {user && (
+            <Text color="white" textAlign="center">
+              {JSON.stringify(user)}
+            </Text>
+          )}
+          {!user && (
+            <Text color="white" textAlign="center">
+              No User
+            </Text>
+          )}
+          {errorMessage && (
+            <Text textAlign="center" color="red.500">
+              {errorMessage}
+            </Text>
+          )}
+          {loading && (
+            <Text color="white" textAlign="center">
+              Loading...
+            </Text>
+          )}
+        </VStack>
+      </Container>
+    </Center>
+  );
+}
+```

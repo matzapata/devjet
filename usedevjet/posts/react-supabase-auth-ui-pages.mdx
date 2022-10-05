@@ -1,0 +1,780 @@
+---
+title: "Create authentication pages"
+date: 2022-09-23
+summary: "Create SignIn, SignUp and Recovery pages. Optionally connect them with supabase auth hook"
+tags: ["auth"]
+category: "auth"
+image: "/images/supabase.jpg"
+pro: false
+generators: 1
+---
+
+1. Dependencies
+
+This receipe is only about creating the UI for the authentication pages. To complete your authentication feature you may want to check out the following receipes first:
+
+- [Authenticate users with supabase](/posts/pern_react-supabase-auth-hook) (required)
+- [Create protected routes for your react app](/posts/pern_react-protected-routes)
+
+2. Create UI components
+
+```tsx:src/pages/Signin.tsx
+import React, { useState } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+
+export default function Login() {
+  const [errorMessage] = useState("");
+  const [loading] = useState(false);
+  const { colorMode } = useColorMode();
+
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Log in to your account
+        </Heading>
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <ReactLink to="/auth/recover">
+            <Link
+              color="blue.600"
+              fontWeight="medium"
+              display="block"
+              textAlign="right"
+              mt="1"
+            >
+              Forgot your password?
+            </Link>
+          </ReactLink>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </Stack>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            as="span"
+            fontWeight="500"
+            mr="1"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Don&apos;t have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signup"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign up
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:src/pages/Signup.tsx
+import React, { useState } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  Stack,
+  useColorMode,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink } from "react-router-dom";
+
+type State = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+export default function SignUp() {
+  const [errorMessage] = useState("");
+  const [loading] = useState(false);
+  const [displayEmailAlert] = useState(false);
+  const { colorMode } = useColorMode();
+  const [state, setState] = useState<State>({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Create your account
+        </Heading>
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl mb="2">
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl
+            isInvalid={state.password !== state.passwordConfirmation}
+          >
+            <FormLabel>Confirm password</FormLabel>
+            <Input
+              type="password"
+              name="passwordConfirmation"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.passwordConfirmation}
+              onChange={onChange}
+            />
+            <FormErrorMessage>Passwords doesn&apos;t match</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Sign up
+          </Button>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            mr="1"
+            as="span"
+            fontWeight="500"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Already have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign in
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:src/pages/Recover.tsx
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Input,
+  Link,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink } from "react-router-dom";
+
+function Recover() {
+  const { colorMode } = useColorMode();
+  const [email, setEmail] = useState("");
+  const [errorMessage] = useState("");
+  const [loading] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
+  return (
+    <Center minH="100vh" py="10">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="4" textAlign="center">
+          Forgot your password?
+        </Heading>
+        <Text
+          mb="10"
+          fontWeight="medium"
+          color={colorMode === "light" ? "gray.600" : "gray.500"}
+          textAlign="center"
+        >
+          No worries, we&apos;ll send you reset instructions.
+        </Text>
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl isInvalid={errorMessage !== ""} mb="5">
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e: any) => setEmail(e.target.value)}
+            />
+            <FormErrorMessage>{errorMessage}</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Reset password
+          </Button>
+        </Box>
+        <Box textAlign="center" mt="4">
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+            fontWeight="500"
+            justifyItems="center"
+          >
+            <ArrowBackIcon mr="1" />
+            Back to login
+          </Link>
+        </Box>
+      </Container>
+    </Center>
+  );
+}
+
+export default Recover;
+```
+
+3. Add pages 
+
+```tsx:src/App.tsx {6,7,8,14,15,16}
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Home from "pages/Home";
+import NotFound from "pages/NotFound";
+import SignUp from "pages/auth/Signup";
+import SignIn from "pages/auth/Signin";
+import Recover from "pages/auth/Recover";
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/auth/signup" element={<SignUp />} />
+      <Route path="/auth/signin" element={<SignIn />} />
+      <Route path="/auth/recover" element={<Recover />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
+export default App;
+```
+
+4. Make your pages functional with supabase auth hook
+
+```tsx:src/pages/Signup.tsx {20,21,31,32,46-49,52-56,}
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  useColorMode,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "utils/authHook";
+
+type State = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+export default function SignUp() {
+  const { colorMode } = useColorMode();
+  const navigate = useNavigate();
+  const { signUp, user, loading, errorMessage } = useAuth();
+  const [state, setState] = useState<State>({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const error = await signUp({
+      email: state.email,
+      password: state.password,
+    });
+    if (!error) navigate("/auth/signin");
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Create your account
+        </Heading>
+
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl mb="2">
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl
+            isInvalid={state.password !== state.passwordConfirmation}
+          >
+            <FormLabel>Confirm password</FormLabel>
+            <Input
+              type="password"
+              name="passwordConfirmation"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.passwordConfirmation}
+              onChange={onChange}
+            />
+            <FormErrorMessage>Passwords doesn&apos;t match</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Sign up
+          </Button>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            mr="1"
+            as="span"
+            fontWeight="500"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Already have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign in
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:src/pages/Signin.tsx {20,21,25,26,40-43,46-50}
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "utils/authHook";
+
+export default function Login() {
+  const { colorMode } = useColorMode();
+  const navigate = useNavigate();
+  const { signIn, user, loading, errorMessage } = useAuth();
+
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const error = await signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (!error) navigate("/");
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Log in to your account
+        </Heading>
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <ReactLink to="/auth/recover">
+            <Link
+              color="blue.600"
+              fontWeight="medium"
+              display="block"
+              textAlign="right"
+              mt="1"
+            >
+              Forgot your password?
+            </Link>
+          </ReactLink>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </Stack>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            as="span"
+            fontWeight="500"
+            mr="1"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Don&apos;t have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signup"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign up
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:src/pages/Recover.tsx {1,17,18,23-28,32-36}
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Input,
+  Link,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "utils/authHook";
+
+function Recover() {
+  const { colorMode } = useColorMode();
+  const [email, setEmail] = useState("");
+  const { user, loading, resetPasswordForEmail, errorMessage } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const error = await resetPasswordForEmail(email);
+    if (!error) {
+      alert("Recovery email sent successfully");
+      navigate("/auth/signin");
+    }
+  };
+
+  return (
+    <Center minH="100vh" py="10">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="4" textAlign="center">
+          Forgot your password?
+        </Heading>
+        <Text
+          mb="10"
+          fontWeight="medium"
+          color={colorMode === "light" ? "gray.600" : "gray.500"}
+          textAlign="center"
+        >
+          No worries, we&apos;ll send you reset instructions.
+        </Text>
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl isInvalid={errorMessage !== ""} mb="5">
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e: any) => setEmail(e.target.value)}
+            />
+            <FormErrorMessage>{errorMessage}</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Reset password
+          </Button>
+        </Box>
+        <Box textAlign="center" mt="4">
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+            fontWeight="500"
+            justifyItems="center"
+          >
+            <ArrowBackIcon mr="1" />
+            Back to login
+          </Link>
+        </Box>
+      </Container>
+    </Center>
+  );
+}
+
+export default Recover;
+```

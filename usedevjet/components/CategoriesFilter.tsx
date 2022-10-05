@@ -1,11 +1,13 @@
 import React from "react";
-import { Select, useColorMode } from "@chakra-ui/react";
+import { Flex, Tag } from "@chakra-ui/react";
 import { PostMetadata } from "types/Post";
 
 function CategoriesFilter({
+  category,
   setCategory,
   postsMetadata,
 }: {
+  category: string;
   setCategory: (category: string) => void;
   postsMetadata: PostMetadata[];
 }) {
@@ -13,21 +15,28 @@ function CategoriesFilter({
     ?.map((p) => p.category)
     .filter((c) => c !== undefined) as string[];
   const categories = Array.from(new Set(postCategories));
-  const { colorMode } = useColorMode();
+  categories.unshift("all");
 
   return (
-    <Select
-      maxW={{ base: "", md: "160px" }}
-      bg={colorMode === "light" ? "white" : "gray.800"}
-      onChange={(e) => setCategory(e.target.value)}
-    >
-      <option value="all">All categories</option>
-      {categories.map((c, i) => (
-        <option key={i} value={c}>
-          {c}
-        </option>
-      ))}
-    </Select>
+    <Flex>
+      {categories.map((c, i) => {
+        const isActive = category === c;
+
+        return (
+          <Tag
+            outline={isActive ? "2px solid" : ""}
+            outlineColor="teal.400"
+            onClick={() => setCategory(c)}
+            cursor="pointer"
+            mr="2"
+            key={i}
+            size="md"
+          >
+            {c}
+          </Tag>
+        );
+      })}
+    </Flex>
   );
 }
 

@@ -27,7 +27,7 @@ function Newsletter() {
         Get notified whenever a new recipe or generator is published
       </Text>
       <Box
-        as={"form"}
+        as="form"
         action="https://www.getrevue.co/profile/usedevjet/add_subscriber"
         method="post"
         id="revue-form"
@@ -49,8 +49,10 @@ function Newsletter() {
             value="Subscribe"
             name="member[subscribe]"
             id="member_submit"
+            borderRadius="3px"
+            px="6"
           >
-            Suscribe
+            Subscribe
           </Button>
         </HStack>
 

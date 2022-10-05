@@ -21,8 +21,8 @@ function PostLayout({
 
   return (
     <Box>
-      <Container as="article" w="full" maxW="container.md">
-        <NavBar />
+      <NavBar />
+      <Container as="article" w="full" maxW="container.lg">
         <PostHeader postMetadata={postMetadata} />
 
         {postMetadata.comingsoon ? (
@@ -49,8 +49,8 @@ function PostLayout({
             <MDXContent components={MDXComponents} />
           </Prose>
         )}
-        <Footer />
       </Container>
+      <Footer />
     </Box>
   );
 }

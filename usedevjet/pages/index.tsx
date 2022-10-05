@@ -13,8 +13,9 @@ import {
   InputRightElement,
   Button,
   Stack,
-  Icon,
   useColorMode,
+  Image,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 
 import NavBar from "components/NavBar";
@@ -26,7 +27,6 @@ import { allPosts, Post } from "contentlayer/generated";
 import Pagination from "components/Pagination";
 import CategoriesFilter from "components/CategoriesFilter";
 import StackFilter from "components/StackFilter";
-import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
 import { PostMetadata } from "types/Post";
 import { extractMetadata } from "lib/posts";
@@ -55,6 +55,10 @@ export default function Blog({
   const [stack, setStack] = useState("all");
   const itemsPerPage = 10;
   const { colorMode } = useColorMode();
+  const consoleExample = useBreakpointValue({
+    base: "/landing-console-example-sm.png",
+    md: "/landing-console-example.png",
+  });
 
   useEffect(() => {
     setFilteredBlogPosts(
@@ -78,98 +82,145 @@ export default function Blog({
       <Head>
         <title>Devjet</title>
       </Head>
-      <Container w="full" maxW="container.md">
+      <Box>
         <NavBar />
-        <Heading
-          textAlign="center"
-          letterSpacing="tight"
-          mb="4"
-          mt="16"
-          as="h1"
-          size="3xl"
-        >
-          All the resources you need to speed up your development
-        </Heading>
-        <Text
-          textAlign="center"
-          mx="auto"
-          maxW="xl"
-          fontSize="lg"
-          fontWeight="medium"
-          color={colorMode === "light" ? "gray.600" : "gray.400"}
-        >
-          Devjet is a collection of code guides, receipes and generators to help
-          your build your PERN and NEXTJS projects in no time.
-        </Text>
+        <Container w="full" maxW="container.lg">
+          <Heading
+            textAlign="center"
+            letterSpacing="tight"
+            fontFamily="Fira code"
+            mb="10"
+            mt="20"
+            as="h1"
+            size={{ base: "2xl", md: "3xl" }}
+          >
+            Making it easy and fast to build full-stack web apps
+          </Heading>
+          <Text
+            textAlign="center"
+            fontFamily="Fira code"
+            mx="auto"
+            maxW="xl"
+            fontSize="lg"
+            color={colorMode === "light" ? "gray.600" : "gray.400"}
+          >
+            Devjet is a collection of code recipes and generators to help your
+            build full stack web applications with REACT, and NEXTJS in no time.
+          </Text>
 
-        <Flex justifyContent="center">
-          <NextLink href="/plans">
-            <Button
-              mt="6"
-              mr="6"
-              size="lg"
-              colorScheme="blue"
-              rightIcon={<Icon as={ArrowLongRightIcon} />}
-            >
-              Get all access
-            </Button>
-          </NextLink>
-          <NextLink href="/posts/quickstart">
-            <Button colorScheme="blue" variant="link" mt="6" size="lg">
-              Quickstart
-            </Button>
-          </NextLink>
-        </Flex>
+          <Stack
+            justifyContent="center"
+            w="full"
+            mt="6"
+            spacing="4"
+            direction={{ base: "column", md: "row" }}
+          >
+            <NextLink href="https://usedevjet.gumroad.com/l/full-access">
+              <Button size="lg" colorScheme="blue" borderRadius="3px">
+                Get all access
+              </Button>
+            </NextLink>
+            <NextLink href="/posts/quickstart">
+              <Button
+                borderRadius="3px"
+                colorScheme="gray"
+                variant="outline"
+                mt="6"
+                size="lg"
+                color="gray.500"
+                border="1px"
+              >
+                Quickstart
+              </Button>
+            </NextLink>
+          </Stack>
+        </Container>
+
+        <Container pt="96px" maxW="container.lg">
+          <Image
+            shadow="lg"
+            src={consoleExample}
+            alt="devjet console interaction example"
+          />
+        </Container>
 
         <Divider
-          mt="14"
+          my="14"
           borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
         />
 
-        <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
-          <InputGroup w="100%">
-            <Input
-              bg={colorMode === "light" ? "white" : "gray.800"}
-              shadow={"sm"}
-              aria-label="Search by title"
-              placeholder="Search by title"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchValue(e.target.value)
-              }
+        <Container maxW="container.lg">
+          <Heading
+            textAlign="center"
+            letterSpacing="tight"
+            mb="24"
+            as="h1"
+            size="2xl"
+            maxW="2xl"
+            mx="auto"
+            fontFamily="Fira code"
+          >
+            Explore recipes and generators to grow your web app ideas
+          </Heading>
+          <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
+            <InputGroup w="100%">
+              <Input
+                borderRadius="3px"
+                bg={colorMode === "light" ? "white" : "gray.800"}
+                shadow={"sm"}
+                aria-label="Search by title"
+                placeholder="Search by title"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchValue(e.target.value)
+                }
+              />
+              <InputRightElement>
+                <SearchIcon color="gray.300" />
+              </InputRightElement>
+            </InputGroup>
+            <StackFilter setStack={(s) => setStack(s)} />
+          </Stack>
+          <Box mb="8">
+            <CategoriesFilter
+              category={category}
+              postsMetadata={postsMetadata}
+              setCategory={(c) => setCategory(c)}
             />
-            <InputRightElement>
-              <SearchIcon color="gray.300" />
-            </InputRightElement>
-          </InputGroup>
-          <CategoriesFilter
-            postsMetadata={postsMetadata}
-            setCategory={(c) => setCategory(c)}
-          />
-          <StackFilter setStack={(s) => setStack(s)} />
-        </Stack>
+          </Box>
 
-        <Box
-          borderTop="1px"
-          borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
-          mb="20"
-        >
-          {!filteredBlogPosts.length && "No posts found :(("}
-          {filteredBlogPosts.map((p, i) => (
-            <PostCard key={i} postMetadata={p} />
-          ))}
-          <Flex justifyContent="center" mt="8">
-            <Pagination
-              onPageChange={(page) => setPage(page)}
-              initialPage={page}
-              lastPage={Math.ceil(postsMetadata.length / itemsPerPage)}
-            />
-          </Flex>
-        </Box>
+          <Box
+            borderTop="1px"
+            borderColor={colorMode === "light" ? "gray.200" : "gray.600"}
+            mb="20"
+          >
+            {!filteredBlogPosts.length && (
+              <Box mt="4">
+                <Text>No recipes found :((</Text>
+                <Text>
+                  Subscribe to the newsletter so we can let you know when
+                  something new is added.
+                </Text>
+              </Box>
+            )}
+            {filteredBlogPosts.map((p, i) => (
+              <PostCard key={i} postMetadata={p} />
+            ))}
+            <Flex justifyContent="center" mt="8">
+              <Pagination
+                onPageChange={(page) => setPage(page)}
+                initialPage={page}
+                lastPage={Math.ceil(postsMetadata.length / itemsPerPage)}
+              />
+            </Flex>
+          </Box>
+        </Container>
 
-        <Newsletter />
+        <Container maxW="container.lg">
+          <Newsletter />
+        </Container>
 
         <Footer />
-      </Container>
+      </Box>
     </>
   );
 }
