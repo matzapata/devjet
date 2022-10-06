@@ -1,6 +1,6 @@
 {
-  "name": "devjet-pern_react-protected-routes",
-  "version": "1.0.1",
+  "name": "devjet-supabase-auth-ui",
+  "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "files": [
@@ -16,14 +16,14 @@
     "lint:fix": "eslint --fix ./src/**/*.ts"
   },
   "devDependencies": {
-    "gluegun": "^5.1.2",
-    "cpy-cli": "^4.2.0",
-    "@types/node": "^12.7.11",
+    "@types/node": "^18.7.23",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
+    "cpy-cli": "^4.2.0",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.2.0",
+    "gluegun": "^5.1.2",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
     "rmdir-cli": "^2.0.6",

@@ -1,5 +1,5 @@
 ---
-title: "Newsletter with revue"
+title: "Newsletter with revue and react"
 date: 
 summary: "Create a newsletter with revue"
 tags: ["newsletter","marketing"]
@@ -7,19 +7,14 @@ category: "recipes"
 image: "/images/revue.png"
 pro: false
 comingsoon: false
+generators: 1
 ---
 
 > Save up some time running devjet generators. Before running make sure you are at the root of your project (optional)
 
 ```sh:generators
-yarn add devjet-newsletter-with-revue # Install generator
-
-# Run generator to create Newsletter component
-npx devjet newsletter-with-revue 
-
-yarn remove devjet-newsletter-with-revue # Remove generator
+devjet run newsletter-with-revue 
 ```
-
 
 1. Create your account at [revue](https://www.getrevue.co/)
 
@@ -78,7 +73,7 @@ function Newsletter() {
             name="member[subscribe]"
             id="member_submit"
           >
-            Suscribe
+            Subscribe
           </Button>
         </HStack>
 
@@ -90,8 +85,8 @@ function Newsletter() {
             rel="noreferrer"
           >
             Terms of Service
-          </Link>{" "}
-          and{" "}
+          </Link>
+          {" and "}
           <Link
             target="_blank"
             href="https://www.getrevue.co/privacy"

@@ -1,3 +1,26 @@
+---
+title: "Newsletter with revue and nextjs"
+date: 
+summary: "Create a newsletter with revue"
+tags: ["newsletter","marketing"]
+category: "recipes"
+image: "/images/revue.png"
+pro: false
+comingsoon: false
+generators: 1
+---
+
+> Save up some time running devjet generators. Before running make sure you are at the root of your project (optional)
+
+```sh:generators
+devjet run newsletter-with-revue 
+```
+
+1. Create your account at [revue](https://www.getrevue.co/)
+
+2. Create the newsletter component. Make sure to update the form action link with your revue username `https://www.getrevue.co/profile/{{revue_username}}/add_subscriber`.
+
+```tsx:Newsletter.tsx {31}
 import React from "react";
 import {
   Box,
@@ -62,8 +85,8 @@ function Newsletter() {
             rel="noreferrer"
           >
             Terms of Service
-          </Link>{" "}
-          and{" "}
+          </Link>
+          {" and "}
           <Link
             target="_blank"
             href="https://www.getrevue.co/privacy"
@@ -78,3 +101,4 @@ function Newsletter() {
 }
 
 export default Newsletter;
+```
