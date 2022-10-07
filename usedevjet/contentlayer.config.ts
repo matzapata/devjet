@@ -88,10 +88,9 @@ const Post = defineDocumentType(() => ({
       of: "string",
       resolve: (doc) => {
         const slug = doc._raw.flattenedPath;
-        const stacks = slug.split("-")[0].split("_");
+        const stacks = slug.split("-")[0];
 
         const postStacks = [];
-        if (stacks.includes("pern")) postStacks.push("pern");
         if (stacks.includes("nextjs")) postStacks.push("nextjs");
         if (stacks.includes("react")) postStacks.push("react");
 

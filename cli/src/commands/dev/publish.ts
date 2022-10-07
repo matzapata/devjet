@@ -42,9 +42,13 @@ module.exports = {
     if (!pkg.name) return print.error("Couldn't read package.json name");
     const slug = pkg.name.replace('devjet-', '');
 
-    const publishReact = await prompt.confirm('Publish react?');
-    const publishNextjs = await prompt.confirm('Publish nextjs?');
+    const publishUnique = await prompt.confirm('Publish post.mdx?');
+    const publishReact = await prompt.confirm('Publish react-post.mdx?');
+    const publishNextjs = await prompt.confirm('Publish nextjs-post.mdx?');
 
+    if (publishUnique) {
+      await publish(filesystem, patching, 'posts/post.mdx', `${slug}.mdx`);
+    }
     if (publishReact) {
       await publish(
         filesystem,

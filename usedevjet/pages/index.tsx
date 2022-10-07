@@ -68,7 +68,10 @@ export default function Blog({
         )
         .filter((p) => p.url !== "/posts/quickstart")
         .filter((p) => p.category === category || category === "all")
-        .filter((p) => p.stacks.includes(stack) || stack === "all")
+        .filter(
+          (p) =>
+            p.stacks.includes(stack) || stack === "all" || p.stacks.length === 0
+        )
         .sort((a, b) => {
           if (a.comingsoon === true || b.comingsoon === true) return -1;
           else return Number(new Date(b.date)) - Number(new Date(a.date));
