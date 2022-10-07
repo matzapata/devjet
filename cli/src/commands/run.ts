@@ -92,7 +92,7 @@ async function runGenerator(
 
 module.exports = {
   name: 'run',
-  description: `Bootstrap your Devjet project. Usage: devjet new projectname`,
+  description: `Run devjet generators. Usage: devjet run generator-package generator-name. Discover generators at usedevjet.com`,
   run: async (toolbox: GluegunToolbox) => {
     const { print, parameters } = toolbox;
     const helpMessage = 'Usage: devjet run generatorname commandname';

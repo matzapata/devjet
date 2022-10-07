@@ -10,19 +10,19 @@ module.exports = {
     const { generatorName } = await prompt.ask({
       name: 'generatorName',
       type: 'input',
-      message: 'What is the post slug?',
+      message: 'What is the generator name?',
     });
 
     if (generatorName.includes(' ')) {
-      return print.error('Slugs cant contains spaces');
+      return print.error('Generators names cant contains spaces');
     }
 
     const projectDirectory = `devjet-${generatorName}`;
-    print.info(`Creating a new devjet post at ${projectDirectory}`);
+    print.info(`Creating a new devjet generator at ${projectDirectory}`);
 
     if (filesystem.exists(projectDirectory)) {
       return print.error(
-        `Couldn't create project at ${projectDirectory}. Folder already exists.`
+        `Couldn't create generator at ${projectDirectory}. Folder already exists.`
       );
     }
 
