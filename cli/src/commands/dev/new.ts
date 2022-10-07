@@ -7,17 +7,17 @@ module.exports = {
   run: async (toolbox: GluegunToolbox) => {
     const { filesystem, print, prompt, template } = toolbox;
 
-    const { postSlug } = await prompt.ask({
-      name: 'postSlug',
+    const { generatorName } = await prompt.ask({
+      name: 'generatorName',
       type: 'input',
       message: 'What is the post slug?',
     });
 
-    if (postSlug.includes(' ')) {
+    if (generatorName.includes(' ')) {
       return print.error('Slugs cant contains spaces');
     }
 
-    const projectDirectory = `devjet-${postSlug}`;
+    const projectDirectory = `devjet-${generatorName}`;
     print.info(`Creating a new devjet post at ${projectDirectory}`);
 
     if (filesystem.exists(projectDirectory)) {
@@ -35,15 +35,15 @@ module.exports = {
     template.generate({
       template: 'generator/package.json',
       target: `${projectDirectory}/package.json`,
-      props: { postSlug },
+      props: { generatorName },
     });
 
-    print.success('All done!');
-    print.info('Create your example at example folder with npx devjet new');
+    print.info('Create your examples at `examples` folder with npx devjet new');
     print.info('Please edit accordingly the following files:');
     print.info('- src/commands/index.ts');
-    print.info('- src/commands/index.ts');
     print.info('- package.json');
-    print.info('- post.mdx');
+    print.info(
+      '- Create your posts in the posts folder, remember that the file is copied directly so include the slug in the name of it. Use `react-`, `nextjs-` or none to target both stacks.'
+    );
   },
 };
