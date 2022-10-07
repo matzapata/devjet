@@ -153,8 +153,8 @@ export default function Blog({
           <Heading
             textAlign="center"
             letterSpacing="tight"
-            mb="24"
             as="h1"
+            mb="4"
             size="2xl"
             maxW="2xl"
             mx="auto"
@@ -162,6 +162,9 @@ export default function Blog({
           >
             Explore recipes and generators to grow your web app ideas
           </Heading>
+          <Text mb="24" textAlign="center" fontFamily="Fira code">
+            Authentication, analytics, ui-ux, payments, emails and much more
+          </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={2} my="6">
             <InputGroup w="100%">
               <Input
