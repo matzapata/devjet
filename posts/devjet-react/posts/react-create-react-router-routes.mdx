@@ -1,12 +1,19 @@
 ---
 title: "Configuring frontend routes"
-date: 2022-02-28
+date: 
 summary: "Create a new frontend route with react-router-dom and react"
 tags: ["basics","react","react-router-dom"]
 category: "basics"
 image: "/images/react.png"
-generators: 0
+pro: false
+comingsoon: false
+generators: 1
 ---
+
+
+```bash:generators
+devjet run react new-page --name=PageName --path=page-path
+```
 
 All pages components should go under the `pages` folder and exported by default.
 
@@ -28,10 +35,10 @@ export default MyPage;
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-import Home from "./pages/Home";
-import About from "./pages/About";
-import NotFound from "./pages/NotFound";
-import MyPage from "./pages/MyPage";
+import Home from "pages/Home";
+import About from "pages/About";
+import NotFound from "pages/NotFound";
+import MyPage from "pages/MyPage";
 
 function App() {
   return (
