@@ -1,0 +1,79 @@
+---
+title: "Private routes with react-router-dom"
+date: 10/7/2022
+summary: "Create a component to protect your routes"
+tags: ["auth", "react-roouter-dom"]
+category: "receipes"
+image: "/images/react.png"
+pro: false
+comingsoon: false
+---
+
+{/*  SOURCES:  */}
+{/*  https://www.robinwieruch.de/react-router-private-routes/  */}
+
+> Save up some time running devjet generators. Before running make sure you are at the root of your project (optional)
+
+```sh:generators
+yarn add devjet-pern_react-protected-routes # Install generator
+
+# Run generator to create ProtectedRoute component
+npx devjet add-protected-routes 
+
+yarn remove devjet-pern_react-protected-routes # Remove generator
+```
+
+
+1. Create ProtectedRoute component
+
+```tsx:src/components/ProtectedRoute.tsx
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+
+const ProtectedRoute = ({
+  isAllowed,
+  redirectPath = "/auth/signin",
+  children,
+}: {
+  isAllowed: boolean;
+  redirectPath?: string;
+  children?: any;
+}) => {
+  if (!isAllowed) {
+    return <Navigate to={redirectPath} replace />;
+  } else return children ? children : <Outlet />;
+};
+
+export default ProtectedRoute;
+```
+
+2. Use the component to protect your pages. 
+
+```tsx:src/App.tsx {8,16,17,18,19}
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Home from "pages/Home";
+import NotFound from "pages/NotFound";
+import ProtectedPage from "pages/Protected";
+
+import ProtectedRoute from "components/ProtectedRoute";
+
+function App() {
+  const user = null; // Test only. This should get from your supabase auth hook for example
+
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route element={<ProtectedRoute isAllowed={!!user} />}>
+        <Route path="protected" element={<ProtectedPage />} />
+        <Route path="test" element={<ProtectedPage />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
+export default App;
+```
+

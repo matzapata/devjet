@@ -1,51 +1,23 @@
 ---
-title: "Authenticate your users with supabase"
-date: 2022-09-23
-summary: "Create SignIn, SignUp and Recovery pages and connect them with supabase to authenticate your users."
-tags: ["auth"]
-category: "receipes"
-image: "/images/supabase.jpg"
-pro: false
+title: "Create Signin, Signup and Recover UI pages"
+date: 10/7/2022
+summary: "Just the UI so you can integrate your custom authentication system"
+tags: ["auth", "ui-ux"]
+category: "ui-ux"
+image: "/images/chakra-ui.png"
+pro: true
+comingsoon: false
+generators: 1
 ---
 
-1. Install dependencies
-
-2. Create authentication hooks
-
-3. Create UI components
-
-
-4. Register the authentication routes
-
-```tsx:src/App.tsx {6,7,8,14,15,16}
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-
-import Home from "pages/Home";
-import NotFound from "pages/NotFound";
-import SignUp from "pages/auth/Signup";
-import SignIn from "pages/auth/Signin";
-import Recover from "pages/auth/Recover";
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/auth/signup" element={<SignUp />} />
-      <Route path="/auth/signin" element={<SignIn />} />
-      <Route path="/auth/recover" element={<Recover />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-}
-
-export default App;
+```sh:generators
+npx devjet run auth-ui-pages
 ```
 
-5. Make your pages functional with supabase auth hook
+1. Create your components in the pages folder and update them to work with your logic
 
-```tsx:src/pages/auth/Signup.tsx {20,21,31,32,46-49,52-56,}
-import React, { useState, useEffect } from "react";
+```tsx:Signin.tsx
+import React, { useState } from "react";
 import {
   Button,
   Container,
@@ -60,12 +32,139 @@ import {
   Flex,
   Alert,
   AlertIcon,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+
+export default function Login() {
+  const [errorMessage] = useState("");
+  const [loading] = useState(false);
+  const { colorMode } = useColorMode();
+
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Log in to your account
+        </Heading>
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <ReactLink to="/auth/recover">
+            <Link
+              color="blue.600"
+              fontWeight="medium"
+              display="block"
+              textAlign="right"
+              mt="1"
+            >
+              Forgot your password?
+            </Link>
+          </ReactLink>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </Stack>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            as="span"
+            fontWeight="500"
+            mr="1"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Don&apos;t have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signup"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign up
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:Signup.tsx
+import React, { useState } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  Stack,
   useColorMode,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
-import { useAuth } from "utils/authHook";
+import { Link as ReactLink } from "react-router-dom";
 
 type State = {
   email: string;
@@ -74,9 +173,10 @@ type State = {
 };
 
 export default function SignUp() {
+  const [errorMessage] = useState("");
+  const [loading] = useState(false);
+  const [displayEmailAlert] = useState(false);
   const { colorMode } = useColorMode();
-  const navigate = useNavigate();
-  const { signUp, user, loading, errorMessage } = useAuth();
   const [state, setState] = useState<State>({
     email: "",
     password: "",
@@ -90,17 +190,8 @@ export default function SignUp() {
     });
   };
 
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const error = await signUp({
-      email: state.email,
-      password: state.password,
-    });
-    if (!error) navigate("/auth/signin");
   };
 
   return (
@@ -110,14 +201,12 @@ export default function SignUp() {
         <Heading mb="20" textAlign="center">
           Create your account
         </Heading>
-
         {errorMessage !== "" && (
           <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
             <AlertIcon h="4" />
             {errorMessage}
           </Alert>
         )}
-
         <Box as="form" w="full" onSubmit={onSubmit}>
           <FormControl mb="2">
             <FormLabel>Email</FormLabel>
@@ -190,145 +279,8 @@ export default function SignUp() {
 }
 ```
 
-```tsx:src/pages/auth/Signin.tsx {20,21,25,26,40-43,46-50}
-import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Container,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Link,
-  Center,
-  Box,
-  Text,
-  Flex,
-  Alert,
-  AlertIcon,
-  Stack,
-  useColorMode,
-} from "@chakra-ui/react";
-import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
-import { useAuth } from "utils/authHook";
-
-export default function Login() {
-  const { colorMode } = useColorMode();
-  const navigate = useNavigate();
-  const { signIn, user, loading, errorMessage } = useAuth();
-
-  const [state, setState] = useState({
-    email: "",
-    password: "",
-  });
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const error = await signIn({
-      email: state.email,
-      password: state.password,
-    });
-    if (!error) navigate("/");
-  };
-
-  return (
-    <Center minH="100vh" py="14">
-      <Container maxW="md">
-        <BrandFavicon mx="auto" mb="4" />
-        <Heading mb="20" textAlign="center">
-          Log in to your account
-        </Heading>
-        {errorMessage !== "" && (
-          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
-            <AlertIcon h="4" />
-            {errorMessage}
-          </Alert>
-        )}
-        <Box as="form" w="full" onSubmit={onSubmit}>
-          <FormControl mb="2">
-            <FormLabel>Email</FormLabel>
-            <Input
-              type="email"
-              name="email"
-              bg={colorMode === "light" ? "white" : "gray.800"}
-              required
-              value={state.email}
-              onChange={onChange}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
-              name="password"
-              bg={colorMode === "light" ? "white" : "gray.800"}
-              required
-              value={state.password}
-              onChange={onChange}
-            />
-          </FormControl>
-          <Link
-            as={ReactLink}
-            to="/auth/recover"
-            color="blue.600"
-            fontWeight="medium"
-            display="block"
-            textAlign="right"
-            mt="1"
-          >
-            Forgot your password?
-          </Link>
-          <Stack spacing="4">
-            <Button
-              type="submit"
-              mt="8"
-              size="md"
-              colorScheme="blue"
-              w="full"
-              isLoading={loading}
-            >
-              Sign In
-            </Button>
-          </Stack>
-        </Box>
-        <Flex justifyContent="center" mt="4">
-          <Text
-            as="span"
-            fontWeight="500"
-            mr="1"
-            color={colorMode === "light" ? "gray.600" : "gray.500"}
-          >
-            Don&apos;t have an account?
-          </Text>
-          <Link
-            as={ReactLink}
-            to="/auth/signup"
-            color="blue.600"
-            fontWeight="500"
-          >
-            Sign up
-          </Link>
-        </Flex>
-      </Container>
-    </Center>
-  );
-}
-```
-
-```tsx:src/pages/auth/Recover.tsx {1,17,18,23-28,32-36}
-import React, { useState, useEffect } from "react";
+```tsx:Recover.tsx
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -344,26 +296,16 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
-import { useAuth } from "utils/authHook";
+import { Link as ReactLink } from "react-router-dom";
 
 function Recover() {
   const { colorMode } = useColorMode();
   const [email, setEmail] = useState("");
-  const { user, loading, resetPasswordForEmail, errorMessage } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user, navigate]);
+  const [errorMessage] = useState("");
+  const [loading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const error = await resetPasswordForEmail(email);
-    if (!error) {
-      alert("Recovery email sent successfully");
-      navigate("/auth/signin");
-    }
   };
 
   return (
@@ -424,3 +366,4 @@ function Recover() {
 
 export default Recover;
 ```
+

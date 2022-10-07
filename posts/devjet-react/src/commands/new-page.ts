@@ -9,7 +9,7 @@ module.exports = {
     await toolbox.step("1. Create page component at src/pages", {
       react: () =>
         toolbox.template.generate({
-          template: "create-react-router-routes/Page.tsx.ejf",
+          template: "create-react-router-routes/Page.tsx.ejs",
           target: `src/pages/${name}.tsx`,
         }),
     });
