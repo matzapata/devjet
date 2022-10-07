@@ -3,9 +3,8 @@ import { GluegunToolbox } from "gluegun";
 module.exports = {
   description: "Create a newsletter component with revue",
   run: async (toolbox: GluegunToolbox) => {
-
     await toolbox.step(
-      "1. Create your account at https://www.getrevue.co/ (This one is on you 😉​)",
+      "1. Create your account at https://www.getrevue.co/ (This one is on you 😉​)"
     );
 
     await toolbox.step("2. Create the newsletter component", {
@@ -17,11 +16,6 @@ module.exports = {
         toolbox.template.generate({
           template: "Newsletter.tsx",
           target: "src/components/Newsletter.tsx",
-        }),
-      pern: () =>
-        toolbox.template.generate({
-          template: "Newsletter.tsx",
-          target: "client/src/components/Newsletter.tsx",
         }),
       nextjs: () =>
         toolbox.template.generate({
