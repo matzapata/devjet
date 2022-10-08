@@ -11,6 +11,7 @@ module.exports = {
         toolbox.template.generate({
           template: "create-react-router-routes/Page.tsx.ejs",
           target: `src/pages/${name}.tsx`,
+          props: { name },
         }),
     });
 

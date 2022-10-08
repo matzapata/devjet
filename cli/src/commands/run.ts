@@ -68,7 +68,7 @@ async function runGenerator(
   };
 
   const isReady = await toolbox.prompt.confirm(
-    'We strongly recommend to run devjet generators on a new branch or with a previous commit. Are you ready to continue?'
+    'We strongly recommend to run devjet generators on a new branch or with a previous commit so you can review the changes applied. Are you ready to continue?'
   );
   if (!isReady) return toolbox.print.error('Take your time, no problem!');
 
