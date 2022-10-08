@@ -1,12 +1,47 @@
 ---
 title: "Add analytics to your nextjs website with cloudflare"
-date: 9/28/2022
+date: 10/8/2022
 summary: "Get usefull data about your website usage with cloudflare and nextjs"
 tags: ["analytics"]
-category: "analytics"
+category: "marketing"
 image: "/images/cloudflare.png"
 pro: true
-comingsoon: true
-generators: 0
+comingsoon: false
+generators: 1
 ---
 
+```bash:generators
+devjet run cloudflare-analytics
+```
+
+1. Create your Web Analytics Site
+
+On your [Cloudflare dashboard](https://dash.cloudflare.com/), select `Web Analytics` from the menu on the left. Click `Add a site` under the `Quick Actions` menu on the right. Enter the domain where your website is hosted and click `next` to continue. A tracking snippet will be displayed in a textbox. Click the textbox to copy the tracking snippet.
+
+2. Add the JS Snippet below before the ending body tag on any of your `public/index.html` file.
+
+```tsx:_document.tsx {12,13,14,15,16}
+import Document, { Html, Head, Main, NextScript } from 'next/document'
+
+class MyDocument extends Document {
+  render() {
+    return (
+      <Html>
+        <Head>
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "your-cloudflare-site-token"}'
+          ></script>
+        </body>
+      </Html>
+    )
+  }
+}
+
+export default MyDocument
+```

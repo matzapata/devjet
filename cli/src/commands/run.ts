@@ -1,10 +1,11 @@
 import { filesystem, GluegunToolbox } from 'gluegun';
 import findGitRoot from 'find-git-root';
+import { GeneratorToolbox } from '../types';
 
 function getProjectStack(toolbox: GluegunToolbox, root: string) {
   const { filesystem } = toolbox;
 
-  const isNextjs = filesystem.exists(filesystem.path(root, 'next.config'));
+  const isNextjs = filesystem.exists(filesystem.path(root, 'next.config.js'));
   const isReact = filesystem.exists(filesystem.path(root, 'src', 'index.tsx'));
 
   if (isNextjs) return 'nextjs';
@@ -16,16 +17,16 @@ function findProjectRoot() {
   return findGitRoot(process.cwd()).replace('/.git', '').replace('\\.git', '');
 }
 
-async function runPlugin(
+async function runGenerator(
   toolbox: GluegunToolbox,
   context: {
     stack: string;
     root: string;
   },
-  pluginFolder: string,
+  generatorFolder: string,
   command: string
 ) {
-  const pluginToolbox = {
+  const generatorToolbox: GeneratorToolbox = {
     context,
     parameters: toolbox.parameters,
     filesystem: toolbox.filesystem,
@@ -37,43 +38,20 @@ async function runPlugin(
     semver: toolbox.semver,
     strings: toolbox.strings,
     system: toolbox.system,
+    packageManager: toolbox.packageManager,
     template: {
-      generate: ({
-        template,
-        target,
-        props,
-        directory,
-      }: {
-        template: string;
-        target: string;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        props?: any;
-        directory?: string;
-      }) => {
-        toolbox.template.generate({
+      generate: ({ template, target, props, directory }) => {
+        return toolbox.template.generate({
           directory: directory
             ? directory
-            : toolbox.filesystem.path(pluginFolder, 'build', 'templates'),
+            : toolbox.filesystem.path(generatorFolder, 'build', 'templates'),
           template,
           target,
           props,
         });
       },
     },
-    packageManager: toolbox.packageManager,
-    step: async (
-      message: string,
-      action?: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        all?: () => Promise<any>;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        react?: () => Promise<any>;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        pern?: () => Promise<any>;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        nextjs?: () => Promise<any>;
-      }
-    ): Promise<void> => {
+    step: async (message, action) => {
       try {
         if (action === undefined) {
           return toolbox.print.success(`${toolbox.print.checkmark} ${message}`);
@@ -90,7 +68,7 @@ async function runPlugin(
   };
 
   const isReady = await toolbox.prompt.confirm(
-    'We strongly recommend to run devjet generators on a new branch or with a previous commit. Are you ready to continue?'
+    'We strongly recommend to run devjet generators on a new branch or with a previous commit so you can review the changes applied. Are you ready to continue?'
   );
   if (!isReady) return toolbox.print.error('Take your time, no problem!');
 
@@ -99,14 +77,14 @@ async function runPlugin(
   );
 
   const commandPath = toolbox.filesystem.path(
-    pluginFolder,
+    generatorFolder,
     'build',
     'commands',
     `${command}.js`
   );
 
-  const plugin = await import(commandPath);
-  if (plugin) await plugin.run(pluginToolbox);
+  const generator = await import(commandPath);
+  if (generator) await generator.run(generatorToolbox);
   else toolbox.print.error('Auchh, it seams like that command does not exist');
 
   return null;
@@ -114,16 +92,16 @@ async function runPlugin(
 
 module.exports = {
   name: 'run',
-  description: `Bootstrap your Devjet project. Usage: devjet new projectname`,
+  description: `Run devjet generators. Usage: devjet run generator-package generator-name. Discover generators at usedevjet.com`,
   run: async (toolbox: GluegunToolbox) => {
     const { print, parameters } = toolbox;
-    const helpMessage = 'Usage: devjet run pluginname commandname';
+    const helpMessage = 'Usage: devjet run generatorname commandname';
 
-    // npx devjet run pluginname commandname
+    // npx devjet run generatorname commandname
     const dev = parameters.options.dev;
-    const pluginName = `devjet-${parameters.first}`;
+    const generatorName = `devjet-${parameters.first}`;
     const commandName = parameters.second ? parameters.second : 'index';
-    if (!pluginName) return toolbox.print.error(helpMessage);
+    if (!generatorName) return toolbox.print.error(helpMessage);
 
     // Check techstack and cd to root dir. Create context
     const root = findProjectRoot();
@@ -134,36 +112,38 @@ module.exports = {
     if (!stack) return print.error("Couldn't recognize tech stack");
     else print.info(`Great! it seams you are working with ${stack}`);
 
-    // Install pluginname
+    // Install generatorName
     if (dev) {
       print.warning(
-        '\nYou are in dev mode, meaning you will have to install and uninstall the plugin package yourself. Use npm install ../path/to/package or npm link\n'
+        '\nYou are in dev mode, meaning you will have to install and uninstall the generator package yourself. Use npm install ../path/to/package or npm link\n'
       );
     } else {
-      const pluginInstallSpinner = toolbox.print.spin(
-        'Installing plugin package'
+      const generatorInstallSpinner = toolbox.print.spin(
+        'Installing generator...'
       );
-      pluginInstallSpinner.start();
-      const pluginPackage = await toolbox.packageManager.add(pluginName, {
+      generatorInstallSpinner.start();
+      const generatorPackage = await toolbox.packageManager.add(generatorName, {
         dev: true,
       });
-      if (!pluginPackage.success) {
-        return pluginInstallSpinner.fail("Couldn't install plugin");
+      if (!generatorPackage.success) {
+        return generatorInstallSpinner.fail("Couldn't install the generator");
       }
-      pluginInstallSpinner.succeed('Plugin installed');
+      generatorInstallSpinner.info('Generator installed successfully');
     }
 
-    const pluginPath = filesystem.path('.', 'node_modules', pluginName);
-    await runPlugin(toolbox, { stack, root }, pluginPath, commandName);
+    const generatorPath = filesystem.path('.', 'node_modules', generatorName);
+    await runGenerator(toolbox, { stack, root }, generatorPath, commandName);
 
     // Prompt for uninstall
     if (!dev) {
-      const pluginRemoveSpinner = toolbox.print.spin('Removing plugin package');
-      pluginRemoveSpinner.start();
-      await toolbox.packageManager.remove(pluginName, { dryRun: false });
-      pluginRemoveSpinner.succeed('Plugin removed successfully');
+      const generatorRemoveSpinner = toolbox.print.spin(
+        'Removing generator package'
+      );
+      generatorRemoveSpinner.start();
+      await toolbox.packageManager.remove(generatorName, { dryRun: false });
+      generatorRemoveSpinner.succeed('Generator removed successfully');
     }
 
-    return print.success(`${print.checkmark} All done!`);
+    print.success(`${print.checkmark} All done!`);
   },
 };

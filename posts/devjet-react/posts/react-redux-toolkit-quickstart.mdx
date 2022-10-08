@@ -1,0 +1,101 @@
+---
+title: "Redux toolkit quickstart"
+date: 
+summary: "Learn how to work with redux toolkit by creating a slice that makes use of both, syncronous and asyncronous actions"
+tags: ["basics","client","redux-toolkit"]
+category: "basics"
+image: "/images/redux.png"
+pro: false
+comingsoon: false
+generators: 0
+---
+
+Redux helps you with your app global state management.
+
+1. Create a redux state slice at the `client/src/redux/slices` folder. If this is your first slice you can already delete the `.gitignore` file. Inside that folder create a file with your slice name, for this case `counterSlice.ts`. Insede of it define your initialState along with it's typescript type definition. Then use the `createSlice` function to define your slice name, initialState and reducers.
+
+```ts:redux/slices/counter.ts 
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+
+export interface CounterState {
+  value: number
+}
+
+const initialState: CounterState = {
+  value: 0,
+}
+
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment: (state) => {
+      state.value += 1
+    },
+    decrement: (state) => {
+      state.value -= 1
+    },
+    incrementByAmount: (state, action: PayloadAction<number>) => {
+      state.value += action.payload
+    },
+  },
+})
+
+// Action creators are generated for each case reducer function
+export const { increment, decrement, incrementByAmount } = counterSlice.actions
+
+export default counterSlice.reducer
+```
+
+> Redux Toolkit allows us to write "mutating" logic in reducers. It doesn't actually mutate the state because it uses the Immer library, which detects changes to a "draft state" and produces a brand new immutable state based off those changes.
+
+2. Add slice reducers to the store
+
+```ts:redux/store.ts {3,7}
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "redux/slices/counter";
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+```
+
+3. Use Redux State and Actions in React Components
+
+```tsx {2,6,7,13,17,20}
+import React from 'react'
+import { decrement, increment, useAppSelector, useAppDispatch } from 'redux/slices/counter'
+import { Box, Button, Text } from "@chakra-ui/react"
+
+export function Counter() {
+  const count = useAppSelector((state) => state.counter.value)
+  const dispatch = useAppDispatch()
+
+  return (
+    <Box>
+        <Button
+          aria-label="Increment value"
+          onClick={() => dispatch(increment())}
+        >
+          Increment
+        </Button>
+        <Text>{count}</Text>
+        <Button
+          aria-label="Decrement value"
+          onClick={() => dispatch(decrement())}
+        >
+          Decrement
+        </Button>
+    </Box>
+  )
+}
+```

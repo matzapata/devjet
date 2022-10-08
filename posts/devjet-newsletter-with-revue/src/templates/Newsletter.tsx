@@ -50,7 +50,7 @@ function Newsletter() {
             name="member[subscribe]"
             id="member_submit"
           >
-            Suscribe
+            Subscribe
           </Button>
         </HStack>
 

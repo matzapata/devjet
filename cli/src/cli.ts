@@ -1,5 +1,4 @@
 import { build } from 'gluegun';
-import helpCommand from './commands/help';
 
 /**
  * Create the cli and kick it off
@@ -10,7 +9,7 @@ async function run(argv) {
     .src(__dirname)
     .plugins('./node_modules', { matching: 'devjet-*', hidden: false })
     .version() // provides default for version, v, --version, -v
-    .defaultCommand(helpCommand)
+    .help()
     .create();
   const toolbox = await cli.run(argv);
 

@@ -1,7 +1,6 @@
 import { GluegunToolbox } from 'gluegun';
 
 async function publish(filesystem, patching, src, dst) {
-  const postFilename = `${dst}.mdx`;
   const publishPath = filesystem.path(
     __dirname,
     '..',
@@ -10,7 +9,7 @@ async function publish(filesystem, patching, src, dst) {
     '..',
     'usedevjet',
     'posts',
-    postFilename
+    dst
   );
   filesystem.remove(publishPath);
   filesystem.copy(src, publishPath, { overwrite: true });
@@ -37,33 +36,19 @@ module.exports = {
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const pkg = filesystem.read('./package.json', 'json');
-    if (!pkg.name) return print.error("Couldn't read package.json name");
-    const slug = pkg.name.replace('devjet-', '');
+    const posts = filesystem.list('posts/');
+    const { publishList } = (await prompt.ask({
+      type: 'multiselect',
+      name: 'publishList',
+      message: 'Which posts do you want to publish?',
+      choices: posts,
+    })) as { publishList: string[] };
 
-    const publishReact = await prompt.confirm('Publish react?');
-    const publishNextjs = await prompt.confirm('Publish nextjs?');
-
-    if (publishReact) {
-      await publish(
-        filesystem,
-        patching,
-        'posts/react-post.mdx',
-        `react-${slug}.mdx`
-      );
-    }
-    if (publishNextjs) {
-      await publish(
-        filesystem,
-        patching,
-        'posts/nextjs-post.mdx',
-        `nextjs-${slug}.mdx`
-      );
+    for (const post of publishList) {
+      await publish(filesystem, patching, `posts/${post}`, post);
+      print.success(`${print.checkmark} Successfully published ${post}`);
     }
 
-    print.success('All done!');
-    print.info(`Update the date at usedevjet/posts/${slug}.mdx`);
     print.info('Verify everything and git commit and push. Then deploy');
     print.info('To publish de generator run `npm publish`');
   },

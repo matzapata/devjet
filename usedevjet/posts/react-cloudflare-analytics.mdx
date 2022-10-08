@@ -1,0 +1,34 @@
+---
+title: "Add analytics to your react app with cloudflare"
+date: 10/8/2022
+summary: "Get usefull data about your website usage with cloudflare and react"
+tags: ["analytics"]
+category: "marketing"
+image: "/images/cloudflare.png"
+pro: true
+comingsoon: false
+generators: 0
+---
+
+1. Create your Web Analytics Site
+
+On your [Cloudflare dashboard](https://dash.cloudflare.com/), select `Web Analytics` from the menu on the left. Click `Add a site` under the `Quick Actions` menu on the right. Enter the domain where your website is hosted and click `next` to continue. A tracking snippet will be displayed in a textbox. Click the textbox to copy the tracking snippet.
+
+2. Add the JS Snippet below before the ending body tag on any of your `public/index.html` file.
+
+```html:_document.tsx {11,12}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- ... -->
+    <title>Devjet App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!-- ... -->
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "your-token"}'></script>
+  </body>
+</html>
+```

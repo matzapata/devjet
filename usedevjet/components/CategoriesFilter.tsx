@@ -18,7 +18,7 @@ function CategoriesFilter({
   categories.unshift("all");
 
   return (
-    <Flex>
+    <Flex flexWrap="wrap">
       {categories.map((c, i) => {
         const isActive = category === c;
 
@@ -29,6 +29,7 @@ function CategoriesFilter({
             onClick={() => setCategory(c)}
             cursor="pointer"
             mr="2"
+            mb="2"
             key={i}
             size="md"
           >
