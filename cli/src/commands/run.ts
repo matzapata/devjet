@@ -5,7 +5,7 @@ import { GeneratorToolbox } from '../types';
 function getProjectStack(toolbox: GluegunToolbox, root: string) {
   const { filesystem } = toolbox;
 
-  const isNextjs = filesystem.exists(filesystem.path(root, 'next.config'));
+  const isNextjs = filesystem.exists(filesystem.path(root, 'next.config.js'));
   const isReact = filesystem.exists(filesystem.path(root, 'src', 'index.tsx'));
 
   if (isNextjs) return 'nextjs';
@@ -128,7 +128,7 @@ module.exports = {
       if (!generatorPackage.success) {
         return generatorInstallSpinner.fail("Couldn't install the generator");
       }
-      generatorInstallSpinner.succeed('Generator installed successfully');
+      generatorInstallSpinner.info('Generator installed successfully');
     }
 
     const generatorPath = filesystem.path('.', 'node_modules', generatorName);
@@ -144,6 +144,6 @@ module.exports = {
       generatorRemoveSpinner.succeed('Generator removed successfully');
     }
 
-    return print.success(`${print.checkmark} All done!`);
+    print.success(`${print.checkmark} All done!`);
   },
 };

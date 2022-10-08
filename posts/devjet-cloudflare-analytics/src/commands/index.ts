@@ -21,7 +21,7 @@ module.exports = {
           if (toolbox.filesystem.exists("pages/_document.tsx")) {
             await toolbox.patching.patch("pages/_document.tsx", {
               insert: cloudflareAnalyticsScript,
-              after: "<Head>",
+              before: "</body>",
             });
           } else {
             await toolbox.template.generate({
