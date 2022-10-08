@@ -1,5 +1,5 @@
 {
-  "name": "devjet-supabase-auth-ui",
+  "name": "devjet-supabase-auth",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
