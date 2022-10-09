@@ -1,6 +1,6 @@
 {
-  "name": "devjet-react-protected-routes",
-  "version": "1.0.1",
+  "name": "devjet-protected-routes",
+  "version": "1.0.2",
   "main": "index.js",
   "license": "MIT",
   "files": [

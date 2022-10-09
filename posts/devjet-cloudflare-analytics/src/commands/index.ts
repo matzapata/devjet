@@ -9,31 +9,23 @@ data-cf-beacon='{"token": "your-cloudflare-site-token"}'
 module.exports = {
   description: "Example generator",
   run: async (toolbox: GluegunToolbox) => {
-    await toolbox.step(
-      "1. Create your cloudflare account and get your site token. Checkout usedevjet.com for more information",
-      {}
-    );
+    const { stack } = toolbox.context;
 
-    await toolbox.step(
-      "2. Add the cloudflare JS snippet to your website pages",
-      {
-        nextjs: async () => {
-          if (toolbox.filesystem.exists("pages/_document.tsx")) {
-            await toolbox.patching.patch("pages/_document.tsx", {
-              insert: cloudflareAnalyticsScript,
-              before: "</body>",
-            });
-          } else {
-            await toolbox.template.generate({
-              template: "_document.tsx.ejs",
-              target: "pages/_document.tsx",
-            });
-          }
-          toolbox.print.warning(
-            "Remember to update _document.tsx with your cloudflare token"
-          );
-        },
+    if (stack === "nextjs") {
+      if (toolbox.filesystem.exists("pages/_document.tsx")) {
+        await toolbox.patching.patch("pages/_document.tsx", {
+          insert: cloudflareAnalyticsScript,
+          before: "</body>",
+        });
+      } else {
+        await toolbox.template.generate({
+          template: "_document.tsx.ejs",
+          target: "pages/_document.tsx",
+        });
       }
-    );
+      toolbox.print.warning(
+        "Remember to update _document.tsx with your cloudflare token"
+      );
+    }
   },
 };

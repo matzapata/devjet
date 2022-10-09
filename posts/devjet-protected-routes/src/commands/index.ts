@@ -1,19 +1,13 @@
-import { GluegunToolbox } from "gluegun";
-
 module.exports = {
   description: "Create protected route component",
-  run: async (toolbox: GluegunToolbox) => {
-    await toolbox.step("1. Create ProtectedRoute component", {
-      react: () =>
-        toolbox.template.generate({
-          template: "ProtectedRoute.tsx",
-          target: "src/components/ProtectedRoute.tsx",
-        }),
-      pern: () =>
-        toolbox.template.generate({
-          template: "ProtectedRoute.tsx",
-          target: "client/src/components/ProtectedRoute.tsx",
-        }),
-    });
+  run: async (toolbox) => {
+    const { stack } = toolbox.context;
+
+    if (stack === "react") {
+      await toolbox.template.generate({
+        template: "ProtectedRoute.tsx",
+        target: "src/components/ProtectedRoute.tsx",
+      });
+    } else toolbox.print("Sorry, this generator is only available for react");
   },
 };

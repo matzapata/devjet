@@ -41,7 +41,16 @@ export interface GeneratorToolbox {
       props?: { [key: string]: any };
       directory?: string;
     }) => Promise<string>;
+    renderTree: ({
+      srcFolder,
+      props,
+    }: {
+      srcFolder?: string;
+      props?: { [key: string]: any };
+    }) => Promise<any>;
   };
+  extendPackage: (props: [key: string]) => Promise<any>;
+  injectImports: (filename: string, importString: string) => Promise<any>;
   step: (
     message: string,
     action?: {

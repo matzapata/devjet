@@ -1,6 +1,7 @@
 import { filesystem, GluegunToolbox } from 'gluegun';
 import findGitRoot from 'find-git-root';
 import { GeneratorToolbox } from '../types';
+import merge from 'deepmerge';
 
 function getProjectStack(toolbox: GluegunToolbox, root: string) {
   const { filesystem } = toolbox;
@@ -40,8 +41,8 @@ async function runGenerator(
     system: toolbox.system,
     packageManager: toolbox.packageManager,
     template: {
-      generate: ({ template, target, props, directory }) => {
-        return toolbox.template.generate({
+      generate: async ({ template, target, props, directory }) => {
+        const retVal = toolbox.template.generate({
           directory: directory
             ? directory
             : toolbox.filesystem.path(generatorFolder, 'build', 'templates'),
@@ -49,7 +50,48 @@ async function runGenerator(
           target,
           props,
         });
+        toolbox.print.muted(`Generated ${target}`);
+        return retVal;
       },
+      renderTree: async ({ srcFolder, props }) => {
+        const getNodeFiles = (node, files = []) => {
+          if (node.type === 'file') files.push(node.relativePath);
+          else {
+            for (const children of node.children) {
+              files.push(...getNodeFiles(children));
+            }
+          }
+          return files;
+        };
+        const srcDirectory = toolbox.filesystem.path(
+          generatorFolder,
+          'build',
+          'templates',
+          srcFolder
+        );
+        const tree = toolbox.filesystem.inspectTree(srcDirectory, {
+          relativePath: true,
+        });
+
+        const files = getNodeFiles(tree);
+        for (const file of files) {
+          await toolbox.template.generate({
+            directory: srcDirectory,
+            template: file.replace('./', ''),
+            target: file.replace('./', ''),
+            props,
+          });
+          toolbox.print.muted(`Generated ${file.replace('./', '')}`);
+        }
+      },
+    },
+    extendPackage: (props) => {
+      return toolbox.patching.update('package.json', (pkg) => {
+        return merge(pkg, props);
+      });
+    },
+    injectImports: (filename, importString) => {
+      return toolbox.patching.prepend(filename, importString);
     },
     step: async (message, action) => {
       try {
@@ -84,8 +126,13 @@ async function runGenerator(
   );
 
   const generator = await import(commandPath);
-  if (generator) await generator.run(generatorToolbox);
-  else toolbox.print.error('Auchh, it seams like that command does not exist');
+  if (generator) {
+    await generator.run(generatorToolbox);
+    toolbox.print.info(
+      'Please follow instruction at usedevjet.com on how to use this generator'
+    );
+  } else
+    toolbox.print.error('Auchh, it seams like that command does not exist');
 
   return null;
 }

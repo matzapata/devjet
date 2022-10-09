@@ -1,27 +1,28 @@
 ---
 title: "Improve UX of your Next.js App in 3 minutes with Page Loading Indicator"
-date: 10/8/2022
+date: 10/9/2022
 summary: "Add a progressbar to indicate the loading state on the navigation between pages"
 tags: ["UX"]
 category: "ux-ui"
 image: "/images/nextjs.png"
 pro: false
 comingsoon: false
-generators: 0
+generators: 1
 ---
 
+```bash:generators
+devjet run page-progressbar
+```
 
 1. Install dependencies
 
 ```bash
-yarn add nextjs-progressbar
-# OR with npm
 npm i nextjs-progressbar
 ```
 
 2. Update your _app.tsx file
 
-```tsx:_app.tsx {8,14}
+```tsx:pages/_app.tsx {8,14}
 import React from "react";
 import { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
