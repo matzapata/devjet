@@ -1,20 +1,18 @@
-import { build } from 'gluegun';
+import { program } from '@caporal/core';
+import newProject from './commands/new';
 
-/**
- * Create the cli and kick it off
- */
-async function run(argv) {
-  const cli = build()
-    .brand('devjet')
-    .src(__dirname)
-    .plugins('./node_modules', { matching: 'devjet-*', hidden: false })
-    .version() // provides default for version, v, --version, -v
-    .help()
-    .create();
-  const toolbox = await cli.run(argv);
+program
+  // First possible command: "order"
+  .command('new', 'Bootstrap your Devjet project')
+  .argument('<name>', 'ProjectName')
+  .option('--nextjs', 'Create a nextjs project', { required: false })
+  .option('--react', 'Create a react project', { required: false })
+  .action(({ args, options }) => {
+    return newProject(
+      args.name as string,
+      options.nextjs as boolean,
+      options.react as boolean
+    );
+  });
 
-  // send it back (for testing, mostly)
-  return toolbox;
-}
-
-module.exports = { run };
+program.run();
