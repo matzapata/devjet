@@ -1,6 +1,6 @@
-import { print } from '../../lib/print';
-import { filesystem } from '../../lib/filesystem';
-import { render } from '../../lib/template';
+import { print } from '../../lib/toolbox/print';
+import { filesystem } from '../../lib/toolbox/filesystem';
+import { render } from '../../lib/toolbox/template';
 
 async function newGenerator(name: string): Promise<unknown> {
   if (name.includes(' ')) {

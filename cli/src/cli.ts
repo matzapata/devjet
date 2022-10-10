@@ -1,5 +1,6 @@
 import { program } from '@caporal/core';
 import newGenerator from './commands/dev/new';
+import publishCommand from './commands/dev/publish';
 import newProject from './commands/new';
 
 program
@@ -18,6 +19,10 @@ program
   .argument('<name>', 'Generator package name')
   .action(({ args }) => {
     return newGenerator(args.name as string);
+  })
+  .command('dev-publish', `Publish generator post`)
+  .action(() => {
+    return publishCommand();
   });
 
 program.run();

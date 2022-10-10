@@ -1,10 +1,9 @@
 import gitly from 'gitly';
-import { print } from '../lib/print';
-import { filesystem } from '../lib/filesystem';
-import { prompt } from '../lib/prompt';
-import { system } from '../lib/system';
+import { print } from '../lib/toolbox/print';
+import { filesystem } from '../lib/toolbox/filesystem';
+import { prompt } from '../lib/toolbox/prompt';
+import { system } from '../lib/toolbox/system';
 
-// Bootstrap your Devjet project. Usage: devjet new projectname
 async function newProject(
   projectDirectory: string,
   isNextjs: boolean,
