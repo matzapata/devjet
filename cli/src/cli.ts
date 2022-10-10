@@ -1,8 +1,8 @@
 import { program } from '@caporal/core';
+import newGenerator from './commands/dev/new';
 import newProject from './commands/new';
 
 program
-  // First possible command: "order"
   .command('new', 'Bootstrap your Devjet project')
   .argument('<name>', 'ProjectName')
   .option('--nextjs', 'Create a nextjs project', { required: false })
@@ -13,6 +13,11 @@ program
       options.nextjs as boolean,
       options.react as boolean
     );
+  })
+  .command('dev-new', `Create a devjet generator with it's posts`)
+  .argument('<name>', 'Generator package name')
+  .action(({ args }) => {
+    return newGenerator(args.name as string);
   });
 
 program.run();
