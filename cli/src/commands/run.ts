@@ -51,7 +51,7 @@ async function runCommand(
     generatorRemoveSpinner.succeed('Generator removed successfully');
   }
 
-  print.success(`${print.checkmark} All done!`);
+  print.info(`${print.checkmark} All done!`);
 }
 
 export default runCommand;

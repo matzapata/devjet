@@ -5,9 +5,9 @@ module.exports = {
     const { stack } = toolbox.context;
 
     if (stack === "nextjs") {
-      await toolbox.template.renderTree({ srcFolder: "nextjs" });
+      await toolbox.template.generateTree({ templateDirectory: "nextjs" });
     } else if (stack === "react") {
-      await toolbox.template.renderTree({ srcFolder: "react" });
+      await toolbox.template.generateTree({ templateDirectory: "react" });
     }
   },
 };

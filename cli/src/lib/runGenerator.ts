@@ -1,5 +1,6 @@
 import { prompt } from './toolbox/prompt';
 import { print } from './toolbox/print';
+import { system } from './toolbox/system';
 import { filesystem } from './toolbox/filesystem';
 import { createGeneratorToolbox } from './toolbox/generatorToolbox';
 
@@ -17,7 +18,7 @@ async function runGenerator(
   );
   if (!isReady) return print.error('Take your time, no problem!');
   print.warning(
-    'Hey, if you changed the default folder structure, some things may break...\n'
+    'Hey, if you changed the default folder structure, some things may break...'
   );
 
   const generator = await import(
@@ -26,6 +27,8 @@ async function runGenerator(
   if (generator) {
     const generatorToolbox = createGeneratorToolbox(context, generatorFolder);
     await generator.run(generatorToolbox);
+    await system.run('npm run lint:fix');
+
     print.info(
       'Please follow instruction at usedevjet.com on how to use this generator'
     );

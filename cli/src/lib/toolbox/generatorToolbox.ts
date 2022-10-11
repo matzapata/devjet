@@ -3,6 +3,7 @@ import { patching } from './patching';
 import { strings } from './strings';
 import { system } from './system';
 import { extendPackage } from './extendPackage';
+import { packageManager } from './packageManager';
 import { generate, generateTree } from './template';
 import { print } from './print';
 import { prompt } from './prompt';
@@ -20,6 +21,7 @@ interface GeneratorToolbox {
   strings: any;
   system: any;
   extendPackage: any;
+  packageManager: any;
   injectImports: any;
   template: {
     generate: ({ template, target, props, templateDirectory }) => any;
@@ -37,13 +39,41 @@ function createGeneratorToolbox(
   return {
     context,
     filesystem,
-    patching,
     print,
     prompt,
     strings,
     system,
     extendPackage,
+    packageManager,
     injectImports,
+    patching: {
+      exists: patching.exists,
+      update: (filename, config) => {
+        return patching
+          .update(filename, config)
+          .then(() => print.muted(`Updated ${filename}`));
+      },
+      append: (filename, data) => {
+        return patching
+          .append(filename, data)
+          .then(() => print.muted(`Updated ${filename}`));
+      },
+      prepend: (filename, data) => {
+        return patching
+          .prepend(filename, data)
+          .then(() => print.muted(`Updated ${filename}`));
+      },
+      replace: (filename, src, dst) => {
+        return patching
+          .replace(filename, src, dst)
+          .then(() => print.muted(`Updated ${filename}`));
+      },
+      patch: (filename, opts) => {
+        return patching
+          .patch(filename, opts)
+          .then(() => print.muted(`Updated ${filename}`));
+      },
+    },
     template: {
       generate: ({ template, target, props, templateDirectory }) => {
         return generate({

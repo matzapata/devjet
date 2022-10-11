@@ -4,19 +4,15 @@ module.exports = {
     const { stack } = toolbox.context;
 
     if (stack === "react") {
-      toolbox.template.generate({
+      await toolbox.template.generate({
         template: "Newsletter.tsx",
         target: "src/components/Newsletter.tsx",
       });
     } else if (stack === "nextjs") {
-      toolbox.template.generate({
+      await toolbox.template.generate({
         template: "Newsletter.tsx",
         target: "components/Newsletter.tsx",
       });
     }
-
-    toolbox.print.warning(
-      "Remember to update the username in your form action url"
-    );
   },
 };

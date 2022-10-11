@@ -1,35 +1,37 @@
-import { GluegunToolbox } from "gluegun";
-
 module.exports = {
-  description:
-    "Create a new react-router-dom page. Usage: devjet run react new-page --name=PageName --path=page-path",
-  run: async (toolbox: GluegunToolbox) => {
-    const { name, path } = toolbox.parameters.options;
+  description: "Create a new react-router-dom page.",
+  run: async (toolbox) => {
+    if (toolbox.context.stack === "nextjs") {
+      return toolbox.print.error(
+        "This generator is not available for nextjs yet."
+      );
+    }
 
-    await toolbox.step("1. Create page component at src/pages", {
-      react: () =>
-        toolbox.template.generate({
-          template: "create-react-router-routes/Page.tsx.ejs",
-          target: `src/pages/${name}.tsx`,
-          props: { name },
-        }),
-    });
-
-    await toolbox.step("2. Register route at src/App.tsx ", {
-      react: async () => {
-        await toolbox.patching.patch("src/App.tsx", {
-          insert: `import ${name} from "pages/${name}";\n`,
-          before: `function App() {`,
-        });
-        await toolbox.patching.patch("src/App.tsx", {
-          insert: `<Route path="${path}" element={<${name} />} />`,
-          after: `<Routes>\n`,
-        });
+    const { name, path } = await toolbox.prompt.ask([
+      {
+        type: "input",
+        name: "name",
+        message: "Input component name",
       },
-    });
+      {
+        type: "input",
+        name: "path",
+        message: "Input route path",
+      },
+    ]);
 
-    toolbox.print.warning(
-      "Remember to format the documents changed and review the order of the routes declaration."
-    );
+    await toolbox.template.generate({
+      template: "create-react-router-routes/Page.tsx.ejs",
+      target: `src/pages/${name}.tsx`,
+      props: { name },
+    });
+    await toolbox.patching.patch("src/App.tsx", {
+      insert: `import ${name} from "pages/${name}";\n`,
+      before: `function App() {`,
+    });
+    await toolbox.patching.patch("src/App.tsx", {
+      insert: `<Route path="${path}" element={<${name} />} />`,
+      after: `<Routes>\n`,
+    });
   },
 };
