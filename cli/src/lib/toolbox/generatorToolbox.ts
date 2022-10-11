@@ -5,6 +5,7 @@ import { system } from './system';
 import { extendPackage } from './extendPackage';
 import { generate, generateTree } from './template';
 import { print } from './print';
+import { prompt } from './prompt';
 import { injectImports } from './injectImports';
 
 interface GeneratorToolbox {
