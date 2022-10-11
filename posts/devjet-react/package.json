@@ -1,6 +1,6 @@
 {
-  "name": "devjet-generator-template",
-  "version": "1.0.0",
+  "name": "devjet-react",
+  "version": "1.0.1",
   "main": "index.js",
   "license": "MIT",
   "files": [

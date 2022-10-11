@@ -3,11 +3,13 @@ module.exports = {
   run: async (toolbox) => {
     const { stack } = toolbox.context;
 
-    if (stack === "react") {
-      await toolbox.template.generate({
-        template: "ProtectedRoute.tsx",
-        target: "src/components/ProtectedRoute.tsx",
-      });
-    } else toolbox.print("Sorry, this generator is only available for react");
+    if (stack === "nextjs") {
+      return toolbox.print("Sorry, this generator is only available for react");
+    }
+
+    await toolbox.template.generate({
+      template: "ProtectedRoute.tsx",
+      target: "src/components/ProtectedRoute.tsx",
+    });
   },
 };

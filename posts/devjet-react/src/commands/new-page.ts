@@ -25,13 +25,22 @@ module.exports = {
       target: `src/pages/${name}.tsx`,
       props: { name },
     });
-    await toolbox.patching.patch("src/App.tsx", {
-      insert: `import ${name} from "pages/${name}";\n`,
-      before: `function App() {`,
-    });
-    await toolbox.patching.patch("src/App.tsx", {
-      insert: `<Route path="${path}" element={<${name} />} />`,
-      after: `<Routes>\n`,
-    });
+
+    await toolbox.patching.patch([
+      {
+        filename: "src/App.tsx",
+        opts: {
+          insert: `import ${name} from "pages/${name}";\n`,
+          before: `function App() {`,
+        },
+      },
+      {
+        filename: "src/App.tsx",
+        opts: {
+          insert: `<Route path="${path}" element={<${name} />} />`,
+          after: `<Routes>\n`,
+        },
+      },
+    ]);
   },
 };

@@ -1,6 +1,5 @@
 import { prompt } from './toolbox/prompt';
 import { print } from './toolbox/print';
-import { system } from './toolbox/system';
 import { filesystem } from './toolbox/filesystem';
 import { createGeneratorToolbox } from './toolbox/generatorToolbox';
 
@@ -27,11 +26,6 @@ async function runGenerator(
   if (generator) {
     const generatorToolbox = createGeneratorToolbox(context, generatorFolder);
     await generator.run(generatorToolbox);
-    await system.run('npm run lint:fix');
-
-    print.info(
-      'Please follow instruction at usedevjet.com on how to use this generator'
-    );
   } else print.error('Auchh, it seams like that command does not exist');
 }
 

@@ -48,30 +48,70 @@ function createGeneratorToolbox(
     injectImports,
     patching: {
       exists: patching.exists,
-      update: (filename, config) => {
-        return patching
-          .update(filename, config)
-          .then(() => print.muted(`Updated ${filename}`));
+      update: (operations: { filename: string; config: any }[]) => {
+        const update = async (filename, config) => {
+          try {
+            await patching.update(filename, config);
+            print.muted(`Updated ${filename}`);
+          } catch (e) {
+            print.error(`Error updating ${filename}`);
+          }
+        };
+        return Promise.all(
+          operations.map((op) => update(op.filename, op.config))
+        );
       },
-      append: (filename, data) => {
-        return patching
-          .append(filename, data)
-          .then(() => print.muted(`Updated ${filename}`));
+      append: (operations: { filename: string; data: any }[]) => {
+        const append = async (filename, data) => {
+          try {
+            await patching.append(filename, data);
+            print.muted(`Updated ${filename}`);
+          } catch (e) {
+            print.error(`Error updating ${filename}`);
+          }
+        };
+        return Promise.all(
+          operations.map((op) => append(op.filename, op.data))
+        );
       },
-      prepend: (filename, data) => {
-        return patching
-          .prepend(filename, data)
-          .then(() => print.muted(`Updated ${filename}`));
+      prepend: (operations: { filename: string; data: any }[]) => {
+        const prepend = async (filename, data) => {
+          try {
+            await patching.prepend(filename, data);
+            print.muted(`Updated ${filename}`);
+          } catch (e) {
+            print.error(`Error updating ${filename}`);
+          }
+        };
+        return Promise.all(
+          operations.map((op) => prepend(op.filename, op.data))
+        );
       },
-      replace: (filename, src, dst) => {
-        return patching
-          .replace(filename, src, dst)
-          .then(() => print.muted(`Updated ${filename}`));
+      replace: (
+        operations: { filename: string; src: string; dst: string }[]
+      ) => {
+        const replace = async (filename, src, dst) => {
+          try {
+            await patching.replace(filename, src, dst);
+            print.muted(`Updated ${filename}`);
+          } catch (e) {
+            print.error(`Error updating ${filename}`);
+          }
+        };
+        return Promise.all(
+          operations.map((op) => replace(op.filename, op.src, op.dst))
+        );
       },
-      patch: (filename, opts) => {
-        return patching
-          .patch(filename, opts)
-          .then(() => print.muted(`Updated ${filename}`));
+      patch: (operations: { filename: string; opts: any }[]) => {
+        const patch = async (filename, config) => {
+          try {
+            await patching.patch(filename, config);
+            print.muted(`Updated ${filename}`);
+          } catch (e) {
+            print.error(`Error updating ${filename}`);
+          }
+        };
+        return Promise.all(operations.map((op) => patch(op.filename, op.opts)));
       },
     },
     template: {

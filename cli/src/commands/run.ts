@@ -51,7 +51,11 @@ async function runCommand(
     generatorRemoveSpinner.succeed('Generator removed successfully');
   }
 
-  print.info(`${print.checkmark} All done!`);
+  print.info(
+    'Please follow instruction at usedevjet.com on how to use this generator'
+  );
+  print.info("Execute 'npm run lint:fix'");
+  process.exit();
 }
 
 export default runCommand;
