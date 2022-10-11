@@ -7,4 +7,4 @@ const extendPackage = (props: any) => {
   });
 };
 
-export default { extendPackage };
+export { extendPackage };

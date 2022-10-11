@@ -7,7 +7,7 @@ import ejs from 'ejs';
  *
  * @return The generated string.
  */
-async function render({
+async function generate({
   template,
   target,
   props,
@@ -56,4 +56,48 @@ async function render({
   return content;
 }
 
-export { render };
+function getTreeFiles(node, files = []) {
+  if (node.type === 'file') files.push(node.relativePath);
+  else {
+    for (const children of node.children) {
+      files.push(...getTreeFiles(children));
+    }
+  }
+  return files;
+}
+
+function getFolderFiles(srcDirectory: string): string[] {
+  const tree = filesystem.inspectTree(srcDirectory, {
+    relativePath: true,
+  });
+
+  return getTreeFiles(tree);
+}
+
+async function generateTree({
+  templateDirectory,
+  targetDirectory,
+  props,
+}: {
+  templateDirectory: string;
+  targetDirectory: string;
+  props?: { [key: string]: any };
+}): Promise<string[]> {
+  const templates = getFolderFiles(templateDirectory);
+
+  for (const file of templates) {
+    await generate({
+      templateDirectory,
+      template: file.replace('./', ''),
+      target: filesystem.path(
+        targetDirectory,
+        ...file.replace('./', '').split('/')
+      ),
+      props,
+    });
+  }
+
+  return templates;
+}
+
+export { generate, generateTree };

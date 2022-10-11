@@ -1,6 +1,6 @@
 import { print } from '../../lib/toolbox/print';
 import { filesystem } from '../../lib/toolbox/filesystem';
-import { render } from '../../lib/toolbox/template';
+import { generate } from '../../lib/toolbox/template';
 
 async function newGenerator(name: string): Promise<unknown> {
   if (name.includes(' ')) {
@@ -22,7 +22,7 @@ async function newGenerator(name: string): Promise<unknown> {
     { matching: '!package.json' }
   );
 
-  render({
+  generate({
     template: 'generator/package.json',
     target: `${projectDirectory}/package.json`,
     props: { name },
