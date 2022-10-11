@@ -12,31 +12,18 @@ generators: 0
 
 ## Tech stack
 
-Devjet by default makes use of three tech stacks, REACT with optional serverless functions by vercel, PERN and NEXTJS. The best way to maximize the value that you get from us is by using the `devjet` generators to boostrap your project. Otherwise you have to figure out how our receipes fit in your current work.
+When using devjet, you can choose to work with two boilerplates, React SPA with optional serverless functions by vercel and Nextjs. The best part is that if you use our boilerplates with `devjet new projectname --stack` you'll be in position of using our generators as well to improve your coding speed. Plus, all receipes will be in sync. 
 
-The PERN tech stack used is:
+The React tech stack used is:
 
 - React: Frontend framework.
 - Typescript: Type checking in Backend as well as frontend.
 - Eslint: Code formatting with prettier.
 - Serverless api funtions by vercel on `api` folder.
 - Prisma: ORM.
-- Supabase: For authentication and database hosting.
 - Chakra UI: UI components and styling made easy.
 - Redux with redux-toolkit: State management.
-- React router
-
-The PERN tech stack used is:
-
-- React: Frontend framework.
-- Typescript: Type checking in Backend as well as frontend.
-- Eslint: Code formatting with prettier.
-- Express: Backend framework.
-- Prisma: ORM.
-- Supabase: For authentication and database hosting.
-- Chakra UI: UI components and styling made easy.
-- Redux with redux-toolkit: State management.
-- React router
+- React router.
 
 The NEXTJS tech stack used is:
 
@@ -44,7 +31,6 @@ The NEXTJS tech stack used is:
 - Typescript: Type checking in Backend as well as frontend.
 - Eslint: Code formatting with prettier.
 - Prisma: ORM.
-- Supabase: For authentication and database hosting.
 - Chakra UI: UI components and styling made easy.
 - Redux with redux-toolkit: State management.
 
@@ -55,14 +41,13 @@ Some other services may be opted on receipes themselves to build different funct
 1. Create your project base and install dependencies
 
 ```
-npx devjet new my-react-project
-# Choose react when prompted about your stack
+npx devjet new my-react-app --react
 ```
 
 That's it. Now navigate into de project folder and install the dependencies. 
 
 ```
-cd my-react-project
+cd my-react-app
 npm install
 ```
 
@@ -82,53 +67,18 @@ psql
 
 4. Set your postgress url on the `.env` file
 
-## PERN quickstart
+## Nextjs quickstart
 
 1. Create your project base and install dependencies
 
 ```
-npx devjet new my-pern-project
-# Choose pern when prompted about your stack
+npx devjet new my-nextjs-app --nextjs
 ```
 
 That's it. Now navigate into de project folder and install the dependencies. 
 
 ```
-cd my-pern-project
-cd api && npm install
-cd ../client && npm install
-```
-
-2. Setup your enviroment variables
-
-Copy `api/.env.example` file to `api/.env` and `client/.env.example` to `client/.env` then fill with the necesary values.
-
-3. Create a postgress database (you'll need to have postgress already installed on your device)
-
-```
-psql
-> password: _ 
-
-# create database my-pern-project;
-# \q
-```
-
-4. Set your postgress url on the `api/.env` file
-
-
-## NEXTJS quickstart
-
-1. Create your project base and install dependencies
-
-```
-npx devjet new my-nextjs-project
-# Choose nextjs when prompted about your stack
-```
-
-That's it. Now navigate into de project folder and install the dependencies. 
-
-```
-cd my-netjs-project && npm install
+cd my-netjs-app && npm install
 ```
 
 2. Setup your enviroment variables
