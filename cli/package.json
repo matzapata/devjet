@@ -31,11 +31,14 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@caporal/core": "^2.0.2",
     "deepmerge": "^4.2.2",
     "ejs": "^3.1.8",
     "find-git-root": "^1.0.4",
     "gitly": "^2.2.2",
-    "gluegun": "latest"
+    "gluegun": "latest",
+    "insert-line": "^1.1.0",
+    "line-number": "^0.1.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

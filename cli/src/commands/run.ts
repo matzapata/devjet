@@ -14,12 +14,15 @@ async function runCommand(
   const commandName = generator ? generator : 'index';
 
   // Get project context
-  const root = getProjectRoot();
-  if (root === '') return print.error('Not a devjet project');
-  else print.info(`Found devjet project at ${root}`);
-  const stack = getProjectStack(root);
-  if (!stack) return print.error("Couldn't recognize tech stack");
-  else print.info(`Great! it seams you are working with ${stack}`);
+  let root = filesystem.cwd();
+  let stack = getProjectStack(root);
+  if (!stack) {
+    root = getProjectRoot();
+    if (root === '') return print.error("Could't find a devjet project");
+    else print.info(`Found devjet project at ${root}`);
+    stack = getProjectStack(root);
+    if (!stack) return print.error("Couldn't recognize tech stack");
+  } else print.info(`Great! it seams you are working with ${stack}`);
 
   // Install generatorName
   if (isDev) {

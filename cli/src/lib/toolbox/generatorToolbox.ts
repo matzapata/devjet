@@ -46,74 +46,7 @@ function createGeneratorToolbox(
     extendPackage,
     packageManager,
     injectImports,
-    patching: {
-      exists: patching.exists,
-      update: (operations: { filename: string; config: any }[]) => {
-        const update = async (filename, config) => {
-          try {
-            await patching.update(filename, config);
-            print.muted(`Updated ${filename}`);
-          } catch (e) {
-            print.error(`Error updating ${filename}`);
-          }
-        };
-        return Promise.all(
-          operations.map((op) => update(op.filename, op.config))
-        );
-      },
-      append: (operations: { filename: string; data: any }[]) => {
-        const append = async (filename, data) => {
-          try {
-            await patching.append(filename, data);
-            print.muted(`Updated ${filename}`);
-          } catch (e) {
-            print.error(`Error updating ${filename}`);
-          }
-        };
-        return Promise.all(
-          operations.map((op) => append(op.filename, op.data))
-        );
-      },
-      prepend: (operations: { filename: string; data: any }[]) => {
-        const prepend = async (filename, data) => {
-          try {
-            await patching.prepend(filename, data);
-            print.muted(`Updated ${filename}`);
-          } catch (e) {
-            print.error(`Error updating ${filename}`);
-          }
-        };
-        return Promise.all(
-          operations.map((op) => prepend(op.filename, op.data))
-        );
-      },
-      replace: (
-        operations: { filename: string; src: string; dst: string }[]
-      ) => {
-        const replace = async (filename, src, dst) => {
-          try {
-            await patching.replace(filename, src, dst);
-            print.muted(`Updated ${filename}`);
-          } catch (e) {
-            print.error(`Error updating ${filename}`);
-          }
-        };
-        return Promise.all(
-          operations.map((op) => replace(op.filename, op.src, op.dst))
-        );
-      },
-      patch: (operations: { filename: string; opts: any }[]) => {
-        const patch = async (filename, config) => {
-          try {
-            await patching.patch(filename, config);
-            print.muted(`Updated ${filename}`);
-          } catch (e) {
-            print.error(`Error updating ${filename}`);
-          }
-        };
-        return Promise.all(operations.map((op) => patch(op.filename, op.opts)));
-      },
-    },
+    patching,
     template: {
       generate: ({ template, target, props, templateDirectory }) => {
         return generate({
