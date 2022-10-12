@@ -26,8 +26,8 @@ async function generate({
   };
 
   const pathToTemplate = templateDirectory
-    ? `${templateDirectory}/${template}`
-    : `${filesystem.path(__dirname, '..', 'templates')}/${template}`;
+    ? filesystem.path(templateDirectory, template)
+    : filesystem.path(__dirname, '..', '..', 'templates', template);
 
   // bomb if the template doesn't exist
   if (!filesystem.isFile(pathToTemplate)) {

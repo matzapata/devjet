@@ -8,7 +8,7 @@ async function newGenerator(name: string): Promise<unknown> {
   }
 
   const projectDirectory = `devjet-${name}`;
-  print.info(`Creating a new devjet generator at ${projectDirectory}`);
+  print.info(`Creating a new devjet generator at ${projectDirectory}...`);
 
   if (filesystem.exists(projectDirectory)) {
     return print.error(
@@ -28,7 +28,7 @@ async function newGenerator(name: string): Promise<unknown> {
     props: { name },
   });
 
-  print.info('Create your examples at `examples` folder with npx devjet new');
+  print.info('Create your examples at `examples` folder with "npx devjet new"');
   print.info('Please edit accordingly the following files:');
   print.info('- src/commands/index.ts');
   print.info('- package.json');
