@@ -1,0 +1,520 @@
+---
+title: "Authenticate your users with supabase and react"
+date: 10/12/2022
+summary: "Create SignIn, SignUp and Recovery pages and connect them with supabase to authenticate your users."
+tags: ["auth"]
+category: "auth"
+image: "/images/supabase.jpg"
+pro: true
+generators: 0
+commingsoon: false
+---
+
+```bash:generators
+devjet run supabase-auth
+```
+
+1. Install dependencies
+
+```bash
+npm install @supabase/auth-helpers-nextjs@^0.2.7 @supabase/auth-helpers-react@^0.2.3 @supabase/supabase-js@^1.35.6
+```
+
+2. Setup the enviroment variables. Remember to update `.env.example` as well to keep a record of your enviroment varibles.
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+3. Create your supabase auth api endpoints.
+
+```tsx:pages/api/auth/[...supabase].tsx
+import { handleAuth } from "@supabase/auth-helpers-nextjs";
+
+export default handleAuth({ logout: { returnTo: "/" } });
+```
+
+4. Wrap your `pages/_app.js` component with the `UserProvider` component:
+
+```tsx:pages/_app.js {6,7,12,14}
+import React from "react";
+import "styles/globals.css";
+import type { AppProps } from "next/app";
+import { ChakraProvider } from "@chakra-ui/react";
+import chakraTheme from "utils/chakraTheme";
+import { UserProvider } from "@supabase/auth-helpers-react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <ChakraProvider theme={chakraTheme}>
+      <UserProvider supabaseClient={supabaseClient}>
+        <Component {...pageProps} />
+      </UserProvider>
+    </ChakraProvider>
+  );
+}
+
+export default MyApp;
+```
+
+You can now determine if a user is authenticated by checking that the user object returned by the `useUser()` hook is defined.
+
+
+5. Protect your pages
+
+```tsx
+import { withPageAuth } from '@supabase/auth-helpers-nextjs'
+
+export default function Profile({ user }) {
+  return <div>Hello {user.name}</div>
+}
+
+export const getServerSideProps = withPageAuth({ redirectTo: '/auth/signin' })
+```
+
+You can also access the user session data by calling getUser inside of this method, eg:
+
+```tsx
+import { withPageAuth, getUser } from '@supabase/auth-helpers-nextjs'
+
+export default function ProtectedPage({ user, customProp }) {
+  return <div>Protected content</div>
+}
+
+export const getServerSideProps = withPageAuth({
+  redirectTo: '/foo',
+  async getServerSideProps(ctx) {
+    // Access the user object
+    const { user, accessToken } = await getUser(ctx)
+    return { props: { email: user?.email } }
+  },
+})
+```
+
+6. Protecting api routes
+
+```tsx
+import {
+  withApiAuth,
+  supabaseServerClient,
+} from '@supabase/auth-helpers-nextjs'
+
+export default withApiAuth(async function ProtectedRoute(req, res) {
+  // ...
+})
+```
+
+7. Create authentication pages
+
+```tsx:pages/auth/signin.tsx
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import NextLink from "next/link";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
+
+export default function Login(): JSX.Element {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { colorMode } = useColorMode();
+  const { user } = useUser();
+  const router = useRouter();
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    const { error } = await supabaseClient.auth.signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setErrorMessage(error.message);
+    setLoading(false);
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Log in to your account
+        </Heading>
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <NextLink href="/auth/recover">
+            <Link
+              color="blue.600"
+              fontWeight="medium"
+              display="block"
+              textAlign="right"
+              mt="1"
+            >
+              Forgot your password?
+            </Link>
+          </NextLink>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </Stack>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            as="span"
+            fontWeight="500"
+            mr="1"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Don&apos;t have an account?
+          </Text>
+          <Link
+            as={NextLink}
+            href="/auth/signup"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign up
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:pages/auth/signup.tsx
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  useColorMode,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import NextLink from "next/link";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
+
+type State = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+export default function SignUp(): JSX.Element {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [displayEmailAlert, setDisplayEmailAlert] = useState(false);
+  const { colorMode } = useColorMode();
+  const [state, setState] = useState<State>({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    const { error } = await supabaseClient.auth.signUp({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setErrorMessage(error.message);
+    else setDisplayEmailAlert(true);
+    setState({
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    });
+    setLoading(false);
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Create your account
+        </Heading>
+        {displayEmailAlert && (
+          <Alert status="success" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            Account created successfully. Please check your email.
+          </Alert>
+        )}
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl mb="2">
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl
+            isInvalid={state.password !== state.passwordConfirmation}
+          >
+            <FormLabel>Confirm password</FormLabel>
+            <Input
+              type="password"
+              name="passwordConfirmation"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.passwordConfirmation}
+              onChange={onChange}
+            />
+            <FormErrorMessage>Passwords doesn&apos;t match</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Sign up
+          </Button>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            mr="1"
+            as="span"
+            fontWeight="500"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Already have an account?
+          </Text>
+          <Link
+            as={NextLink}
+            href="/auth/signin"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign in
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:pages/auth/recover.tsx
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Input,
+  Link,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { BrandFavicon } from "components/Brand";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
+import NextLink from "next/link";
+
+function Recover(): JSX.Element {
+  const { colorMode } = useColorMode();
+  const [email, setEmail] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    const { error } = await supabaseClient.auth.api.resetPasswordForEmail(
+      email
+    );
+    if (error) setErrorMessage(error.message);
+    setLoading(false);
+  };
+
+  return (
+    <Center minH="100vh" py="10">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="4" textAlign="center">
+          Forgot your password?
+        </Heading>
+        <Text
+          mb="10"
+          fontWeight="medium"
+          color={colorMode === "light" ? "gray.600" : "gray.500"}
+          textAlign="center"
+        >
+          No worries, we&apos;ll send you reset instructions.
+        </Text>
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl isInvalid={errorMessage !== ""} mb="5">
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <FormErrorMessage>{errorMessage}</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Reset password
+          </Button>
+        </Box>
+        <Box textAlign="center" mt="4">
+          <NextLink href="/auth/signin">
+            <Link
+              color={colorMode === "light" ? "gray.600" : "gray.500"}
+              fontWeight="500"
+              justifyItems="center"
+            >
+              <ArrowBackIcon mr="1" />
+              Back to login
+            </Link>
+          </NextLink>
+        </Box>
+      </Container>
+    </Center>
+  );
+}
+
+export default Recover;
+```

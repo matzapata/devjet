@@ -1,49 +1,40 @@
-import { GluegunToolbox } from 'gluegun';
+import { print } from '../../lib/toolbox/print';
+import { filesystem } from '../../lib/toolbox/filesystem';
+import { template } from '../../lib/toolbox/template';
 
-module.exports = {
-  name: 'new',
-  hidden: true,
-  description: `Create a new devjet generator asociated to a post`,
-  run: async (toolbox: GluegunToolbox) => {
-    const { filesystem, print, prompt, template } = toolbox;
+async function newGenerator(name: string): Promise<unknown> {
+  if (name.includes(' ')) {
+    return print.error('Generators names cant contains spaces');
+  }
 
-    const { generatorName } = await prompt.ask({
-      name: 'generatorName',
-      type: 'input',
-      message: 'What is the generator name?',
-    });
+  const projectDirectory = `devjet-${name}`;
+  print.info(`Creating a new devjet generator at ${projectDirectory}...`);
 
-    if (generatorName.includes(' ')) {
-      return print.error('Generators names cant contains spaces');
-    }
-
-    const projectDirectory = `devjet-${generatorName}`;
-    print.info(`Creating a new devjet generator at ${projectDirectory}`);
-
-    if (filesystem.exists(projectDirectory)) {
-      return print.error(
-        `Couldn't create generator at ${projectDirectory}. Folder already exists.`
-      );
-    }
-
-    filesystem.copy(
-      filesystem.path(__dirname, '..', '..', 'templates', 'generator'),
-      projectDirectory,
-      { matching: '!package.json' }
+  if (filesystem.exists(projectDirectory)) {
+    return print.error(
+      `Couldn't create generator at ${projectDirectory}. Folder already exists.`
     );
+  }
 
-    template.generate({
-      template: 'generator/package.json',
-      target: `${projectDirectory}/package.json`,
-      props: { generatorName },
-    });
+  filesystem.copy(
+    filesystem.path(__dirname, '..', '..', 'templates', 'generator'),
+    projectDirectory,
+    { matching: '!package.json' }
+  );
 
-    print.info('Create your examples at `examples` folder with npx devjet new');
-    print.info('Please edit accordingly the following files:');
-    print.info('- src/commands/index.ts');
-    print.info('- package.json');
-    print.info(
-      '- Create your posts in the posts folder, remember that the file is copied directly so include the slug in the name of it. Use `react-`, `nextjs-` or none to target both stacks.'
-    );
-  },
-};
+  template.generate({
+    template: 'generator/package.json',
+    target: `${projectDirectory}/package.json`,
+    props: { name },
+  });
+
+  print.info('Create your examples at `examples` folder with "npx devjet new"');
+  print.info('Please edit accordingly the following files:');
+  print.info('- src/commands/index.ts');
+  print.info('- package.json');
+  print.info(
+    '- Create your posts in the posts folder, remember that the file is copied directly so include the slug in the name of it. Use `react-`, `nextjs-` or none to target both stacks.'
+  );
+}
+
+export default newGenerator;

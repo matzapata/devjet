@@ -1,19 +1,19 @@
-import { GluegunToolbox } from "gluegun";
+import { GeneratorToolbox } from "devjet";
 
 module.exports = {
   description: "Create protected route component",
-  run: async (toolbox: GluegunToolbox) => {
-    await toolbox.step("1. Create ProtectedRoute component", {
-      react: () =>
-        toolbox.template.generate({
-          template: "ProtectedRoute.tsx",
-          target: "src/components/ProtectedRoute.tsx",
-        }),
-      pern: () =>
-        toolbox.template.generate({
-          template: "ProtectedRoute.tsx",
-          target: "client/src/components/ProtectedRoute.tsx",
-        }),
+  run: async (toolbox: GeneratorToolbox) => {
+    const { stack } = toolbox.context;
+
+    if (stack === "nextjs") {
+      return toolbox.print.error(
+        "Sorry, this generator is only available for react"
+      );
+    }
+
+    await toolbox.template.generate({
+      template: "ProtectedRoute.tsx",
+      target: "src/components/ProtectedRoute.tsx",
     });
   },
 };

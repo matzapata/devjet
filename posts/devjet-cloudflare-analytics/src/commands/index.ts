@@ -1,39 +1,28 @@
-import { GluegunToolbox } from "gluegun";
-
-const cloudflareAnalyticsScript = `<script
-defer
-src="https://static.cloudflareinsights.com/beacon.min.js"
-data-cf-beacon='{"token": "your-cloudflare-site-token"}'
-></script>`;
+import { GeneratorToolbox } from "devjet";
 
 module.exports = {
-  description: "Example generator",
-  run: async (toolbox: GluegunToolbox) => {
-    await toolbox.step(
-      "1. Create your cloudflare account and get your site token. Checkout usedevjet.com for more information",
-      {}
-    );
+  description: "Add cloudflare analytics to your project",
+  run: async (toolbox: GeneratorToolbox) => {
+    const { stack } = toolbox.context;
 
-    await toolbox.step(
-      "2. Add the cloudflare JS snippet to your website pages",
-      {
-        nextjs: async () => {
-          if (toolbox.filesystem.exists("pages/_document.tsx")) {
-            await toolbox.patching.patch("pages/_document.tsx", {
-              insert: cloudflareAnalyticsScript,
-              before: "</body>",
-            });
-          } else {
-            await toolbox.template.generate({
-              template: "_document.tsx.ejs",
-              target: "pages/_document.tsx",
-            });
-          }
-          toolbox.print.warning(
-            "Remember to update _document.tsx with your cloudflare token"
-          );
-        },
+    if (stack === "nextjs") {
+      if (toolbox.filesystem.exists("pages/_document.tsx")) {
+        await toolbox.patching.insertLine(
+          "pages/_document.tsx",
+          `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "your-cloudflare-site-token"}'></script>`,
+          "</body>",
+          { before: true }
+        );
+      } else {
+        await toolbox.template.generate({
+          template: "_document.tsx",
+          target: "pages/_document.tsx",
+        });
       }
-    );
+    } else {
+      toolbox.print.error(
+        "Sorry, this generator is only available for nextjs projects"
+      );
+    }
   },
 };

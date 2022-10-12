@@ -1,58 +1,47 @@
-import {
-  GluegunFilesystem,
-  GluegunHttp,
-  GluegunMeta,
-  GluegunPackageManager,
-  GluegunParameters,
-  GluegunPatching,
-  GluegunPrint,
-  GluegunPrompt,
-  GluegunSemver,
-  GluegunStrings,
-  GluegunSystem,
-} from 'gluegun';
+import { Filesystem } from './lib/toolbox/filesystem';
+import { Patching } from './lib/toolbox/patching';
+import { Strings } from './lib/toolbox/strings';
+import { System } from './lib/toolbox/system';
+import { ExtendPackage } from './lib/toolbox/extendPackage';
+import { PackageManager } from './lib/toolbox/packageManager';
+import { Print } from './lib/toolbox/print';
+import { Prompt } from './lib/toolbox/prompt';
+import { InjectImports } from './lib/toolbox/injectImports';
 
 export interface GeneratorToolbox {
   context: {
     stack: string;
     root: string;
   };
-  parameters: GluegunParameters;
-  filesystem: GluegunFilesystem;
-  http: GluegunHttp;
-  meta: GluegunMeta;
-  patching: GluegunPatching;
-  print: GluegunPrint;
-  prompt: GluegunPrompt;
-  semver: GluegunSemver;
-  strings: GluegunStrings;
-  system: GluegunSystem;
-  packageManager: GluegunPackageManager;
+  filesystem: Filesystem;
+  patching: Patching;
+  print: Print;
+  prompt: Prompt;
+  strings: Strings;
+  system: System;
+  extendPackage: ExtendPackage;
+  packageManager: PackageManager;
+  injectImports: InjectImports;
   template: {
     generate: ({
       template,
       target,
       props,
-      directory,
+      templateDirectory,
     }: {
       template: string;
       target: string;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       props?: { [key: string]: any };
-      directory?: string;
-    }) => Promise<string>;
+      templateDirectory?: string;
+    }) => any;
+    generateTree: ({
+      templateDirectory,
+      targetDirectory,
+      props,
+    }: {
+      templateDirectory: string;
+      targetDirectory?: string;
+      props?: { [key: string]: any };
+    }) => any;
   };
-  step: (
-    message: string,
-    action?: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      all?: () => Promise<any>;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      react?: () => Promise<any>;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      pern?: () => Promise<any>;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      nextjs?: () => Promise<any>;
-    }
-  ) => Promise<void>;
 }

@@ -1,0 +1,610 @@
+---
+title: "Authenticate your users with supabase and react"
+date: 10/12/2022
+summary: "Create SignIn, SignUp and Recovery pages and connect them with supabase to authenticate your users."
+tags: ["auth"]
+category: "auth"
+image: "/images/supabase.jpg"
+pro: true
+generators: 1
+commingsoon: false
+---
+
+```bash:generators
+devjet run supabase-auth
+```
+
+1. Install dependencies
+
+```bash
+yarn add @supabase/supabase-js@^1.35.6
+```
+
+2. Create your supabase application and copy your credentials to `.env`. Remember to update `.env.example` with your new enviroment variable title.
+
+```bash:.env
+# ...
+REACT_APP_SUPABASE_URL= # YOUR_SUPABASE_URL
+REACT_APP_SUPABASE_API_KEY= # YOUR_SUPABASE_API_KEY
+```
+
+```bash:.env.example
+# ...
+REACT_APP_SUPABASE_URL=
+REACT_APP_SUPABASE_API_KEY=
+```
+
+3. Create supabase client in `client/src/utils/supabase.ts`
+
+```ts:src/utils/supabase.ts
+import { createClient } from "@supabase/supabase-js";
+
+export const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL as string,
+  process.env.REACT_APP_SUPABASE_API_KEY as string
+);
+```
+
+4. Create an authentication context hook
+
+```ts:src/hooks/authHook.tsx
+import React, { useContext, useState, useEffect, createContext } from "react";
+import { supabase } from "utils/supabase";
+import { User, UserCredentials, UserAttributes } from "@supabase/supabase-js";
+
+export interface SupabaseSignInOptions {
+  redirectTo?: string | undefined;
+  data?: object | undefined;
+  captchaToken?: string | undefined;
+}
+
+// create a context for authentication
+const AuthContext = createContext<any>({});
+
+export const AuthProvider = ({ children }: { children: JSX.Element }) => {
+  const [user, setUser] = useState<User | null>();
+  const [loading, setLoading] = useState(true);
+  const [event, setEvent] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    // get session data if there is an active session
+    const session = supabase.auth.session();
+
+    setUser(session?.user ?? null);
+    setLoading(false);
+
+    // listen for changes to auth
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+        setEvent(event);
+
+        if (event == "PASSWORD_RECOVERY") {
+          const newPassword = prompt(
+            "What would you like your new password to be?"
+          );
+          if (newPassword === null) {
+            alert("There was an error updating your password.");
+          } else {
+            const { data, error } = await supabase.auth.update({
+              password: newPassword,
+            });
+
+            if (data) alert("Password updated successfully!");
+            if (error) alert("There was an error updating your password.");
+          }
+        }
+      }
+    );
+
+    // cleanup the useEffect hook
+    return () => {
+      listener?.unsubscribe();
+    };
+  }, []);
+
+  // create signUp, signIn, signOut functions
+  const value = {
+    signUp: async (
+      userCredentials: UserCredentials,
+      options: SupabaseSignInOptions | undefined
+    ) => {
+      const { error } = await supabase.auth.signUp(userCredentials, options);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    signIn: async (
+      userCredentials: UserCredentials,
+      options: SupabaseSignInOptions | undefined
+    ) => {
+      const { error } = await supabase.auth.signIn(userCredentials, options);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    signInWithEmail: async (
+      email: string,
+      options: SupabaseSignInOptions | undefined
+    ) => {
+      const { error } = await supabase.auth.signIn({ email }, options);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    resetPasswordForEmail: async (email: string) => {
+      const { error } = await supabase.auth.api.resetPasswordForEmail(email);
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    updatePassword: async (password: string) => {
+      const { error } = await supabase.auth.update({ password });
+      if (error) setErrorMessage(error.message);
+      return error;
+    },
+    updateUser: (attributes: UserAttributes) =>
+      supabase.auth.update(attributes),
+    signOut: () => supabase.auth.signOut(),
+    errorMessage,
+    loading,
+    event,
+    user,
+  };
+
+  // use a provider to pass down the value
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+// export the useAuth hook
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+```
+
+5. Add your context provider to `src/index.ts`
+
+```ts:src/index.ts {11,21,25}
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "styles/index.css";
+import App from "App";
+import reportWebVitals from "reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { store } from "redux/store";
+import { Provider } from "react-redux";
+import { ChakraProvider } from "@chakra-ui/react";
+import chakraTheme from "utils/chakraTheme";
+import { AuthProvider } from "hooks/authHook";
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>
+        <AuthProvider>
+          <ChakraProvider theme={chakraTheme}>
+            <App />
+          </ChakraProvider>
+        </AuthProvider>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+6. Create authentication UI and integrate it with the supabase auth hook recently created
+
+```tsx:src/pages/auth/Signup.tsx {20,21,31,32,46-49,52-56}
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  useColorMode,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "hooks/authHook";
+
+type State = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
+export default function SignUp() {
+  const { colorMode } = useColorMode();
+  const navigate = useNavigate();
+  const { signUp, user, loading, errorMessage } = useAuth();
+  const [state, setState] = useState<State>({
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const error = await signUp({
+      email: state.email,
+      password: state.password,
+    });
+    if (!error) navigate("/auth/signin");
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Create your account
+        </Heading>
+
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl mb="2">
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl
+            isInvalid={state.password !== state.passwordConfirmation}
+          >
+            <FormLabel>Confirm password</FormLabel>
+            <Input
+              type="password"
+              name="passwordConfirmation"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.passwordConfirmation}
+              onChange={onChange}
+            />
+            <FormErrorMessage>Passwords doesn&apos;t match</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Sign up
+          </Button>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            mr="1"
+            as="span"
+            fontWeight="500"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Already have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign in
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:src/pages/auth/Signin.tsx {20,21,25,26,40-43,46-50}
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link,
+  Center,
+  Box,
+  Text,
+  Flex,
+  Alert,
+  AlertIcon,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "hooks/authHook";
+
+export default function Login() {
+  const { colorMode } = useColorMode();
+  const navigate = useNavigate();
+  const { signIn, user, loading, errorMessage } = useAuth();
+
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const error = await signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (!error) navigate("/");
+  };
+
+  return (
+    <Center minH="100vh" py="14">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="20" textAlign="center">
+          Log in to your account
+        </Heading>
+        {errorMessage !== "" && (
+          <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
+            <AlertIcon h="4" />
+            {errorMessage}
+          </Alert>
+        )}
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl mb="2">
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.email}
+              onChange={onChange}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              name="password"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              value={state.password}
+              onChange={onChange}
+            />
+          </FormControl>
+          <Link
+            as={ReactLink}
+            to="/auth/recover"
+            color="blue.600"
+            fontWeight="medium"
+            display="block"
+            textAlign="right"
+            mt="1"
+          >
+            Forgot your password?
+          </Link>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </Stack>
+        </Box>
+        <Flex justifyContent="center" mt="4">
+          <Text
+            as="span"
+            fontWeight="500"
+            mr="1"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+          >
+            Don&apos;t have an account?
+          </Text>
+          <Link
+            as={ReactLink}
+            to="/auth/signup"
+            color="blue.600"
+            fontWeight="500"
+          >
+            Sign up
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
+}
+```
+
+```tsx:src/pages/auth/Recover.tsx {1,17,18,23-28,32-36}
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Center,
+  Container,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Input,
+  Link,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { BrandFavicon } from "components/Brand";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useAuth } from "hooks/authHook";
+
+function Recover() {
+  const { colorMode } = useColorMode();
+  const [email, setEmail] = useState("");
+  const { user, loading, resetPasswordForEmail, errorMessage } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate("/");
+  }, [user, navigate]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const error = await resetPasswordForEmail(email);
+    if (!error) {
+      alert("Recovery email sent successfully");
+      navigate("/auth/signin");
+    }
+  };
+
+  return (
+    <Center minH="100vh" py="10">
+      <Container maxW="md">
+        <BrandFavicon mx="auto" mb="4" />
+        <Heading mb="4" textAlign="center">
+          Forgot your password?
+        </Heading>
+        <Text
+          mb="10"
+          fontWeight="medium"
+          color={colorMode === "light" ? "gray.600" : "gray.500"}
+          textAlign="center"
+        >
+          No worries, we&apos;ll send you reset instructions.
+        </Text>
+        <Box as="form" w="full" onSubmit={onSubmit}>
+          <FormControl isInvalid={errorMessage !== ""} mb="5">
+            <Input
+              type="email"
+              name="email"
+              bg={colorMode === "light" ? "white" : "gray.800"}
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e: any) => setEmail(e.target.value)}
+            />
+            <FormErrorMessage>{errorMessage}</FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={loading}
+            type="submit"
+            mt="8"
+            size="md"
+            colorScheme="blue"
+            w="full"
+          >
+            Reset password
+          </Button>
+        </Box>
+        <Box textAlign="center" mt="4">
+          <Link
+            as={ReactLink}
+            to="/auth/signin"
+            color={colorMode === "light" ? "gray.600" : "gray.500"}
+            fontWeight="500"
+            justifyItems="center"
+          >
+            <ArrowBackIcon mr="1" />
+            Back to login
+          </Link>
+        </Box>
+      </Container>
+    </Center>
+  );
+}
+
+export default Recover;
+```
+
+7. Register the authentication routes
+
+```tsx:src/App.tsx {6,7,8,14,15,16}
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+
+import Home from "pages/Home";
+import NotFound from "pages/NotFound";
+import SignUp from "pages/auth/Signup";
+import SignIn from "pages/auth/Signin";
+import Recover from "pages/auth/Recover";
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/auth/signup" element={<SignUp />} />
+      <Route path="/auth/signin" element={<SignIn />} />
+      <Route path="/auth/recover" element={<Recover />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
+export default App;
+```
