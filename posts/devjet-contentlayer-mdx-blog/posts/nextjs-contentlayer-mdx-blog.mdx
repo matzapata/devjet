@@ -1,7 +1,7 @@
 ---
 title: "Create a blog with nextjs, mdx and contentlayer"
 date: 
-summary: "Manage your content with contentlayer and mdx. Create listing and contentpage."
+summary: "Manage your content with contentlayer and mdx. Create minimalistics listing and post pages."
 tags: []
 category: "marketing"
 image: "/images/nextjs.png"
@@ -11,92 +11,278 @@ generators: 0
 ---
 
 ```sh:generators
-npx devjet run newsletter-with-revue 
+npx devjet run 
 ```
 
-1. Create your account at [revue](https://www.getrevue.co/)
+1. Install dependencies
 
-2. Create the newsletter component. Make sure to update the form action link with your revue username `https://www.getrevue.co/profile/{{revue_username}}/add_subscriber`.
+```
+npm install contentlayer@^0.2.4 next-contentlayer@^0.2.4 @nikolovlazar/chakra-ui-prose@1.2.1
+```
 
-```tsx:Newsletter.tsx {31}
+2. Update next.config.js
+
+```js:next.config.js {2,3,10}
+/** @type {import('next').NextConfig} */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { withContentlayer } = require("next-contentlayer");
+
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+};
+
+module.exports = withContentlayer(nextConfig);
+```
+
+3. Include the contentlayer folder inside the types of our project
+
+```json:tsconfig.json {21-24,30}
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "contentlayer/generated": ["./.contentlayer/generated"]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    ".contentlayer/generated",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
+```
+
+3. Define contentlayer configuration
+
+```ts:contentlayer.config.ts
+import { defineDocumentType, makeSource } from "contentlayer/source-files";
+
+export const Post = defineDocumentType(() => ({
+  name: "Post",
+  filePathPattern: `**/*.mdx`, // Type of file to parse (every mdx in all subfolders)
+  contentType: 'mdx',
+  fields: {
+    title: {
+      type: "string",
+      description: "The title of the post",
+      required: true,
+    },
+    date: {
+      type: "date",
+      description: "The date of the post",
+      required: true,
+    },
+  },
+  computedFields: {
+    url: {
+      type: "string",
+      resolve: (post) => `/blog/posts/${post._raw.flattenedPath}`,
+    },
+  },
+}));
+
+export default makeSource({
+  contentDirPath: "data", // Source directory where the content is located
+  documentTypes: [Post],
+});
+```
+
+4. Create example content
+
+```mdx:data/example.mdx
+---
+title: Lorem Ipsum
+date: 2021-12-24
+---
+
+Ullamco et nostrud magna commodo nostrud occaecat quis pariatur id ipsum. Ipsum
+consequat enim id excepteur consequat nostrud esse esse fugiat dolore.
+Reprehenderit occaecat exercitation non cupidatat in eiusmod laborum ex eu
+fugiat aute culpa pariatur. Irure elit proident consequat veniam minim ipsum ex
+pariatur.
+
+# Heading
+
+Mollit nisi cillum exercitation minim officia velit laborum non Lorem
+adipisicing dolore. Labore commodo consectetur commodo velit adipisicing irure
+dolore dolor reprehenderit aliquip. Reprehenderit cillum mollit eiusmod
+excepteur elit ipsum aute pariatur in. Cupidatat ex culpa velit culpa ad non
+labore exercitation irure laborum.
+
+\```
+Code example
+\```
+```
+
+5. List all posts
+
+```tsx:blog/index.tsx {1,13}
 import React from "react";
 import {
-  Box,
-  Button,
+  Container,
   Heading,
-  HStack,
-  Input,
   Link,
-  Text,
-  useColorMode,
+  ListItem,
+  UnorderedList,
 } from "@chakra-ui/react";
+import { allPosts, Post } from "contentlayer/generated";
+import type { GetStaticPropsResult } from "next";
+import Head from "next/head";
+import NextLink from "next/link";
 
-function Newsletter() {
-  const { colorMode } = useColorMode();
+export async function getStaticProps(): Promise<
+  GetStaticPropsResult<{ posts: Post[] }>
+> {
+  return { props: { posts: allPosts } };
+}
+
+function Blog({ posts }: { posts: Post[] }) {
   return (
-    <Box
-      p="6"
-      bg={colorMode === "light" ? "blue.50" : "gray.800"}
-      border="1px"
-      borderColor={colorMode === "light" ? "blue.200" : "gray.400"}
-      borderRadius={4}
-    >
-      <Heading size="md" mb="1">
-        Subscribe to the newsletter
-      </Heading>
-      <Text mb="4">
-        Get notified whenever a new recipe or generator is published
-      </Text>
-      <Box
-        as="form"
-        action="https://www.getrevue.co/profile/usedevjet/add_subscriber"
-        method="post"
-        id="revue-form"
-        name="revue-form"
-        target="_blank"
-      >
-        <HStack>
-          <Input
-            bg={colorMode === "light" ? "white" : "gray.900"}
-            className="revue-form-field"
-            placeholder="Your email address..."
-            type="email"
-            name="member[email]"
-            id="member_email"
-          />
-          <Button
-            colorScheme="blue"
-            type="submit"
-            value="Subscribe"
-            name="member[subscribe]"
-            id="member_submit"
-          >
-            Suscribe
-          </Button>
-        </HStack>
+    <>
+      <Head>
+        <title>NextJs Content Layer Blog Template</title>
+      </Head>
 
-        <Text mt="2" fontSize="sm" color="gray.600">
-          By subscribing, you agree with Revues{" "}
-          <Link
-            target="_blank"
-            href="https://www.getrevue.co/terms"
-            rel="noreferrer"
-          >
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link
-            target="_blank"
-            href="https://www.getrevue.co/privacy"
-            rel="noreferrer"
-          >
-            Privacy Policy
-          </Link>
-        </Text>
-      </Box>
-    </Box>
+      <Container maxW="container.md" mt="16">
+        <Heading mb="8">My Blog Posts</Heading>
+        <UnorderedList>
+          {posts.map((post, idx) => (
+            <ListItem key={idx}>
+              <Link as={NextLink} href={post.url}>
+                {post.title}
+              </Link>
+            </ListItem>
+          ))}
+        </UnorderedList>
+      </Container>
+    </>
   );
 }
 
-export default Newsletter;
+export default Blog;
+```
+
+6. Render each post and setup chakraui-prose
+
+```ts:utils/chakraTheme.ts {2,16}
+import { extendTheme } from "@chakra-ui/react";
+import { withProse } from "@nikolovlazar/chakra-ui-prose";
+
+const colors = {
+  brand: {
+    900: "#1a365d",
+    800: "#153e75",
+    700: "#2a69ac",
+  },
+};
+
+const theme = extendTheme(
+  {
+    colors,
+  },
+  withProse()
+);
+
+export default theme;
+```
+
+```tsx:pages/blog/posts/[slug].tsx 
+import React from "react";
+import { Box, Container, Heading, Link } from "@chakra-ui/react";
+import { allPosts, Post } from "contentlayer/generated";
+import {
+  GetStaticPathsResult,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+} from "next";
+import { useMDXComponent } from "next-contentlayer/hooks";
+import Head from "next/head";
+import NextLink from "next/link";
+import { Prose } from "@nikolovlazar/chakra-ui-prose";
+
+// Generate static paths for all posts
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
+  const paths = allPosts.map((post) => post.url);
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+// Find post with matching slug and return it as props to the page
+export async function getStaticProps({
+  params,
+}: GetStaticPropsContext): Promise<GetStaticPropsResult<{ post: Post }>> {
+  const post = allPosts.find(
+    (post) => post._raw.flattenedPath === params?.slug
+  );
+
+  // Redirect to homepage if post not found
+  return typeof post === "undefined"
+    ? {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      }
+    : {
+        props: {
+          post,
+        },
+      };
+}
+
+function PostLayout({ post }: { post: Post }) {
+  const MDXContent = useMDXComponent(post.body.code);
+  return (
+    <>
+      <Head>
+        <title>{post.title}</title>
+      </Head>
+
+      <Container maxW="container.md">
+        <Box mb="4" mt="8">
+          <Link as={NextLink} href="/blog">
+            Back to blogs
+          </Link>
+        </Box>
+
+        <Box mb="8">
+          <Heading>{post.title}</Heading>
+          <time dateTime={post.date}>{post.date}</time>
+        </Box>
+
+        <Prose>
+          <MDXContent />
+        </Prose>
+      </Container>
+    </>
+  );
+}
+
+export default PostLayout;
+
 ```
