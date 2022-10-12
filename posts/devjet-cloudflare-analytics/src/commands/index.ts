@@ -15,7 +15,7 @@ module.exports = {
         );
       } else {
         await toolbox.template.generate({
-          template: "_document.tsx.ejs",
+          template: "_document.tsx",
           target: "pages/_document.tsx",
         });
       }

@@ -57,9 +57,11 @@ async function runCommand(
   }
 
   print.info('Installing new dependencies and linting...');
-  execSync('npm install && npm run lint:fix"', {
-    stdio: 'inherit',
-  });
+  try {
+    execSync('npm install && npm run lint:fix"', {
+      stdio: 'inherit',
+    });
+  } catch (e) {}
 
   print.info(
     'Please follow instruction at usedevjet.com on how to use the code generated'
