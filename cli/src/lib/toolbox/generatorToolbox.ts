@@ -4,30 +4,11 @@ import { strings } from './strings';
 import { system } from './system';
 import { extendPackage } from './extendPackage';
 import { packageManager } from './packageManager';
-import { generate, generateTree } from './template';
+import { template as templateModule } from './template';
 import { print } from './print';
 import { prompt } from './prompt';
 import { injectImports } from './injectImports';
-
-interface GeneratorToolbox {
-  context: {
-    stack: string;
-    root: string;
-  };
-  filesystem: any;
-  patching: any;
-  print: any;
-  prompt: any;
-  strings: any;
-  system: any;
-  extendPackage: any;
-  packageManager: any;
-  injectImports: any;
-  template: {
-    generate: ({ template, target, props, templateDirectory }) => any;
-    generateTree: ({ templateDirectory, targetDirectory, props }) => any;
-  };
-}
+import { GeneratorToolbox } from '../../types';
 
 function createGeneratorToolbox(
   context: {
@@ -49,31 +30,37 @@ function createGeneratorToolbox(
     patching,
     template: {
       generate: ({ template, target, props, templateDirectory }) => {
-        return generate({
-          templateDirectory: templateDirectory
-            ? templateDirectory
-            : filesystem.path(generatorFolder, 'build', 'templates'),
-          template,
-          target,
-          props,
-        }).then(() => print.muted(`Generated ${target}`));
+        return templateModule
+          .generate({
+            templateDirectory: templateDirectory
+              ? templateDirectory
+              : filesystem.path(generatorFolder, 'build', 'templates'),
+            template,
+            target,
+            props,
+          })
+          .then(() => print.muted(`Generated ${target}`));
       },
       generateTree: ({ templateDirectory, targetDirectory, props }) => {
         // Make templateDirectory relative to generator templates folder and target directory cwd by default
-        return generateTree({
-          templateDirectory: filesystem.path(
-            generatorFolder,
-            'build',
-            'templates',
-            templateDirectory
-          ),
-          targetDirectory: targetDirectory ? targetDirectory : filesystem.cwd(),
-          props,
-        }).then((files) =>
-          files.forEach((file) =>
-            print.muted(`Generated ${file.replace('./', '')}`)
-          )
-        );
+        return templateModule
+          .generateTree({
+            templateDirectory: filesystem.path(
+              generatorFolder,
+              'build',
+              'templates',
+              templateDirectory
+            ),
+            targetDirectory: targetDirectory
+              ? targetDirectory
+              : filesystem.cwd(),
+            props,
+          })
+          .then((files) =>
+            files.forEach((file) =>
+              print.muted(`Generated ${file.replace('./', '')}`)
+            )
+          );
       },
     },
   };

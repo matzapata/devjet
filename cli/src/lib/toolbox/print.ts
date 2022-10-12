@@ -1,3 +1,3 @@
-import { print } from 'gluegun';
+import { print, GluegunPrint as Print } from 'gluegun';
 
-export { print };
+export { print, Print };

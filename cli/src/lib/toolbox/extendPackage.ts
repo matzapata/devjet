@@ -7,4 +7,6 @@ const extendPackage = (props: any) => {
   });
 };
 
-export { extendPackage };
+type ExtendPackage = typeof extendPackage;
+
+export { extendPackage, ExtendPackage };

@@ -1,3 +1,3 @@
-import { prompt } from 'gluegun';
+import { prompt, GluegunPrompt as Prompt } from 'gluegun';
 
-export { prompt };
+export { prompt, Prompt };

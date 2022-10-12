@@ -1,10 +1,9 @@
 import { patching } from './patching';
 
-function injectImports(
-  filename: string,
-  importString: string
-): Promise<string | boolean> {
-  return patching.prepend(filename, importString);
+function injectImports(filename: string, importStrings: string[]): void {
+  patching.prependManyLines(filename, importStrings);
 }
 
-export { injectImports };
+type InjectImports = typeof injectImports;
+
+export { injectImports, InjectImports };

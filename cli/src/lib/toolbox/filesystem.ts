@@ -1,3 +1,3 @@
-import { filesystem } from 'gluegun';
+import { filesystem, GluegunFilesystem as Filesystem } from 'gluegun';
 
-export { filesystem };
+export { filesystem, Filesystem };

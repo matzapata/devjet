@@ -1,3 +1,3 @@
-import { strings } from 'gluegun';
+import { strings, GluegunStrings as Strings } from 'gluegun';
 
-export { strings };
+export { strings, Strings };

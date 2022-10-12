@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -17,17 +17,25 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
+import NextLink from "next/link";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
-export default function Login() {
-  const [errorMessage] = useState("");
-  const [loading] = useState(false);
+export default function Login(): JSX.Element {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const { colorMode } = useColorMode();
-
+  const { user } = useUser();
+  const router = useRouter();
   const [state, setState] = useState({
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -38,6 +46,14 @@ export default function Login() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    const { error } = await supabaseClient.auth.signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setErrorMessage(error.message);
+    setLoading(false);
   };
 
   return (
@@ -76,7 +92,7 @@ export default function Login() {
               onChange={onChange}
             />
           </FormControl>
-          <ReactLink to="/auth/recover">
+          <NextLink href="/auth/recover">
             <Link
               color="blue.600"
               fontWeight="medium"
@@ -86,7 +102,7 @@ export default function Login() {
             >
               Forgot your password?
             </Link>
-          </ReactLink>
+          </NextLink>
           <Stack spacing="4">
             <Button
               type="submit"
@@ -110,8 +126,8 @@ export default function Login() {
             Don&apos;t have an account?
           </Text>
           <Link
-            as={ReactLink}
-            to="/auth/signup"
+            as={NextLink}
+            href="/auth/signup"
             color="blue.600"
             fontWeight="500"
           >

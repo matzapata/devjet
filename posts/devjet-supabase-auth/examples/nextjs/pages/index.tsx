@@ -1,5 +1,6 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import React from "react";
+import type { NextPage } from "next";
+import Head from "next/head";
 import { Center, Image, Link, Text, VStack } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
         </Link>
       </VStack>
     </Center>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

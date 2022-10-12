@@ -1,17 +1,22 @@
 import { patching as gluegunPatching } from 'gluegun';
 import InsertLine from 'insert-line';
-import LineNumber from 'line-number';
 import { tryCatchWrapper, tryCatchWrapperSync } from '../tryCatchWrapper';
 import { filesystem } from './filesystem';
 import { print } from './print';
 
-function getLineMatches(
+function getMatchLineNumber(
   filename: string,
   exp: string | RegExp
-): { line: string; number: number; match: string }[] {
+): number | null {
   const content = filesystem.read(filename);
-  const re = typeof exp === 'string' ? new RegExp(exp) : exp;
-  return LineNumber(content, re);
+  const lines = content.split('\n');
+  const re =
+    typeof exp === 'string' ? new RegExp(exp.replace('/', '\\/')) : exp;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (re.exec(lines[i])) return i + 1;
+  }
+  return null;
 }
 
 function insertLine(
@@ -25,12 +30,19 @@ function insertLine(
   }
 ): null | void {
   const fn = tryCatchWrapperSync(
-    () => {
-      const matchLineNum = getLineMatches(filename, exp);
-      if (matchLineNum.length === 0) return null;
-      console.log(`found at ${matchLineNum[0].number}`);
+    (
+      filename: string,
+      line: string,
+      exp: string | RegExp,
+      opts: {
+        before?: boolean;
+        after?: boolean;
+        replace?: boolean;
+      }
+    ) => {
+      let insertionLineNum = getMatchLineNumber(filename, exp);
+      if (insertionLineNum === null) throw new Error('Not found');
 
-      let insertionLineNum = matchLineNum[0].number;
       if (opts.after && !opts.replace) insertionLineNum++;
       if (opts.replace) insertionLineNum--;
       return InsertLine(filename)
@@ -38,16 +50,28 @@ function insertLine(
         .at(insertionLineNum);
     },
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () => {
+      if (opts.replace) {
+        print.error(
+          `Error updating ${filename}. Couldn't replace:\n${exp}\nwith\n${line}`
+        );
+      } else {
+        print.error(
+          `Error updating ${filename}. Couldn't insert:\n${line}\n${
+            opts.before ? 'before: ' : 'after: '
+          }\n${exp}`
+        );
+      }
+    }
   );
-  return fn();
+  return fn(filename, line, exp, opts);
 }
 
 function prependLine(filename: string, line: string): unknown {
   const fn = tryCatchWrapperSync(
     () => InsertLine(filename).prependSync(line),
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () => print.error(`Error updating ${filename}. Couldn't prepend:\n${line}`)
   );
   return fn();
 }
@@ -59,7 +83,7 @@ function appendLine(filename: string, line: string): unknown {
   const fn = tryCatchWrapperSync(
     () => InsertLine(filename).appendSync(line),
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () => print.error(`Error updating ${filename}. Couldn't append:\n${line}`)
   );
   return fn();
 }
@@ -71,7 +95,10 @@ function update(filename: string, opts: any): unknown {
   const fn = tryCatchWrapper(
     gluegunPatching.update,
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () =>
+      print.error(
+        `Error updating ${filename}. Please carefully review recipe at usedevjet.com`
+      )
   );
   return fn(filename, opts);
 }
@@ -79,25 +106,25 @@ function updateMany(operations: { filename: string; config: any }[]) {
   return Promise.all(operations.map((op) => update(op.filename, op.config)));
 }
 
-function append(filename, opts) {
+function append(filename, data) {
   const fn = tryCatchWrapper(
     gluegunPatching.append,
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () => print.error(`Error updating ${filename}. Couldn't append:\n${data}`)
   );
-  return fn(filename, opts);
+  return fn(filename, data);
 }
 function appendMany(operations: { filename: string; data: any }[]) {
   return Promise.all(operations.map((op) => append(op.filename, op.data)));
 }
 
-function prepend(filename, opts) {
+function prepend(filename, data) {
   const fn = tryCatchWrapper(
     gluegunPatching.prepend,
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () => print.error(`Error updating ${filename}. Couldn't prepend:\n${data}`)
   );
-  return fn(filename, opts);
+  return fn(filename, data);
 }
 function prependMany(operations: { filename: string; data: any }[]) {
   return Promise.all(operations.map((op) => prepend(op.filename, op.data)));
@@ -107,7 +134,10 @@ function replace(filename, src, dst) {
   const fn = tryCatchWrapper(
     gluegunPatching.replace,
     () => print.muted(`Updated ${filename}`),
-    () => print.error(`Error updating ${filename}`)
+    () =>
+      print.error(
+        `Error updating ${filename}. Couldn't replace:\n${src}\nwith:\n${dst}`
+      )
   );
   return fn(filename, src, dst);
 }
@@ -150,4 +180,6 @@ const patching = {
   appendManyLines,
 };
 
-export { patching };
+type Patching = typeof patching;
+
+export { patching, Patching };

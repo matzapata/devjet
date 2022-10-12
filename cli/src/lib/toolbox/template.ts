@@ -100,4 +100,11 @@ async function generateTree({
   return templates;
 }
 
-export { generate, generateTree };
+const template = {
+  generate,
+  generateTree,
+};
+
+type Template = typeof template;
+
+export { Template, template };

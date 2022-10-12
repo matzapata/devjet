@@ -1,6 +1,8 @@
+import { GeneratorToolbox } from "devjet";
+
 module.exports = {
   description: "Create a new react-router-dom page.",
-  run: async (toolbox) => {
+  run: async (toolbox: GeneratorToolbox) => {
     if (toolbox.context.stack === "nextjs") {
       return toolbox.print.error(
         "This generator is not available for nextjs yet."
@@ -26,21 +28,15 @@ module.exports = {
       props: { name },
     });
 
-    await toolbox.patching.patch([
-      {
-        filename: "src/App.tsx",
-        opts: {
-          insert: `import ${name} from "pages/${name}";\n`,
-          before: `function App() {`,
-        },
-      },
-      {
-        filename: "src/App.tsx",
-        opts: {
-          insert: `<Route path="${path}" element={<${name} />} />`,
-          after: `<Routes>\n`,
-        },
-      },
+    toolbox.injectImports("src/App.tsx", [
+      `import ${name} from "pages/${name}";`,
     ]);
+
+    toolbox.patching.insertLine(
+      "src/App.tsx",
+      `<Route path="${path}" element={<${name} />} />`,
+      "<Routes>",
+      { after: true }
+    );
   },
 };

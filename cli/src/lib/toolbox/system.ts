@@ -1,3 +1,3 @@
-import { system } from 'gluegun';
+import { system, GluegunSystem as System } from 'gluegun';
 
-export { system };
+export { system, System };

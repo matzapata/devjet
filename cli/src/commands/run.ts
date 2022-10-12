@@ -4,6 +4,8 @@ import getProjectRoot from '../lib/getProjectRoot';
 import getProjectStack from '../lib/getProjectStack';
 import runGenerator from '../lib/runGenerator';
 import { packageManager } from '../lib/toolbox/packageManager';
+import { execSync } from 'child_process';
+// import { execSync } from 'child_process';
 
 async function runCommand(
   generatorPackage: string,
@@ -54,10 +56,15 @@ async function runCommand(
     generatorRemoveSpinner.succeed('Generator removed successfully');
   }
 
+  print.info('Installing new dependencies and linting...');
+  execSync('npm install && npm run lint:fix"', {
+    stdio: 'inherit',
+  });
+
   print.info(
-    'Please follow instruction at usedevjet.com on how to use this generator'
+    'Please follow instruction at usedevjet.com on how to use the code generated'
   );
-  print.info("Execute 'npm run lint:fix'");
+
   process.exit();
 }
 

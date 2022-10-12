@@ -39,4 +39,6 @@ const packageManager = {
   remove,
 };
 
-export { packageManager };
+type PackageManager = typeof packageManager;
+
+export { packageManager, PackageManager };

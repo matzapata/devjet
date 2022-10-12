@@ -1,7 +1,9 @@
+import { GeneratorToolbox } from "devjet";
+
 module.exports = {
   description:
     "Create authentication pages ui components. Signin, Signup and Recover",
-  run: async (toolbox: any) => {
+  run: async (toolbox: GeneratorToolbox) => {
     const { stack } = toolbox.context;
 
     if (stack === "nextjs") {

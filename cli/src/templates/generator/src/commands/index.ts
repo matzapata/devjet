@@ -1,4 +1,6 @@
+import { GeneratorToolbox } from 'devjet';
+
 module.exports = {
   description: 'Example generator',
-  run: async (toolbox) => {},
+  run: async (toolbox: GeneratorToolbox) => {},
 };

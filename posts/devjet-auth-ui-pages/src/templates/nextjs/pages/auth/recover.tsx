@@ -14,13 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink } from "react-router-dom";
+import NextLink from "next/link";
 
-function Recover() {
+function Recover(): JSX.Element {
   const { colorMode } = useColorMode();
   const [email, setEmail] = useState("");
-  const [errorMessage] = useState("");
-  const [loading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +50,7 @@ function Recover() {
               required
               placeholder="Enter your email"
               value={email}
-              onChange={(e: any) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <FormErrorMessage>{errorMessage}</FormErrorMessage>
           </FormControl>
@@ -66,16 +66,16 @@ function Recover() {
           </Button>
         </Box>
         <Box textAlign="center" mt="4">
-          <Link
-            as={ReactLink}
-            to="/auth/signin"
-            color={colorMode === "light" ? "gray.600" : "gray.500"}
-            fontWeight="500"
-            justifyItems="center"
-          >
-            <ArrowBackIcon mr="1" />
-            Back to login
-          </Link>
+          <NextLink href="/auth/signin">
+            <Link
+              color={colorMode === "light" ? "gray.600" : "gray.500"}
+              fontWeight="500"
+              justifyItems="center"
+            >
+              <ArrowBackIcon mr="1" />
+              Back to login
+            </Link>
+          </NextLink>
         </Box>
       </Container>
     </Center>

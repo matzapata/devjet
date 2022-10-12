@@ -1,6 +1,8 @@
+import { GeneratorToolbox } from "devjet";
+
 module.exports = {
   description: "Create a newsletter component with revue",
-  run: async (toolbox) => {
+  run: async (toolbox: GeneratorToolbox) => {
     const { stack } = toolbox.context;
 
     if (stack === "react") {

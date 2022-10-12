@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -15,27 +15,27 @@ import {
   AlertIcon,
   Stack,
   useColorMode,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import { BrandFavicon } from "components/Brand";
-import { Link as ReactLink } from "react-router-dom";
+import NextLink from "next/link";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
-type State = {
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-};
-
-export default function SignUp() {
-  const [errorMessage] = useState("");
-  const [loading] = useState(false);
-  const [displayEmailAlert] = useState(false);
+export default function Login(): JSX.Element {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const { colorMode } = useColorMode();
-  const [state, setState] = useState<State>({
+  const { user } = useUser();
+  const router = useRouter();
+  const [state, setState] = useState({
     email: "",
     password: "",
-    passwordConfirmation: "",
   });
+
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -46,6 +46,14 @@ export default function SignUp() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    const { error } = await supabaseClient.auth.signIn({
+      email: state.email,
+      password: state.password,
+    });
+    if (error) setErrorMessage(error.message);
+    setLoading(false);
   };
 
   return (
@@ -53,7 +61,7 @@ export default function SignUp() {
       <Container maxW="md">
         <BrandFavicon mx="auto" mb="4" />
         <Heading mb="20" textAlign="center">
-          Create your account
+          Log in to your account
         </Heading>
         {errorMessage !== "" && (
           <Alert status="error" mb="5" fontSize="sm" fontWeight="medium">
@@ -73,7 +81,7 @@ export default function SignUp() {
               onChange={onChange}
             />
           </FormControl>
-          <FormControl mb="2">
+          <FormControl>
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
@@ -84,47 +92,46 @@ export default function SignUp() {
               onChange={onChange}
             />
           </FormControl>
-          <FormControl
-            isInvalid={state.password !== state.passwordConfirmation}
-          >
-            <FormLabel>Confirm password</FormLabel>
-            <Input
-              type="password"
-              name="passwordConfirmation"
-              bg={colorMode === "light" ? "white" : "gray.800"}
-              required
-              value={state.passwordConfirmation}
-              onChange={onChange}
-            />
-            <FormErrorMessage>Passwords doesn&apos;t match</FormErrorMessage>
-          </FormControl>
-          <Button
-            isLoading={loading}
-            type="submit"
-            mt="8"
-            size="md"
-            colorScheme="blue"
-            w="full"
-          >
-            Sign up
-          </Button>
+          <NextLink href="/auth/recover">
+            <Link
+              color="blue.600"
+              fontWeight="medium"
+              display="block"
+              textAlign="right"
+              mt="1"
+            >
+              Forgot your password?
+            </Link>
+          </NextLink>
+          <Stack spacing="4">
+            <Button
+              type="submit"
+              mt="8"
+              size="md"
+              colorScheme="blue"
+              w="full"
+              isLoading={loading}
+            >
+              Sign In
+            </Button>
+          </Stack>
         </Box>
         <Flex justifyContent="center" mt="4">
           <Text
-            mr="1"
             as="span"
             fontWeight="500"
+            mr="1"
             color={colorMode === "light" ? "gray.600" : "gray.500"}
           >
-            Already have an account?
+            Don&apos;t have an account?
           </Text>
           <Link
-            as={ReactLink}
-            to="/auth/signin"
+            as={NextLink}
+            href="/auth/signup"
             color="blue.600"
             fontWeight="500"
           >
-            Sign in
+            Sign up
           </Link>
         </Flex>
       </Container>
