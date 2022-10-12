@@ -3,6 +3,7 @@ import { print } from '../lib/toolbox/print';
 import { filesystem } from '../lib/toolbox/filesystem';
 import { prompt } from '../lib/toolbox/prompt';
 import { system } from '../lib/toolbox/system';
+import { execSync } from 'child_process';
 
 async function newProject(
   projectDirectory: string,
@@ -30,18 +31,20 @@ async function newProject(
     );
   }
 
-  print.info('Downloading boilerplate...');
+  print.muted('Downloading boilerplate...');
   try {
     await gitly(`matzapata/devjet-${stack}-boilerplate`, projectDirectory, {});
-    print.info('Initializing repository...');
+    print.muted('Initializing repository...');
     await system.run(
       `cd ${projectDirectory} && git init && git add . && git commit -m "First commit by devjet"`
     );
 
-    print.success(`Successfully generated project at ${projectDirectory}`);
-    print.info(
-      `Please install dependencies.\nFor further information visit https://www.usedevjet.com/`
-    );
+    print.muted(`Installing dependencies...`);
+    try {
+      execSync(`cd ${projectDirectory} && npm install`, {
+        stdio: 'inherit',
+      });
+    } catch (e) {}
   } catch (e) {
     print.error('Error creating devjet boilerplate');
     print.error(e);
