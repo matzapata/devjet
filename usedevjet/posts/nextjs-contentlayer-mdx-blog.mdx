@@ -1,16 +1,14 @@
 ---
 title: "Create a blog with nextjs, mdx and contentlayer"
-date: 
+date: 10/12/2022
 summary: "Manage your content with contentlayer and mdx. Create minimalistics listing and post pages."
-tags: []
+tags: ["blog"]
 category: "marketing"
 image: "/images/nextjs.png"
 pro: true
-comingsoon: true
+comingsoon: false
 generators: 0
 ---
-
-{/* https://www.sandromaglione.com/techblog/contentlayer-blog-template-with-nextjs */}
 
 ```sh:generators
 npx devjet run contentlayer-mdx-blog
@@ -18,7 +16,7 @@ npx devjet run contentlayer-mdx-blog
 
 1. Install dependencies
 
-```
+```bash
 npm install contentlayer@^0.2.4 next-contentlayer@^0.2.4 @nikolovlazar/chakra-ui-prose@1.2.1
 ```
 
@@ -114,7 +112,7 @@ export default makeSource({
 
 4. Create example content
 
-```mdx:data/example.mdx
+```:data/example.mdx
 ---
 title: Lorem Ipsum
 date: 2021-12-24
@@ -134,9 +132,6 @@ dolore dolor reprehenderit aliquip. Reprehenderit cillum mollit eiusmod
 excepteur elit ipsum aute pariatur in. Cupidatat ex culpa velit culpa ad non
 labore exercitation irure laborum.
 
-\```
-Code example
-\```
 ```
 
 5. List all posts
